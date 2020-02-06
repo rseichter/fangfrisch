@@ -1,0 +1,6 @@
+[report]
+exclude_lines =
+	def __repr__
+	log\.(debug|error|except|fatal|info|warn)
+	pragma: no cover
+	raise NotImplementedError

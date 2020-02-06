@@ -2,16 +2,20 @@ import argparse
 import sys
 
 from fangfrisch.config import config
+from fangfrisch.logging import log
+from fangfrisch.refresh import refresh_all
 
 parser = argparse.ArgumentParser()
 parser.add_argument('action', help='Action to perform')
-parser.add_argument('--conf', default=None, help='Configuration file (no default)')
+parser.add_argument('-c', '--conf', default=None, help='Configuration file (no default)')
 args = parser.parse_args()
 if not config.init(args.conf):
-    print(f'Cannot parse configuration file: {args.conf}', file=sys.stderr)
+    log.error(f'Cannot parse configuration file: {args.conf}')
     sys.exit(1)
 if 'dumpconf' == args.action:
     config.dump()
+elif 'refresh' == args.action:
+    refresh_all()
 else:
-    print(f'Unknown action: {args.action}', file=sys.stderr)
+    log.error(f'Unknown action: {args.action}')
     sys.exit(1)
