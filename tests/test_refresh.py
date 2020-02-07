@@ -1,9 +1,8 @@
 import unittest
 
 from fangfrisch.config import config
-from fangfrisch.refresh import UrlTuple
-from fangfrisch.refresh import refresh
-from fangfrisch.refresh import refresh_all
+from fangfrisch.refresh import ClamavItem
+from fangfrisch.refresh import ClamavRefresh
 from tests import FangfrischTest
 
 HORUS_FEED = 'https://horus-it.com/feed.xml'
@@ -14,29 +13,31 @@ config.init(FangfrischTest.CONF)
 
 
 class RefreshTests(FangfrischTest):
+    ref = ClamavRefresh()
+
     def test_404(self):
-        ut = UrlTuple(self.UNITTEST, 'x', HORUS_INDEX + 'BAD', None, None)
-        self.assertFalse(refresh(ut))
+        ci = ClamavItem(self.UNITTEST, 'x', HORUS_INDEX + 'BAD', None, None)
+        self.assertFalse(self.ref.refresh(ci))
 
     def test_bad_checksum(self):
-        ut = UrlTuple(self.UNITTEST, 'x', HORUS_INDEX, 'sha256', None)
-        self.assertFalse(refresh(ut))
+        ci = ClamavItem(self.UNITTEST, 'x', HORUS_INDEX, 'sha256', None)
+        self.assertFalse(self.ref.refresh(ci))
 
     def test_good_checksum(self):
-        ut = UrlTuple(self.UNITTEST, 'x', HORUS_ROBOTS, 'sha256', f'{self.TMPDIR}/x')
-        self.assertTrue(refresh(ut))
+        ci = ClamavItem(self.UNITTEST, 'x', HORUS_ROBOTS, 'sha256', f'{self.TMPDIR}/x')
+        self.assertTrue(self.ref.refresh(ci))
 
     def test_missing_checksum(self):
-        ut = UrlTuple(self.UNITTEST, 'x', HORUS_FEED, 'sha256', None)
-        self.assertFalse(refresh(ut))
+        ci = ClamavItem(self.UNITTEST, 'x', HORUS_FEED, 'sha256', None)
+        self.assertFalse(self.ref.refresh(ci))
 
     def test_unknown_check(self):
-        ut = UrlTuple(self.UNITTEST, 'x', HORUS_INDEX, 'BAD', None)
-        self.assertFalse(refresh(ut))
+        ci = ClamavItem(self.UNITTEST, 'x', HORUS_INDEX, 'BAD', None)
+        self.assertFalse(self.ref.refresh(ci))
 
     @unittest.skipUnless(FangfrischTest.online_tests(), 'online tests disabled')
     def test_refresh_all(self):
-        self.assertEqual(2, refresh_all())
+        self.assertEqual(2, self.ref.refresh_all())
 
 
 if __name__ == '__main__':
