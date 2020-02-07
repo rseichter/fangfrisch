@@ -6,7 +6,6 @@ import requests
 from fangfrisch.config import config
 from fangfrisch.logging import log
 from fangfrisch.util import check_sha256
-from fangfrisch.util import write_binary
 
 
 class ClamavItem:
@@ -52,7 +51,8 @@ class ClamavRefresh:
             elif ci.check:
                 log.error(f'Unsupported integrity check: {ci.check}')
                 return False
-            write_binary(r.content, ci.path)
+            with open(ci.path, 'wb') as f:
+                f.write(r.content)
         except OSError as e:  # pragma: no cover
             log.exception(e)
         return True
