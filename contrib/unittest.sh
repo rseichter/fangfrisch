@@ -13,8 +13,8 @@
 set -e
 
 source venv/bin/activate
-if [ -f local/secrets ]; then
-	source local/secrets
+if [ -f tests/settings ]; then
+	source tests/settings
 fi
 
 CONF='tests/tests.conf'

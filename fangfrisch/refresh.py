@@ -4,6 +4,7 @@ from typing import List
 import requests
 
 from fangfrisch.config import config
+from fangfrisch.db import RefreshLog
 from fangfrisch.logging import log
 from fangfrisch.util import check_sha256
 
@@ -53,6 +54,7 @@ class ClamavRefresh:
                 return False
             with open(ci.path, 'wb') as f:
                 f.write(r.content)
+                RefreshLog.stamp_by_url(ci.url)
         except OSError as e:  # pragma: no cover
             log.exception(e)
         return True
