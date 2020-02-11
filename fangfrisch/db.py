@@ -1,6 +1,7 @@
 import os
 import sys
 from datetime import datetime
+from datetime import timedelta
 
 from sqlalchemy import Column
 from sqlalchemy import DateTime
@@ -31,15 +32,24 @@ class RefreshLog(Base):
         self.refreshed = datetime.utcnow()
 
     @staticmethod
+    def _by_url(url, session):
+        return session.query(RefreshLog).filter(RefreshLog.url == url).first()
+
+    @staticmethod
+    def refresh_required(url, max_age) -> bool:
+        entry = RefreshLog._by_url(url, Session())
+        if not entry:
+            return True
+        threshold = datetime.utcnow() - timedelta(minutes=max_age)
+        return entry.refreshed < threshold
+
+    @staticmethod
     def stamp_by_url(url) -> None:
         session = Session()
-        entry = session.query(RefreshLog).filter(RefreshLog.url == url).first()
-        if not entry:
+        entry = RefreshLog._by_url(url, session)
+        if entry:
+            entry.refreshed = datetime.utcnow()
+        else:
             entry = RefreshLog(url)
-        entry.stamp()
-
-    def stamp(self) -> None:
-        self.refreshed = datetime.utcnow()
-        session = Session()
-        session.add(self)
+        session.add(entry)
         session.commit()

@@ -54,6 +54,10 @@ class ConfigTests(FangfrischTest):
         s = self.c.sections()
         self.assertIn(self.UNITTEST, s)
 
+    def test_max_age(self):
+        self.c.init(self.CONF)
+        self.assertEqual(60 * 24, self.c.max_age(SANESECURITY))
+
 
 if __name__ == '__main__':
     unittest.main()

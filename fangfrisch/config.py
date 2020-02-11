@@ -3,6 +3,7 @@ import sys
 from logging import DEBUG
 
 BASE_URL = 'base_url'
+MAX_AGE = 'max_age'
 INTEGRITY_CHECK = 'integrity_check'
 SANESECURITY = 'sanesecurity'
 LOCAL_DIR = 'local_directory'
@@ -15,6 +16,7 @@ defaults = {
 sections = {
     SANESECURITY: {
         BASE_URL: 'http://ftp.swin.edu.au/sanesecurity/',
+        MAX_AGE: '1440',  # Minutes in 24h
         'url_badmacro': 'badmacro.ndb',
         'url_blurl': 'blurl.ndb',
         'url_bofhland_cracked_url': 'bofhland_cracked_URL.ndb',
@@ -81,6 +83,9 @@ class Configuration:
 
     def base_url(self, section: str, fallback=None):
         return self.parser.get(section, BASE_URL, fallback=fallback)
+
+    def max_age(self, section: str, fallback=(24 * 60)):
+        return self.parser.getint(section, MAX_AGE, fallback=fallback)
 
     def integrity_check(self, section: str, fallback=None):
         return self.parser.get(section, INTEGRITY_CHECK, fallback=fallback)

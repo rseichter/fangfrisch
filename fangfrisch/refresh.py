@@ -10,8 +10,9 @@ from fangfrisch.util import check_sha256
 
 
 class ClamavItem:
-    def __init__(self, section, option, url, check, path) -> None:
+    def __init__(self, section, option, url, check, path, max_age) -> None:
         self.check = check
+        self.max_age = max_age
         self.option = option
         self.path = path
         self.section = section
@@ -29,13 +30,19 @@ class ClamavRefresh:
                     if option.startswith('url_'):
                         value = config.get(section, option)
                         item = ClamavItem(section, option, base_url + value, config.integrity_check(section),
-                                          os.path.join(config.local_dir(section), value))
+                                          os.path.join(config.local_dir(section), value),
+                                          config.max_age(section))
                         result.append(item)
         return result
 
     @staticmethod
-    def refresh(ci: ClamavItem) -> bool:
+    def refresh(ci: ClamavItem, force=False) -> bool:
         try:
+            if force:
+                log.debug(f'{ci.url} refresh forced')
+            elif not RefreshLog.refresh_required(ci.url, ci.max_age):
+                log.debug(f'{ci.url} skipped (no refresh required)')
+                return False
             r = requests.get(ci.url)
             if r.status_code != requests.codes.ok:
                 log.error(f'Failed to download data file: {r.status_code} {r.reason}')
@@ -59,9 +66,9 @@ class ClamavRefresh:
             log.exception(e)
         return True
 
-    def refresh_all(self) -> int:
+    def refresh_all(self, force=False) -> int:
         count = 0
         for ci in self.collect_clamav_items():
-            if self.refresh(ci):
+            if self.refresh(ci, force):
                 count += 1
         return count
