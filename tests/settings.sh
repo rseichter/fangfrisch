@@ -1,5 +1,3 @@
-RUN_ONLINE_TESTS=0
-SQLALCHEMY_URL="sqlite:///$(realpath tests/tests.sqlite)"
-
-export RUN_ONLINE_TESTS
-export SQLALCHEMY_URL
+export LOG_LEVEL='ERROR'
+export RUN_ONLINE_TESTS=0
+export SQLALCHEMY_URL="sqlite:///tests/tests.sqlite"

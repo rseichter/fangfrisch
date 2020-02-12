@@ -1,11 +1,9 @@
 from fangfrisch.config import BASE_URL
-from fangfrisch.config import ENABLED
 from fangfrisch.config import MAX_AGE
 
 _config_sanesecurity = {
     'sanesecurity': {
         BASE_URL: 'http://ftp.swin.edu.au/sanesecurity/',
-        ENABLED: '1',
         MAX_AGE: str(24 * 60),
         'url_badmacro': 'badmacro.ndb',
         'url_blurl': 'blurl.ndb',

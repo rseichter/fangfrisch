@@ -50,7 +50,8 @@ class ClamavRefresh:
                 log.error(f'Failed to download data file: {r.status_code} {r.reason}')
                 return False
             if 'sha256' == ci.check:
-                r_checksum = requests.get(f'{ci.url}.{ci.check}')
+                url = f'{ci.url}.{ci.check}'
+                r_checksum = requests.get(url)
                 if r_checksum.status_code != requests.codes.ok:
                     log.error(f'Failed to download checksum file: {r_checksum.status_code} {r_checksum.reason}')
                     return False

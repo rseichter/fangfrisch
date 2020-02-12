@@ -1,6 +1,5 @@
 import configparser
 import sys
-from logging import DEBUG
 
 from fangfrisch.config import BASE_URL
 from fangfrisch.config import ENABLED
@@ -11,8 +10,9 @@ INTEGRITY_CHECK = 'integrity_check'
 LOCAL_DIR = 'local_directory'
 
 _config_defaults = {
+    ENABLED: '0',
     INTEGRITY_CHECK: 'sha256',
-    LOCAL_DIR: '/tmp/fangfrisch.sh',
+    LOCAL_DIR: '/tmp/fangfrisch',
 }
 _config_other = [_config_sanesecurity]
 
@@ -47,9 +47,6 @@ class Configuration:
 
     def integrity_check(self, section: str, fallback=None):
         return self.parser.get(section, INTEGRITY_CHECK, fallback=fallback)
-
-    def log_level(self):
-        return self.parser.get('DEFAULT', 'log_level', fallback=DEBUG)
 
     def local_dir(self, section: str):
         return self.parser.get(section, LOCAL_DIR)

@@ -4,7 +4,10 @@ import unittest
 import uuid
 
 from fangfrisch.logging import log
-from fangfrisch.util import represents_true
+
+
+def to_bool(x: str) -> bool:
+    return x and x.lower() in ['1', 'enabled', 'y', 'yes', 'true']
 
 
 class FangfrischTest(unittest.TestCase):
@@ -19,4 +22,4 @@ class FangfrischTest(unittest.TestCase):
 
     @classmethod
     def online_tests(cls):
-        return represents_true(os.getenv('RUN_ONLINE_TESTS', '0'))
+        return to_bool(os.getenv('RUN_ONLINE_TESTS', '0'))

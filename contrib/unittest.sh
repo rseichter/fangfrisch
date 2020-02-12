@@ -25,8 +25,8 @@ if [ ! -f ${CONF} ]; then
 	exit 1
 fi
 
-if [ ! -d /tmp/fangfrisch.sh/unittest ]; then
-	mkdir -p /tmp/fangfrisch.sh/unittest
+if [ ! -d /tmp/fangfrisch/unittest ]; then
+	mkdir -p /tmp/fangfrisch/unittest
 fi
 
 function usage() {

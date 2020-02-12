@@ -1,4 +1,7 @@
 import logging
+import os
 
-# logging.basicConfig(level=logging.DEBUG)
+level = os.getenv('LOG_LEVEL')
+if level:
+    logging.basicConfig(level=level.upper())
 log = logging.getLogger(__name__)

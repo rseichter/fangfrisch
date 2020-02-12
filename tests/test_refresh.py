@@ -1,6 +1,8 @@
 import unittest
 
 from fangfrisch.config.config import config
+from fangfrisch.db import RefreshLog
+from fangfrisch.db import Session
 from fangfrisch.refresh import ClamavItem
 from fangfrisch.refresh import ClamavRefresh
 from tests import FangfrischTest
@@ -35,12 +37,15 @@ class RefreshTests(FangfrischTest):
         ci = ClamavItem(self.UNITTEST, 'x', HORUS_INDEX, 'BAD', None, 0)
         self.assertFalse(self.ref.refresh(ci))
 
-    @unittest.skipUnless(FangfrischTest.online_tests(), 'online tests disabled')
     def test_refresh_force(self):
         self.assertEqual(2, self.ref.refresh_all(force=True))
 
     def test_refresh(self):
-        self.assertEqual(0, self.ref.refresh_all(force=False))
+        self.s = Session()
+        self.s.query(RefreshLog).delete()
+        self.s.add(RefreshLog('https://horus-it.com/favicon-32x32.png'))
+        self.s.commit()
+        self.assertEqual(1, self.ref.refresh_all(force=False))
 
 
 if __name__ == '__main__':

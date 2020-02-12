@@ -33,22 +33,13 @@ class ConfigTests(FangfrischTest):
         self.assertEqual('http://ftp.swin.edu.au/sanesecurity/badmacro.ndb',
                          self.c.base_url(SECTION) + self.c.get(SECTION, 'url_badmacro'))
 
-    def test_log_level(self):
-        self.c.init(self.CONF)
-        self.assertEqual('FATAL', self.c.log_level())
-
     def test_local_dir(self):
         self.c.init(self.CONF)
         self.assertEqual(self.TMPDIR, self.c.local_dir(self.UNITTEST))
 
     def test_integrity_check(self):
         self.c.init(self.CONF)
-        self.assertEqual('sha512', self.c.integrity_check(self.UNITTEST))
-
-    def test_options(self):
-        self.c.init(self.CONF)
-        o = self.c.options(self.UNITTEST)
-        self.assertIn('foo', o)
+        self.assertEqual('sha256', self.c.integrity_check(self.UNITTEST))
 
     def test_sections(self):
         self.c.init(self.CONF)
