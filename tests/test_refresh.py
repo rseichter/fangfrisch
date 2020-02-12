@@ -25,9 +25,10 @@ from fangfrisch.refresh import ClamavItem
 from fangfrisch.refresh import ClamavRefresh
 from tests import FangfrischTest
 
-HORUS_FEED = 'https://horus-it.com/feed.xml'
-HORUS_INDEX = 'https://horus-it.com/index.html'
-HORUS_ROBOTS = 'https://horus-it.com/robots.txt'
+URL_BAD_SHA256 = 'https://seichter.de/favicon.ico'
+URL_MD5 = 'https://seichter.de/favicon-32x32.png'
+URL_MISSING = 'https://seichter.de/index.html'
+URL_SHA256 = 'https://seichter.de/favicon-16x16.png'
 
 config.init(FangfrischTest.CONF)
 
@@ -36,35 +37,39 @@ class RefreshTests(FangfrischTest):
     ref = ClamavRefresh(Namespace(force=False))
 
     def test_404(self):
-        ci = ClamavItem(self.UNITTEST, 'x', HORUS_INDEX + 'BAD', None, None, 0)
+        ci = ClamavItem(self.UNITTEST, 'x', URL_BAD_SHA256 + 'BAD', None, None, 0)
         self.assertFalse(self.ref.refresh(ci))
 
-    def test_bad_checksum(self):
-        ci = ClamavItem(self.UNITTEST, 'x', HORUS_INDEX, 'sha256', None, 0)
+    def test_bad_sha256(self):
+        ci = ClamavItem(self.UNITTEST, 'x', URL_BAD_SHA256, 'sha256', None, 0)
         self.assertFalse(self.ref.refresh(ci))
 
-    def test_good_checksum(self):
-        ci = ClamavItem(self.UNITTEST, 'x', HORUS_ROBOTS, 'sha256', f'{self.TMPDIR}/x', 0)
+    def test_good_sha256(self):
+        ci = ClamavItem(self.UNITTEST, 'x', URL_SHA256, 'sha256', f'{self.TMPDIR}/x', 0)
+        self.assertTrue(self.ref.refresh(ci))
+
+    def test_good_md5(self):
+        ci = ClamavItem(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x', 0)
         self.assertTrue(self.ref.refresh(ci))
 
     def test_missing_checksum(self):
-        ci = ClamavItem(self.UNITTEST, 'x', HORUS_FEED, 'sha256', None, 0)
+        ci = ClamavItem(self.UNITTEST, 'x', URL_MISSING, 'sha256', None, 0)
         self.assertFalse(self.ref.refresh(ci))
 
     def test_unknown_check(self):
-        ci = ClamavItem(self.UNITTEST, 'x', HORUS_INDEX, 'BAD', None, 0)
+        ci = ClamavItem(self.UNITTEST, 'x', URL_BAD_SHA256, 'BAD', None, 0)
         self.assertFalse(self.ref.refresh(ci))
 
     def test_refresh_force(self):
         cr = ClamavRefresh(Namespace(force=True))
-        self.assertEqual(2, cr.refresh_all())
+        self.assertEqual(3, cr.refresh_all())
 
     def test_refresh(self):
         self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
-        self.s.add(RefreshLog('https://horus-it.com/favicon-32x32.png'))
+        self.s.add(RefreshLog(URL_MD5))
         self.s.commit()
-        self.assertEqual(1, self.ref.refresh_all())
+        self.assertEqual(2, self.ref.refresh_all())
 
 
 if __name__ == '__main__':

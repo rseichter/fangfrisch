@@ -49,7 +49,10 @@ class Configuration:
         return self.parser.getint(section, MAX_AGE, fallback=fallback)
 
     def integrity_check(self, section: str, fallback=None):
-        return self.parser.get(section, INTEGRITY_CHECK, fallback=fallback)
+        check = self.parser.get(section, INTEGRITY_CHECK, fallback=fallback)
+        if check in ['disabled', 'no', 'off']:
+            return None
+        return check
 
     def local_dir(self, section: str):
         return self.parser.get(section, LOCAL_DIR)

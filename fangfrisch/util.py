@@ -19,7 +19,7 @@ along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 import hashlib
 
 
-def check_sha256(content, digest: str) -> bool:
-    h = hashlib.new('sha256')
+def check_integrity(content, algorithm: str, digest: str) -> bool:
+    h = hashlib.new(algorithm)
     h.update(content)
     return h.hexdigest() == digest

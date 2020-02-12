@@ -24,7 +24,7 @@ import requests
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
 from fangfrisch.logging import log
-from fangfrisch.util import check_sha256
+from fangfrisch.util import check_integrity
 
 
 class ClamavItem:
@@ -69,19 +69,16 @@ class ClamavRefresh:
             if r.status_code != requests.codes.ok:
                 log.error(f'Failed to download data file: {r.status_code} {r.reason}')
                 return False
-            if 'sha256' == ci.check:
+            if ci.check:
                 url = f'{ci.url}.{ci.check}'
                 r_checksum = requests.get(url)
                 if r_checksum.status_code != requests.codes.ok:
                     log.error(f'Failed to download checksum file: {r_checksum.status_code} {r_checksum.reason}')
                     return False
                 digest = r_checksum.text.split(' ')[0]
-                if not check_sha256(r.content, digest):
+                if not check_integrity(r.content, ci.check, digest):
                     log.error(f'Checksum mismatch (expected {digest})')
                     return False
-            elif ci.check:
-                log.error(f'Unsupported integrity check: {ci.check}')
-                return False
             log.info(f'Updating {ci.path}')
             with open(ci.path, 'wb') as f:
                 f.write(r.content)

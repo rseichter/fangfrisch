@@ -18,20 +18,31 @@ along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 """
 import unittest
 
-from fangfrisch.util import check_sha256
+from fangfrisch.util import check_integrity
 from tests import FangfrischTest
 
 SAMPLE_DATA = 'fangfrisch'.encode('utf-8')
-SAMPLE_DIGEST = '64ab093d2f42fe686ee229ab50f650752a74975347141f2e8e947a9d059b891a'
+SAMPLE_MD5 = '5e46abab8a827e1534af3a64a3d91f00'
+SAMPLE_SHA256 = '64ab093d2f42fe686ee229ab50f650752a74975347141f2e8e947a9d059b891a'
 
 
 class UtilTests(FangfrischTest):
 
+    def test_md5_fail(self):
+        self.assertFalse(check_integrity(SAMPLE_DATA, 'md5', 'a b'))
+
+    def test_md5_ok(self):
+        self.assertTrue(check_integrity(SAMPLE_DATA, 'md5', SAMPLE_MD5))
+
     def test_sha256_fail(self):
-        self.assertFalse(check_sha256(SAMPLE_DATA, 'a b'))
+        self.assertFalse(check_integrity(SAMPLE_DATA, 'sha256', 'b c'))
 
     def test_sha256_ok(self):
-        self.assertTrue(check_sha256(SAMPLE_DATA, SAMPLE_DIGEST))
+        self.assertTrue(check_integrity(SAMPLE_DATA, 'sha256', SAMPLE_SHA256))
+
+    def test_unknown(self):
+        with self.assertRaises(ValueError):
+            self.assertFalse(check_integrity(SAMPLE_DATA, 'UNKNOWN_ALGO', ''))
 
 
 if __name__ == '__main__':
