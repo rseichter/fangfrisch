@@ -1,29 +1,48 @@
+"""
+Copyright © 2020 Ralph Seichter
+
+This file is part of "Fangfrisch".
+
+Fangfrisch is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Fangfrisch is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Foobar. If not, see <https://www.gnu.org/licenses/>.
+"""
 import configparser
 import sys
+from configparser import ConfigParser
+from configparser import ExtendedInterpolation
 
-from fangfrisch.config import BASE_URL
 from fangfrisch.config import DB_URL
 from fangfrisch.config import ENABLED
 from fangfrisch.config import MAX_AGE
-from fangfrisch.config.sanesecurity import _config_sanesecurity
+from fangfrisch.config.sanesecurity import sanesecurity
 
 INTEGRITY_CHECK = 'integrity_check'
 LOCAL_DIR = 'local_directory'
 
-_config_defaults = {
+config_defaults = {
     ENABLED: '0',
     INTEGRITY_CHECK: 'sha256',
     LOCAL_DIR: '/tmp/fangfrisch',
 }
-_config_other = [_config_sanesecurity]
+config_other = [sanesecurity]
 
 
 class Configuration:
     parser: configparser.ConfigParser = None
 
     def init(self, filename: str = None) -> bool:
-        self.parser = configparser.ConfigParser(defaults=_config_defaults)
-        for c in _config_other:
+        self.parser = ConfigParser(defaults=config_defaults, interpolation=ExtendedInterpolation())
+        for c in config_other:
             self.parser.read_dict(c)
         if filename:
             parsed = self.parser.read([filename])
@@ -35,9 +54,6 @@ class Configuration:
 
     def get(self, section: str, option: str, fallback=None):
         return self.parser.get(section, option, fallback=fallback)
-
-    def base_url(self, section: str, fallback=None):
-        return self.parser.get(section, BASE_URL, fallback=fallback)
 
     def db_url(self):
         return self.parser.get(configparser.DEFAULTSECT, DB_URL, fallback=None)

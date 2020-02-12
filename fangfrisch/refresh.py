@@ -18,6 +18,7 @@ along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 """
 import os
 from typing import List
+from urllib.parse import urlparse
 
 import requests
 
@@ -47,15 +48,15 @@ class ClamavRefresh:
         for section in config.sections():
             if not config.is_enabled(section):
                 continue
-            base_url = config.base_url(section)
-            if base_url:
-                for option in config.options(section):
-                    if option.startswith('url_'):
-                        value = config.get(section, option)
-                        item = ClamavItem(section, option, base_url + value, config.integrity_check(section),
-                                          os.path.join(config.local_dir(section), value),
-                                          config.max_age(section))
-                        clamav_items.append(item)
+            for option in config.options(section):
+                if option.startswith('url_'):
+                    url = config.get(section, option)
+                    path: str = urlparse(url).path
+                    slash = path.rfind('/')  # returns -1 if not found
+                    path = path[slash + 1:]
+                    item = ClamavItem(section, option, url, config.integrity_check(section),
+                                      os.path.join(config.local_dir(section), path), config.max_age(section))
+                    clamav_items.append(item)
         return clamav_items
 
     def refresh(self, ci: ClamavItem) -> bool:
