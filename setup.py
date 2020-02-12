@@ -18,9 +18,11 @@ along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 """
 from setuptools import setup
 
+from fangfrisch import VERSION
+
 setup(
     name='fangfrisch',
-    version='0.0.1',
+    version=VERSION,
     packages=[
         'fangfrisch',
         'fangfrisch.config'
