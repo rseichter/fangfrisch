@@ -2,6 +2,7 @@ import configparser
 import sys
 
 from fangfrisch.config import BASE_URL
+from fangfrisch.config import DB_URL
 from fangfrisch.config import ENABLED
 from fangfrisch.config import MAX_AGE
 from fangfrisch.config.sanesecurity import _config_sanesecurity
@@ -26,8 +27,7 @@ class Configuration:
             self.parser.read_dict(c)
         if filename:
             parsed = self.parser.read([filename])
-            x = len(parsed)
-            return x == 1
+            return len(parsed) == 1
         return True
 
     def dump(self):  # pragma: no cover
@@ -38,6 +38,9 @@ class Configuration:
 
     def base_url(self, section: str, fallback=None):
         return self.parser.get(section, BASE_URL, fallback=fallback)
+
+    def db_url(self):
+        return self.parser.get(configparser.DEFAULTSECT, DB_URL, fallback=None)
 
     def is_enabled(self, section: str, fallback=False) -> bool:
         return self.parser.getboolean(section, ENABLED, fallback=fallback)

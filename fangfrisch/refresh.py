@@ -38,9 +38,12 @@ class ClamavItem:
 
 
 class ClamavRefresh:
+    def __init__(self, args) -> None:
+        self.args = args
+
     @staticmethod
     def collect_clamav_items() -> List[ClamavItem]:
-        result = []
+        clamav_items = []
         for section in config.sections():
             if not config.is_enabled(section):
                 continue
@@ -52,13 +55,12 @@ class ClamavRefresh:
                         item = ClamavItem(section, option, base_url + value, config.integrity_check(section),
                                           os.path.join(config.local_dir(section), value),
                                           config.max_age(section))
-                        result.append(item)
-        return result
+                        clamav_items.append(item)
+        return clamav_items
 
-    @staticmethod
-    def refresh(ci: ClamavItem, force=False) -> bool:
+    def refresh(self, ci: ClamavItem) -> bool:
         try:
-            if force:
+            if self.args.force:
                 log.debug(f'{ci.url} refresh forced')
             elif not RefreshLog.refresh_required(ci.url, ci.max_age):
                 log.debug(f'{ci.url} skipped (no refresh required)')
@@ -88,9 +90,9 @@ class ClamavRefresh:
             log.exception(e)
         return True
 
-    def refresh_all(self, force=False) -> int:
+    def refresh_all(self) -> int:
         count = 0
-        for ci in self.collect_clamav_items():
-            if self.refresh(ci, force):
+        for clamav_item in self.collect_clamav_items():
+            if self.refresh(clamav_item):
                 count += 1
         return count

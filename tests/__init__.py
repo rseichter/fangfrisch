@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 """
 import logging
-import os
 import unittest
 import uuid
 
@@ -37,7 +36,3 @@ class FangfrischTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         log.setLevel(logging.FATAL)
-
-    @classmethod
-    def online_tests(cls):
-        return to_bool(os.getenv('RUN_ONLINE_TESTS', '0'))

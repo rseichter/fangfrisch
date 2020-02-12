@@ -20,12 +20,14 @@ import unittest
 
 from sqlalchemy.exc import IntegrityError
 
+from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
-from fangfrisch.db import Session
 from tests import FangfrischTest
 
 ID1 = 'test_1'
 ID2 = 'test_2'
+
+config.init(FangfrischTest.CONF)
 
 
 class DbTests(FangfrischTest):
@@ -33,7 +35,8 @@ class DbTests(FangfrischTest):
 
     def setUp(self) -> None:
         super().setUp()
-        self.s = Session()
+        RefreshLog.init()
+        self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
         self.s.add(RefreshLog(ID1))
         self.s.commit()

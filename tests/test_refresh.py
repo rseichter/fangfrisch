@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 """
 import unittest
+from argparse import Namespace
 
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
-from fangfrisch.db import Session
 from fangfrisch.refresh import ClamavItem
 from fangfrisch.refresh import ClamavRefresh
 from tests import FangfrischTest
@@ -33,7 +33,7 @@ config.init(FangfrischTest.CONF)
 
 
 class RefreshTests(FangfrischTest):
-    ref = ClamavRefresh()
+    ref = ClamavRefresh(Namespace(force=False))
 
     def test_404(self):
         ci = ClamavItem(self.UNITTEST, 'x', HORUS_INDEX + 'BAD', None, None, 0)
@@ -56,14 +56,15 @@ class RefreshTests(FangfrischTest):
         self.assertFalse(self.ref.refresh(ci))
 
     def test_refresh_force(self):
-        self.assertEqual(2, self.ref.refresh_all(force=True))
+        cr = ClamavRefresh(Namespace(force=True))
+        self.assertEqual(2, cr.refresh_all())
 
     def test_refresh(self):
-        self.s = Session()
+        self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
         self.s.add(RefreshLog('https://horus-it.com/favicon-32x32.png'))
         self.s.commit()
-        self.assertEqual(1, self.ref.refresh_all(force=False))
+        self.assertEqual(1, self.ref.refresh_all())
 
 
 if __name__ == '__main__':

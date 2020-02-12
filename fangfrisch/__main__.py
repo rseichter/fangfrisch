@@ -34,7 +34,7 @@ if not config.init(args.conf):
 if 'dumpconf' == args.action:
     config.dump()
 elif 'refresh' == args.action:
-    ClamavRefresh().refresh_all(args.force)
+    ClamavRefresh(args).refresh_all()
 else:
     log.error(f'Unknown action: {args.action}')
     sys.exit(1)
