@@ -80,6 +80,7 @@ class ClamavRefresh:
             elif ci.check:
                 log.error(f'Unsupported integrity check: {ci.check}')
                 return False
+            log.info(f'Updating {ci.path}')
             with open(ci.path, 'wb') as f:
                 f.write(r.content)
                 RefreshLog.stamp_by_url(ci.url)
