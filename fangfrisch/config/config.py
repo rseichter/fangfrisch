@@ -49,8 +49,8 @@ class Configuration:
         return self.parser.getint(section, MAX_AGE, fallback=fallback)
 
     def integrity_check(self, section: str, fallback=None):
-        check = self.parser.get(section, INTEGRITY_CHECK, fallback=fallback)
-        if check in ['disabled', 'no', 'off']:
+        check: str = self.parser.get(section, INTEGRITY_CHECK, fallback=fallback)
+        if check and check.lower() in ['disabled', 'no', 'off']:
             return None
         return check
 
