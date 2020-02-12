@@ -16,28 +16,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Foobar. If not, see <https://www.gnu.org/licenses/>.
 """
-import logging
-import os
-import unittest
-import uuid
+from setuptools import setup
 
-from fangfrisch.logging import log
-
-
-def to_bool(x: str) -> bool:
-    return x and x.lower() in ['1', 'enabled', 'y', 'yes', 'true']
-
-
-class FangfrischTest(unittest.TestCase):
-    CONF = 'tests/tests.conf'
-    TMPDIR = f'/tmp/fangfrisch/unittest'
-    UNITTEST = 'unittest'
-    UNKNOWN = uuid.uuid4().hex
-
-    @classmethod
-    def setUpClass(cls) -> None:
-        log.setLevel(logging.FATAL)
-
-    @classmethod
-    def online_tests(cls):
-        return to_bool(os.getenv('RUN_ONLINE_TESTS', '0'))
+setup(
+    name='fangfrisch',
+    version='0.0.1',
+    packages=[
+        'fangfrisch',
+        'fangfrisch.config'
+    ],
+    url='https://seichter.de/',
+    license='GPLv3+',
+    author='Ralph Seichter',
+    author_email='fangfrisch@seichter.de',
+    description='Sibling to Clam Anti-Virus freshclam utility',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+        'Operating System :: OS Independent'
+    ],
+    install_requires=[
+        'requests >= 2.22.0',
+        'SQLAlchemy >= 1.3.13'
+    ],
+    python_requires='>=3.7'
+)
