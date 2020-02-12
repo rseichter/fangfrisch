@@ -1,9 +1,10 @@
 import unittest
 
 from fangfrisch.config import BASE_URL
-from fangfrisch.config import Configuration
-from fangfrisch.config import SANESECURITY
+from fangfrisch.config.config import Configuration
 from tests import FangfrischTest
+
+SECTION = 'sanesecurity'
 
 
 class ConfigTests(FangfrischTest):
@@ -14,11 +15,11 @@ class ConfigTests(FangfrischTest):
 
     def test_sanesec_base_url(self):
         self.c.init()
-        self.assertIsNotNone(self.c.get(SANESECURITY, BASE_URL))
+        self.assertIsNotNone(self.c.get(SECTION, BASE_URL))
 
     def test_sanesec_unknown(self):
         self.c.init()
-        self.assertIsNone(self.c.get(SANESECURITY, self.UNKNOWN))
+        self.assertIsNone(self.c.get(SECTION, self.UNKNOWN))
 
     def test_unknown_section(self):
         self.c.init()
@@ -30,7 +31,7 @@ class ConfigTests(FangfrischTest):
     def test_combined_url(self):
         self.c.init(self.CONF)
         self.assertEqual('http://ftp.swin.edu.au/sanesecurity/badmacro.ndb',
-                         self.c.base_url(SANESECURITY) + self.c.get(SANESECURITY, 'url_badmacro'))
+                         self.c.base_url(SECTION) + self.c.get(SECTION, 'url_badmacro'))
 
     def test_log_level(self):
         self.c.init(self.CONF)
@@ -56,7 +57,7 @@ class ConfigTests(FangfrischTest):
 
     def test_max_age(self):
         self.c.init(self.CONF)
-        self.assertEqual(60 * 24, self.c.max_age(SANESECURITY))
+        self.assertEqual(60 * 24, self.c.max_age(SECTION))
 
 
 if __name__ == '__main__':

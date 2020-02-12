@@ -33,8 +33,12 @@ class DbTests(FangfrischTest):
     def test_refresh_required(self):
         self.assertTrue(RefreshLog.refresh_required(ID1, 0))
 
-    def test_stamp(self):
+    def test_stamp1(self):
         RefreshLog.stamp_by_url(ID1)  # Must not raise an exception
+        self.assertTrue(True)
+
+    def test_stamp2(self):
+        RefreshLog.stamp_by_url(ID2)  # Must not raise an exception
         self.assertTrue(True)
 
 

@@ -1,6 +1,6 @@
 import unittest
 
-from fangfrisch.config import config
+from fangfrisch.config.config import config
 from fangfrisch.refresh import ClamavItem
 from fangfrisch.refresh import ClamavRefresh
 from tests import FangfrischTest
@@ -36,8 +36,11 @@ class RefreshTests(FangfrischTest):
         self.assertFalse(self.ref.refresh(ci))
 
     @unittest.skipUnless(FangfrischTest.online_tests(), 'online tests disabled')
-    def test_refresh_all(self):
+    def test_refresh_force(self):
         self.assertEqual(2, self.ref.refresh_all(force=True))
+
+    def test_refresh(self):
+        self.assertEqual(0, self.ref.refresh_all(force=False))
 
 
 if __name__ == '__main__':

@@ -27,7 +27,6 @@ class RefreshLog(Base):
     refreshed = Column(DateTime)
 
     def __init__(self, url) -> None:
-        super().__init__()
         self.url = url
         self.refreshed = datetime.utcnow()
 

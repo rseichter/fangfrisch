@@ -3,7 +3,7 @@ from typing import List
 
 import requests
 
-from fangfrisch.config import config
+from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
 from fangfrisch.logging import log
 from fangfrisch.util import check_sha256
@@ -24,6 +24,8 @@ class ClamavRefresh:
     def collect_clamav_items() -> List[ClamavItem]:
         result = []
         for section in config.sections():
+            if not config.is_enabled(section):
+                continue
             base_url = config.base_url(section)
             if base_url:
                 for option in config.options(section):

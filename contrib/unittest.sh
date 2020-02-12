@@ -10,21 +10,23 @@
 # Run all unittests and collect coverage data. This will also
 # generate a HTML-based coverage report.
 
+CONF='tests/tests.conf'
+SETTINGS='tests/settings.sh'
+
 set -e
 
 source venv/bin/activate
-if [ -f tests/settings ]; then
-	source tests/settings
+if [ -f ${SETTINGS} ]; then
+	source ${SETTINGS}
 fi
 
-CONF='tests/tests.conf'
 if [ ! -f ${CONF} ]; then
 	echo "Missing config file ${CONF}" >&2
 	exit 1
 fi
 
-if [ ! -d /tmp/fangfrisch/unittest ]; then
-	mkdir -p /tmp/fangfrisch/unittest
+if [ ! -d /tmp/fangfrisch.sh/unittest ]; then
+	mkdir -p /tmp/fangfrisch.sh/unittest
 fi
 
 function usage() {

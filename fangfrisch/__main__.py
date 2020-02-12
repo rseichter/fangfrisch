@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from fangfrisch.config import config
+from fangfrisch.config.config import config
 from fangfrisch.logging import log
 from fangfrisch.refresh import ClamavRefresh
 

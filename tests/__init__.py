@@ -19,5 +19,4 @@ class FangfrischTest(unittest.TestCase):
 
     @classmethod
     def online_tests(cls):
-        o = os.getenv('RUN_ONLINE_TESTS', '0')
-        return represents_true(o)
+        return represents_true(os.getenv('RUN_ONLINE_TESTS', '0'))
