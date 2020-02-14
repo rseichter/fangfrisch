@@ -67,3 +67,19 @@ Internal default values for Sanesecurity can be used by enabling the
 `[sanesecurity]` config section. The resulting [effective
 configuration](contrib/sample-dump.conf) can be displayed using the `dumpconf`
 action.
+
+You can add your own sections for additional virus definition providers:
+```
+[exampleprovider]
+enabled = yes
+integrity_check = md5
+max_age = 1234
+prefix = http://example.tld/clamav/
+url_eggs = ${prefix}eggs.ndb
+url_spam = ${prefix}spam.hdb
+```
+
+Fangfrisch will process only enabled sections, downloading files defined in
+lines with the prefix `url_`. Note that `max_age` is specified in minutes.
+`integrity_check` determines the expected filename for digests, e.g.
+`http://example.tld/clamav/eggs.ndb.md5`.
