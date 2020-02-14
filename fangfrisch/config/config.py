@@ -30,7 +30,7 @@ INTEGRITY_CHECK = 'integrity_check'
 LOCAL_DIR = 'local_directory'
 
 config_defaults = {
-    ENABLED: '0',
+    ENABLED: 'no',
     INTEGRITY_CHECK: 'sha256',
     LOCAL_DIR: '/tmp/fangfrisch',
 }
