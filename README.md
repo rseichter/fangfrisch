@@ -53,3 +53,9 @@ prefix = https://example.tld/clamav-unofficial/
 url_eggs = ${prefix}foo.ndb
 url_spam = ${prefix}bar.ndb
 ```
+
+Fangfrisch has internal default values for Sanesecurity which you can use simply
+by enabling the `[sanesecurity]` config section, as shown in
+[sample.conf](contrib/sample.conf). The resulting [effective
+configuration](contrib/sample-dump.conf) can be displayed using the `dumpconf`
+action.
