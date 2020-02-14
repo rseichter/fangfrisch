@@ -46,13 +46,16 @@ class RefreshLog(Base):
         self.url = url
 
     @classmethod
-    def init(cls):
+    def init(cls, create_all=False):
         if not cls._session:
             db_url = config.db_url()
             if not db_url:  # pragma: no cover
                 log.fatal('Database URL is undefined, exiting.')
                 sys.exit(1)
-            cls._session = sessionmaker(bind=create_engine(db_url, echo=False))
+            engine = create_engine(db_url, echo=False)
+            cls._session = sessionmaker(bind=engine)
+            if create_all:
+                cls.metadata.create_all(engine)
 
     @staticmethod
     def is_outdated(url, max_age) -> bool:

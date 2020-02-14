@@ -20,14 +20,16 @@ import argparse
 import sys
 
 from fangfrisch.config.config import config
+from fangfrisch.db import RefreshLog
 from fangfrisch.logging import log
 from fangfrisch.refresh import ClamavRefresh
 
 DUMP = 'dumpconf'
+INITDB = 'initdb'
 REFRESH = 'refresh'
 
 parser = argparse.ArgumentParser()
-parser.add_argument('action', choices=[DUMP, REFRESH], help='Action to perform')
+parser.add_argument('action', choices=[DUMP, INITDB, REFRESH], help='Action to perform')
 parser.add_argument('-c', '--conf', default=None, help='Configuration file')
 parser.add_argument('-f', '--force', default=False, action='store_true', help='Force action (default: False)')
 args = parser.parse_args()
@@ -36,8 +38,7 @@ if not config.init(args.conf):
     sys.exit(1)
 if DUMP == args.action:
     config.dump()
-elif REFRESH == args.action:
-    ClamavRefresh(args).refresh_all()
+elif INITDB == args.action:
+    RefreshLog.init(create_all=True)
 else:
-    log.error(f'Unknown action: {args.action}')
-    sys.exit(1)
+    ClamavRefresh(args).refresh_all()

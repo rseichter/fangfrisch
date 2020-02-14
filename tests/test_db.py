@@ -35,7 +35,7 @@ class DbTests(FangfrischTest):
 
     def setUp(self) -> None:
         super().setUp()
-        RefreshLog.init()
+        RefreshLog.init(create_all=True)
         self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
         self.s.add(RefreshLog(ID1))
