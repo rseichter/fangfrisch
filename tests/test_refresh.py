@@ -36,6 +36,13 @@ config.init(FangfrischTest.CONF)
 class RefreshTests(FangfrischTest):
     ref = ClamavRefresh(Namespace(force=False))
 
+    def setUp(self) -> None:
+        super().setUp()
+        RefreshLog.init()
+        self.s = RefreshLog._session()
+        self.s.query(RefreshLog).delete()
+        self.s.commit()
+
     def test_404(self):
         ci = ClamavItem(self.UNITTEST, 'x', URL_BAD_SHA256 + 'BAD', None, None, 0)
         self.assertFalse(self.ref.refresh(ci))
@@ -65,11 +72,9 @@ class RefreshTests(FangfrischTest):
         self.assertEqual(3, cr.refresh_all())
 
     def test_refresh(self):
-        self.s = RefreshLog._session()
-        self.s.query(RefreshLog).delete()
         self.s.add(RefreshLog(URL_MD5))
         self.s.commit()
-        self.assertEqual(2, self.ref.refresh_all())
+        self.assertEqual(1, self.ref.refresh_all())
 
 
 if __name__ == '__main__':

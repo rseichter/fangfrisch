@@ -38,59 +38,82 @@ class ClamavItem:
         self.url = url
 
 
+def _clamav_items() -> List[ClamavItem]:
+    item_list = []
+    for section in config.sections():
+        if not config.is_enabled(section):
+            continue
+        for option in config.options(section):
+            if option.startswith('url_'):
+                url = config.get(section, option)
+                path: str = urlparse(url).path
+                slash_pos = path.rfind('/')  # returns -1 if not found
+                path = path[slash_pos + 1:]
+                item = ClamavItem(section, option, url, config.integrity_check(section),
+                                  os.path.join(config.local_dir(section), path), config.max_age(section))
+                item_list.append(item)
+    return item_list
+
+
+def _get_digest(ci: ClamavItem):
+    if not ci.check:
+        return True, None
+    r = requests.get(f'{ci.url}.{ci.check}')
+    if r.status_code != requests.codes.ok:
+        log.error(f'Failed to download checksum file: {r.status_code} {r.reason}')
+        return False, None
+    digest = r.text.split(' ')[0]
+    return True, digest
+
+
+def _get_payload(ci: ClamavItem):
+    r = requests.get(ci.url)
+    if r.status_code != requests.codes.ok:
+        log.error(f'Failed to download data file: {r.status_code} {r.reason}')
+        return False, None
+    return True, r.content
+
+
 class ClamavRefresh:
     def __init__(self, args) -> None:
         self.args = args
 
-    @staticmethod
-    def collect_clamav_items() -> List[ClamavItem]:
-        clamav_items = []
-        for section in config.sections():
-            if not config.is_enabled(section):
-                continue
-            for option in config.options(section):
-                if option.startswith('url_'):
-                    url = config.get(section, option)
-                    path: str = urlparse(url).path
-                    slash = path.rfind('/')  # returns -1 if not found
-                    path = path[slash + 1:]
-                    item = ClamavItem(section, option, url, config.integrity_check(section),
-                                      os.path.join(config.local_dir(section), path), config.max_age(section))
-                    clamav_items.append(item)
-        return clamav_items
-
     def refresh(self, ci: ClamavItem) -> bool:
+        """Refresh a single ClamAV item.
+
+        :param ci: Item to refresh.
+        :return: True if new payload data was written, False otherwise.
+        """
         try:
             if self.args.force:
                 log.debug(f'{ci.url} refresh forced')
-            elif not RefreshLog.refresh_required(ci.url, ci.max_age):
-                log.debug(f'{ci.url} skipped (no refresh required)')
+            elif not RefreshLog.is_outdated(ci.url, ci.max_age):
+                log.debug(f'{ci.url} skip (below max age)')
                 return False
-            r = requests.get(ci.url)
-            if r.status_code != requests.codes.ok:
-                log.error(f'Failed to download data file: {r.status_code} {r.reason}')
+            status, digest = _get_digest(ci)
+            if not status:
                 return False
-            if ci.check:
-                url = f'{ci.url}.{ci.check}'
-                r_checksum = requests.get(url)
-                if r_checksum.status_code != requests.codes.ok:
-                    log.error(f'Failed to download checksum file: {r_checksum.status_code} {r_checksum.reason}')
-                    return False
-                digest = r_checksum.text.split(' ')[0]
-                if not check_integrity(r.content, ci.check, digest):
-                    log.error(f'Checksum mismatch (expected {digest})')
-                    return False
+            if RefreshLog.digest_matches(ci.url, digest):
+                log.debug(f'{ci.url} skip (digest unchanged)')
+                RefreshLog.update(ci.url, digest)  # Update timestamp
+                return False
+            status, payload = _get_payload(ci)
+            if not status:
+                return False
+            if not check_integrity(payload, ci.check, digest):
+                log.error(f'Checksum mismatch (expected {digest})')
+                return False
             log.info(f'Updating {ci.path}')
             with open(ci.path, 'wb') as f:
-                f.write(r.content)
-                RefreshLog.stamp_by_url(ci.url)
+                f.write(payload)
+                RefreshLog.update(ci.url, digest)  # Update digest and timestamp
         except OSError as e:  # pragma: no cover
             log.exception(e)
         return True
 
     def refresh_all(self) -> int:
         count = 0
-        for clamav_item in self.collect_clamav_items():
+        for clamav_item in _clamav_items():
             if self.refresh(clamav_item):
                 count += 1
         return count

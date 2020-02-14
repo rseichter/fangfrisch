@@ -20,6 +20,9 @@ import hashlib
 
 
 def check_integrity(content, algorithm: str, digest: str) -> bool:
-    h = hashlib.new(algorithm)
-    h.update(content)
-    return h.hexdigest() == digest
+    if not algorithm:
+        return True
+    _hash = hashlib.new(algorithm)
+    _hash.update(content)
+    hexdigest = _hash.hexdigest()
+    return hexdigest == digest

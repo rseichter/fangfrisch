@@ -1,4 +1,8 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
 CREATE TABLE refreshlog (
-    url VARCHAR(255) PRIMARY KEY,
-    refreshed TIME
+url VARCHAR(255) PRIMARY KEY,
+digest VARCHAR(255),
+updated TIME
 );
+COMMIT;

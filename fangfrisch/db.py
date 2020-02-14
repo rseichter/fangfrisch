@@ -35,44 +35,51 @@ Base = declarative_base()
 
 class RefreshLog(Base):
     __tablename__ = 'refreshlog'
-    url = Column(String, primary_key=True)
-    refreshed = Column(DateTime)
+    url = Column(String, nullable=False, primary_key=True)
+    digest = Column(String, nullable=True)
+    updated = Column(DateTime, nullable=True)
     _session = None
 
-    def __init__(self, url) -> None:
+    def __init__(self, url, digest=None) -> None:
+        self.digest = digest
+        self.updated = datetime.utcnow()
         self.url = url
-        self.refreshed = datetime.utcnow()
 
     @classmethod
     def init(cls):
         if not cls._session:
             db_url = config.db_url()
             if not db_url:  # pragma: no cover
-                log.fatal('Database URL is undefined')
+                log.fatal('Database URL is undefined, exiting.')
                 sys.exit(1)
             cls._session = sessionmaker(bind=create_engine(db_url, echo=False))
 
     @staticmethod
-    def _by_url(url, session):
-        return session.query(RefreshLog).filter(RefreshLog.url == url).first()
-
-    @staticmethod
-    def refresh_required(url, max_age) -> bool:
-        RefreshLog.init()
-        entry = RefreshLog._by_url(url, RefreshLog._session())
-        if not entry:
-            return True
+    def is_outdated(url, max_age) -> bool:
         threshold = datetime.utcnow() - timedelta(minutes=max_age)
-        return entry.refreshed < threshold
+        RefreshLog.init()
+        entry: RefreshLog = _query_url(url, RefreshLog._session())
+        return (entry is None) or entry.updated < threshold
 
     @staticmethod
-    def stamp_by_url(url) -> None:
+    def digest_matches(url, digest: str) -> bool:
+        RefreshLog.init()
+        entry: RefreshLog = _query_url(url, RefreshLog._session())
+        return (entry is not None) and (entry.digest == digest)
+
+    @staticmethod
+    def update(url, digest) -> None:
         RefreshLog.init()
         session = RefreshLog._session()
-        entry = RefreshLog._by_url(url, session)
+        entry: RefreshLog = _query_url(url, session)
         if entry:
-            entry.refreshed = datetime.utcnow()
+            entry.updated = datetime.utcnow()
+            entry.digest = digest
         else:
-            entry = RefreshLog(url)
+            entry = RefreshLog(url, digest)
         session.add(entry)
         session.commit()
+
+
+def _query_url(url, session):
+    return session.query(RefreshLog).filter(RefreshLog.url == url).first()
