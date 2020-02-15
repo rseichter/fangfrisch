@@ -14,24 +14,28 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Foobar. If not, see <https://www.gnu.org/licenses/>.
+along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-from setuptools import setup
+import setuptools
 
-from fangfrisch import VERSION
+import fangfrisch
 
-setup(
+with open('README.md', 'r') as f:
+    readme = f.read()
+setuptools.setup(
     name='fangfrisch',
-    version=VERSION,
+    version=fangfrisch.VERSION,
     packages=[
         'fangfrisch',
         'fangfrisch.config'
     ],
-    url='https://seichter.de/',
+    url='https://github.com/rseichter/fangfrisch',
     license='GPLv3+',
     author='Ralph Seichter',
     author_email='fangfrisch@seichter.de',
     description='Sibling to Clam Anti-Virus freshclam utility',
+    long_description=readme,
+    long_description_content_type='text/markdown',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
