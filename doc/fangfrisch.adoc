@@ -1,27 +1,31 @@
 # Fangfrisch
+Ralph Seichter <fangfrisch@seichter.de>
+v0.0.7, {docdate}
 
-Copyright © 2020 Ralph Seichter
-
-:keywords: antivirus, clamav, fangfrisch, freshclam, refresh
-:subject: Fangfrisch: Periodically update unofficial ClamAV signatures
-:revnumber: 0.0.7
-:revdate: 2020-02-15
 :copyright: © Ralph Seichter
-:publisher: Ralph Seichter
-:lang: en
-:hyphens: en
 :encoding: UTF-8
+:hyphens: en
+:keywords: antivirus, clamav, fangfrisch, freshclam, refresh
+:lang: en
+:pagenums:
+:publisher: Ralph Seichter
+:sectanchors:
+:sectnums:
+:subject: Fangfrisch: Periodically update unofficial ClamAV signatures
+////
+:revnumber: 0.0.7
+:revdate: 2020-02-16
 :pdf-version: 1.7
 :toc:
 :toclevels: 3
-:sectnums:
-:sectanchors:
-:pagenums:
 :icons: font
 :title-page:
 :media: print
 :source-highlighter: rouge
 :rouge-style: base16.solarized.light
+////
+
+Copyright © 2020 Ralph Seichter
 
 Fangfrisch (German for "freshly caught") is a sibling to the https://www.clamav.net[Clam Anti-Virus]
 freshclam utility.
@@ -97,17 +101,14 @@ enabled = yes
 integrity_check = md5
 # Set max age to 12 hours
 max_age = 720
-prefix = http://example.tld/clamav/
+prefix = http://example.tld/clamav-unofficial/
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb
 ----
 
-Fangfrisch will process only enabled sections, processing lines with the prefix `url_`.
+Fangfrisch will scan enabled sections for lines with the prefix `url_` to determine download sources for virus definition files.
 Supported schemas include FTP, HTTP and HTTPS.
-The value of `integrity_check` determines both the expected filename for digests, e.g.
-`http://example.tld/clamav/eggs.ndb.md5`, and the hashing mechanism used for verification.
+The value of `integrity_check` determines both the expected filename suffix for digests and the hashing mechanism used for verification.
 
-NOTE: `max_age` is specified in minutes.
-Providers usually document their own specific values.
-
-NOTE: Set `integrity_check` to `disabled` if the provider does not support this type of checks.
+NOTE: Max age is specified in minutes.
+Integrity checks can be turned off using the value `disabled`.

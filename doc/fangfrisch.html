@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="author" content="Ralph Seichter">
 <title>Fangfrisch</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -439,6 +440,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <body class="article">
 <div id="header">
 <h1>Fangfrisch</h1>
+<div class="details">
+<span id="author" class="author">Ralph Seichter</span><br>
+<span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
+<span id="revnumber">version 0.0.7,</span>
+<span id="revdate">2020-02-16</span>
+</div>
 </div>
 <div id="content">
 <div id="preamble">
@@ -555,38 +562,25 @@ enabled = yes
 integrity_check = md5
 # Set max age to 12 hours
 max_age = 720
-prefix = http://example.tld/clamav/
+prefix = http://example.tld/clamav-unofficial/
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Fangfrisch will process only enabled sections, processing lines with the prefix <code>url_</code>.
+<p>Fangfrisch will scan enabled sections for lines with the prefix <code>url_</code> to determine download sources for virus definition files.
 Supported schemas include FTP, HTTP and HTTPS.
-The value of <code>integrity_check</code> determines both the expected filename for digests, e.g.
-<code><a href="http://example.tld/clamav/eggs.ndb.md5" class="bare">http://example.tld/clamav/eggs.ndb.md5</a></code>, and the hashing mechanism used for verification.</p>
+The value of <code>integrity_check</code> determines both the expected filename suffix for digests and the hashing mechanism used for verification.</p>
 </div>
 <div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<div class="title">Note</div>
 </td>
 <td class="content">
-<code>max_age</code> is specified in minutes.
-Providers usually document their own specific values.
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Set <code>integrity_check</code> to <code>disabled</code> if the provider does not support this type of checks.
+Max age is specified in minutes.
+Integrity checks can be turned off using the value <code>disabled</code>.
 </td>
 </tr>
 </table>
@@ -597,7 +591,7 @@ Set <code>integrity_check</code> to <code>disabled</code> if the provider does n
 <div id="footer">
 <div id="footer-text">
 Version 0.0.7<br>
-Last updated 2020-02-15 17:09:17 +0100
+Last updated 2020-02-16 00:30:20 +0100
 </div>
 </div>
 </body>
