@@ -5,22 +5,18 @@ ADDST	= doc/fangfrisch.html doc/fangfrisch.pdf
 ADOPT	= -v
 
 all:
-	@echo "Available targets: adoc, clean, fullclean, init"
+	@echo "Available targets: adoc, clean, init"
 
 adoc:	$(ADDST)
 
-doc/fangfrisch.html:	$(ADSRC)
+%.html:	%.adoc
 	asciidoctor $(ADOPT) $<
 
-doc/fangfrisch.pdf:		$(ADSRC)
+%.pdf:	%.adoc
 	asciidoctor-pdf $(ADOPT) $<
 
 clean:
 	find tmp -type f -delete
-	rm $(ADDST)
-
-fullclean:
-	rm -fr tmp
 	rm $(ADDST)
 
 init:
