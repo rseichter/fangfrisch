@@ -21,6 +21,7 @@ clean:
 
 fullclean:
 	rm -fr tmp
+	rm $(ADDST)
 
 init:
 	mkdir -p tmp/sanesecurity
