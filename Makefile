@@ -1,7 +1,7 @@
 # vim:ts=4:noet
 
-ADSRC	= doc/fangfrisch.adoc
-ADDST	= doc/fangfrisch.html doc/fangfrisch.pdf
+ADSRC	= docs/fangfrisch.adoc
+ADDST	= docs/fangfrisch.html docs/fangfrisch.pdf
 ADOPT	= -v
 
 all:
