@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.0.7,</span>
+<span id="revnumber">version 0.dev1,</span>
 <span id="revdate">2020-02-16</span>
 </div>
 </div>
@@ -484,9 +484,9 @@ If not, see <a href="https://www.gnu.org/licenses/" class="bare">https://www.gnu
 <h2 id="_update_strategy"><a class="anchor" href="#_update_strategy"></a>2. Update strategy</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Fangfrisch is expected to run periodically, for example using <a href="https://en.wikipedia.org/wiki/Cron">cron</a>.
+<p>Fangfrisch is expected to run periodically, e.g. using <a href="https://en.wikipedia.org/wiki/Cron">cron</a>.
 Download attempts are recorded in a database and new attempts are only made after the defined age threshold is reached.
-Additionally, Fangfrisch will check digests first (if available), and only download virus definitions when their recorded digest changes, minimising transfer volumes.</p>
+Fangfrisch will attempt to download digests first (if available upstream), and only retrieve corresponding virus definition files when their recorded digest changes, minimising transfer volumes.</p>
 </div>
 </div>
 </div>
@@ -501,8 +501,8 @@ Here is an example listing of commands for BASH:</p>
 <div class="listingblock">
 <div class="content">
 <pre># Create venv home directory
-mkdir -p /var/lib/fangfrisch
-cd /var/lib/fangfrisch
+mkdir -p /var/lib/clamav/fangfrisch
+cd /var/lib/clamav/fangfrisch
 
 # Prepare and activate venv
 python3 -m venv venv
@@ -520,25 +520,43 @@ pip install fangfrisch</pre>
 <div class="paragraph">
 <p>A configuration file is mandatory and uses an INI File structure.
 It must contain at least a default section with the options shown below.
+The suggested path is <code>/etc/fangfrisch.conf</code> but the file can be stored elsewhere if you prefer.
 A description of SQLAlchemy&#8217;s DB URL syntax is available <a href="https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases">here</a>.
 Typically, a local <a href="https://www.sqlite.org">SQLite</a> database will suffice.
-Internal default values for Sanesecurity can be used by enabling the <code>[sanesecurity]</code> section.</p>
+Internal default values for Sanesecurity can be used by enabling an optional section as shown below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre># Mandatory section.
 [DEFAULT]
 db_url = sqlite:////var/lib/clamav/fangfrisch.sqlite
+# Store downloads here. Ensure write access.
 local_directory = /var/lib/clamav
 
-# Optional section, enables internal defaults for Sanesecurity.
+# Optional section: Enable internal defaults for Sanesecurity.
 [sanesecurity]
 enabled = yes</pre>
 </div>
 </div>
 <div class="paragraph">
+<p>Points of note:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Section names are case-sensitive.</p>
+</li>
+<li>
+<p>Max age is specified in minutes.</p>
+</li>
+<li>
+<p>Integrity checks can be turned off by using the value <code>disabled</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
 <p>You can also add your own sections for additional virus definition providers.
-See <a href="https://docs.python.org/3.7/library/configparser.html">here</a> for a detailed description of the supported configuration file parser.
+See <a href="https://docs.python.org/3.7/library/configparser.html">here</a> for a detailed description of the configuration file parser.
 The parser uses extended interpolation, i.e. <code>${section:option}</code> style references to options defined elsewhere in the file.</p>
 </div>
 <div class="listingblock">
@@ -557,15 +575,27 @@ url_spam = ${prefix}spam.hdb</pre>
 <p>Fangfrisch will scan enabled sections for lines prefixed with <code>url_</code> to determine download sources for virus definition files.
 The value of <code>integrity_check</code> determines both the expected filename suffix for digests and the hashing mechanism used for verification.</p>
 </div>
-<div class="admonitionblock note">
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prepare_the_database"><a class="anchor" href="#_prepare_the_database"></a>5. Prepare the database</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>python -m fangfrisch --conf /etc/fangfrisch.conf initdb</pre>
+</div>
+</div>
+<div class="admonitionblock warning">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<div class="title">Warning</div>
 </td>
 <td class="content">
-Max age is specified in minutes.
-Integrity checks can be turned off by using the value <code>disabled</code>.
+Fangfrisch should never be run as <code>root</code>, but as an unprivileged user like <code>clamav</code>.
 </td>
 </tr>
 </table>
@@ -573,7 +603,7 @@ Integrity checks can be turned off by using the value <code>disabled</code>.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_usage"><a class="anchor" href="#_usage"></a>5. Usage</h2>
+<h2 id="_usage"><a class="anchor" href="#_usage"></a>6. Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can display command line arguments as follows:</p>
@@ -601,7 +631,7 @@ optional arguments:
 <ul>
 <li>
 <p><strong>dumpconf</strong>: Dump the effective configuration to stdout, combining both internal defaults and your own settings.
-The effective configuration for the example shown in the <a href="#_configuration">Configuration</a> section is available <a href="sampleeff.conf">here</a>.</p>
+The effective configuration for the example shown in <a href="#_configuration">Section 4</a> is available in <a href="#sampleeff">Appendix A</a>.</p>
 </li>
 <li>
 <p><strong>initdb</strong>: Create the database structure.
@@ -614,7 +644,7 @@ The <code>force</code> switch can be set to force downloads regardless of local 
 </ul>
 </div>
 <div class="paragraph">
-<p>Fangfrisch should never be run as <code>root</code>, but as your local ClamAV user (typically <code>clamav</code>).
+<p>As stated before, Fanfrisch is typically run using cron.
 An example crontab looks like this:</p>
 </div>
 <div class="listingblock">
@@ -625,11 +655,84 @@ An example crontab looks like this:</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_contact"><a class="anchor" href="#_contact"></a>7. Contact</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you come across bugs or have suggestions, you should file an issue on <a href="https://github.com/rseichter/fangfrisch">GitHub</a>.
+To avoid unnecessary effort, please always check existing issues first, including closed ones.
+To contact the author Ralph Seichter directly you can send email to <a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="sampleeff"><a class="anchor" href="#sampleeff"></a>Appendix A: Effective configuration</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre># This is the effective configuration when using sample.conf
+
+[DEFAULT]
+db_url = sqlite:////var/lib/clamav/fangfrisch.sqlite
+enabled = no
+integrity_check = sha256
+local_directory = /var/lib/clamav
+
+[sanesecurity]
+enabled = yes
+max_age = 1440
+prefix = http://ftp.swin.edu.au/sanesecurity/
+url_badmacro = ${prefix}badmacro.ndb
+url_blurl = ${prefix}blurl.ndb
+url_bofhland_cracked_url = ${prefix}bofhland_cracked_URL.ndb
+url_bofhland_malware_attach = ${prefix}bofhland_malware_attach.hdb
+url_bofhland_malware_url = ${prefix}bofhland_malware_URL.ndb
+url_bofhland_phishing_url = ${prefix}bofhland_phishing_URL.ndb
+url_crdfam_clamav = ${prefix}crdfam.clamav.hdb
+url_doppelstern = ${prefix}doppelstern.ndb
+url_doppelstern-phishtank = ${prefix}doppelstern-phishtank.ndb
+url_doppelstern_hdb = ${prefix}doppelstern.hdb
+url_foxhole_all = ${prefix}foxhole_all.ndb
+url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
+url_foxhole_filename = ${prefix}foxhole_filename.cdb
+url_foxhole_generic = ${prefix}foxhole_generic.cdb
+url_foxhole_js = ${prefix}foxhole_js.ndb
+url_foxhole_js_cdb = ${prefix}foxhole_js.cdb
+url_foxhole_mail = ${prefix}foxhole_mail.cdb
+url_junk = ${prefix}junk.ndb
+url_jurlbl = ${prefix}jurlbl.ndb
+url_jurlbla = ${prefix}jurlbla.ndb
+url_lott = ${prefix}lott.ndb
+url_malware.expert = ${prefix}malware.expert.ndb
+url_malware.expert_ndb = ${prefix}malware.expert.hdb
+url_phish = ${prefix}phish.ndb
+url_phishtank = ${prefix}phishtank.ndb
+url_porcupine = ${prefix}porcupine.ndb
+url_rogue = ${prefix}rogue.hdb
+url_scam = ${prefix}scam.ndb
+url_scamnailer = ${prefix}scamnailer.ndb
+url_spamattach = ${prefix}spamattach.hdb
+url_spamimg = ${prefix}spamimg.hdb
+url_spear = ${prefix}spear.ndb
+url_spearl = ${prefix}spearl.ndb
+url_winnow_attachments = ${prefix}winnow.attachments.hdb
+url_winnow_bad_cw = ${prefix}winnow_bad_cw.hdb
+url_winnow_extended_malware = ${prefix}winnow_extended_malware.hdb
+url_winnow_extended_malware_links = ${prefix}winnow_extended_malware_links.ndb
+url_winnow_malware = ${prefix}winnow_malware.hdb
+url_winnow_malware_links = ${prefix}winnow_malware_links.ndb
+url_winnow_phish_complete = ${prefix}winnow_phish_complete.ndb
+url_winnow_phish_complete_url = ${prefix}winnow_phish_complete_url.ndb
+url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.0.7<br>
-Last updated 2020-02-16 10:51:27 +0100
+Version 0.dev1<br>
+Last updated 2020-02-16 11:49:33 +0100
 </div>
 </div>
 </body>
