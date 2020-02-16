@@ -14,9 +14,8 @@ v0.dev8, {docdate}
 :subject: Update and verify unofficial Clam Anti-Virus signatures
 :xrefstyle: short
 
-Fangfrisch (German for "freshly caught") is a sibling to the https://www.clamav.net[Clam Anti-Virus]
-freshclam utility.
-It allows downloading virus definition files that are not official ClamAV canon, e.g. from https://sanesecurity.com[Sanesecurity].
+Fangfrisch (German for "freshly caught") is a sibling to the https://www.clamav.net[Clam Anti-Virus] freshclam utility.
+It allows downloading virus definition files that are not official ClamAV canon, e.g. from https://sanesecurity.com[Sanesecurity] and https://urlhaus.abuse.ch[URLhaus].
 
 == License
 
