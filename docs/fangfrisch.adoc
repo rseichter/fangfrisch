@@ -118,8 +118,8 @@ An example crontab looks like this:
 
 == Contact
 
-If you come across bugs or have suggestions, you should file an issue on https://github.com/rseichter/fangfrisch[GitHub].
-To avoid unnecessary effort, please always check existing issues first, including closed ones.
+If you come across bugs or have suggestions, you should https://github.com/rseichter/fangfrisch/issues[file an issue] on GitHub.
+To avoid unnecessary effort for all involved parties, please _always_ check existing issues first, including closed ones.
 To contact the author {author} directly you can send email to {email}.
 
 [[sampleeff]]
