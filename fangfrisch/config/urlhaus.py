@@ -16,9 +16,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-DB_URL = 'db_url'
-ENABLED = 'enabled'
-INTEGRITY_CHECK = 'integrity_check'
-LOCAL_DIR = 'local_directory'
-MAX_AGE = 'max_age'
-PREFIX = 'prefix'
+from fangfrisch.config import INTEGRITY_CHECK
+from fangfrisch.config import MAX_AGE
+
+urlhaus = {
+    'urlhaus': {
+        MAX_AGE: str(30),  # Max age in minutes
+        INTEGRITY_CHECK: 'disabled',
+        'url_urlhaus': 'https://urlhaus.abuse.ch/downloads/urlhaus.ndb',
+    }
+}

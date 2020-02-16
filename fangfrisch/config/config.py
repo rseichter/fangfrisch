@@ -23,18 +23,18 @@ from configparser import ExtendedInterpolation
 
 from fangfrisch.config import DB_URL
 from fangfrisch.config import ENABLED
+from fangfrisch.config import INTEGRITY_CHECK
+from fangfrisch.config import LOCAL_DIR
 from fangfrisch.config import MAX_AGE
 from fangfrisch.config.sanesecurity import sanesecurity
-
-INTEGRITY_CHECK = 'integrity_check'
-LOCAL_DIR = 'local_directory'
+from fangfrisch.config.urlhaus import urlhaus
 
 config_defaults = {
     ENABLED: 'no',
     INTEGRITY_CHECK: 'sha256',
     LOCAL_DIR: '/tmp/fangfrisch',
 }
-config_other = [sanesecurity]
+config_other = [sanesecurity, urlhaus]
 
 
 class Configuration:
