@@ -13,6 +13,7 @@ function usage() {
 	bn="$(basename $0)"
 	echo "Usage: ${bn} {clean | dist}" >&2
 	echo "       ${bn} upload [repository]" >&2
+	echo "       ${bn} setver {version}" >&2
 	exit 1
 }
 
@@ -38,6 +39,12 @@ function do_upload() {
 	twine upload "${opt[@]}" dist/*
 }
 
+function do_setver() {
+	[ $# -gt 0 ] || usage
+	sed -i '' -E -e "s/^v[^,]+, {docdate.+/v$1, {docdate}/" docs/fangfrisch.adoc
+	sed -i '' -E -e "s/^__version.+/__version__ = '$1'/" fangfrisch/__init__.py
+}
+
 [ $# -gt 0 ] || usage
 arg="$1"
 shift
@@ -45,7 +52,7 @@ case "$arg" in
 	clean)
 		do_$arg
 		;;
-	dist | upload)
+	dist | setver | upload)
 		source venv/bin/activate
 		do_$arg "$@"
 		;;
