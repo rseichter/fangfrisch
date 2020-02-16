@@ -3,6 +3,7 @@
 AD_OPTS		= -v
 DOC_HTML	= docs/index.html
 DOC_SOURCE	= docs/fangfrisch.adoc
+PACKAGE		= contrib/package.sh
 
 all:
 	@echo "Available targets: doc, clean, init"
@@ -17,7 +18,10 @@ $(DOC_HTML):	$(DOC_SOURCE)
 
 clean:
 	find tmp -type f -delete
-	rm $(ADDST)
+	$(PACKAGE) clean
+
+dist:	doc
+	$(PACKAGE) dist
 
 init:
 	mkdir -p tmp/sanesecurity

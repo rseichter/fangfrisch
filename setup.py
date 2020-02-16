@@ -20,7 +20,7 @@ import setuptools
 
 import fangfrisch
 
-url = 'https://github.com/rseichter/fangfrisch/'
+source_url = 'https://github.com/rseichter/fangfrisch/'
 with open('README.md', 'r') as f:
     long_description = f.read()
 setuptools.setup(
@@ -30,11 +30,11 @@ setuptools.setup(
         'fangfrisch',
         'fangfrisch.config',
     ],
-    url=url,
+    url=source_url,
     project_urls={
-        'Documentation': f'{url}blob/master/doc/fangfrisch.adoc',
-        'Source': f'{url}',
-        'Tracker': f'{url}issues',
+        'Documentation': 'https://rseichter.github.io/fangfrisch/',
+        'Source': f'{source_url}',
+        'Tracker': f'{source_url}issues',
     },
     license='GPLv3+',
     author='Ralph Seichter',
