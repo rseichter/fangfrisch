@@ -25,3 +25,8 @@ dist:	doc
 
 init:
 	mkdir -p tmp/sanesecurity
+
+upload:
+	@echo -e '\nExecute one of the following:\n'
+	@echo -e '# a) Test release\n$(PACKAGE) upload testpypi\n'
+	@echo -e '# b) Production release\n$(PACKAGE) upload pypi\n'
