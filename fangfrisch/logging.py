@@ -20,5 +20,5 @@ import logging
 import os
 
 level = os.getenv('LOG_LEVEL', 'INFO')
-logging.basicConfig(level=level.upper(), format='%(message)s')
+logging.basicConfig(level=level.upper(), format='%(levelname)s %(message)s')
 log = logging.getLogger(__name__)
