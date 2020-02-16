@@ -92,20 +92,20 @@ class ClamavRefresh:
             if self.args.force:
                 log.debug(f'{ci.url} refresh forced')
             elif not RefreshLog.is_outdated(ci.url, ci.max_age):
-                log.debug(f'{ci.url} skip (below max age)')
+                log.debug(f'{ci.url} below max age')
                 return False
             status, digest = _get_digest(ci)
             if not status:
                 return False
             if RefreshLog.digest_matches(ci.url, digest):
-                log.debug(f'{ci.url} skip (digest unchanged)')
+                log.debug(f'{ci.url} unchanged')
                 RefreshLog.update(ci.url, digest)  # Update timestamp
                 return False
             status, payload = _get_payload(ci)
             if not status:
                 return False
             if not check_integrity(payload, ci.check, digest):
-                log.error(f'Checksum mismatch (expected {digest})')
+                log.error(f'{ci.url} integrity check failed')
                 return False
             log.info(f'Updating {ci.path}')
             with open(ci.path, 'wb') as f:
