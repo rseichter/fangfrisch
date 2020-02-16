@@ -17,6 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import os
+from subprocess import CalledProcessError
+from subprocess import CompletedProcess
+from subprocess import run
 from typing import List
 from urllib.parse import urlparse
 
@@ -117,4 +120,15 @@ class ClamavRefresh:
         for clamav_item in _clamav_items():
             if self.refresh(clamav_item):
                 count += 1
+        _exec = config.on_update_exec()
+        if count > 0 and _exec:
+            try:
+                timeout = int(config.on_update_timeout())
+                p: CompletedProcess = run(_exec, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
+                if p.stdout:
+                    log.info(p.stdout)
+                if p.stderr:
+                    log.error(p.stderr)
+            except CalledProcessError as e:  # pragma: no cover
+                log.exception(e)
         return count

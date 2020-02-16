@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.dev8,</span>
+<span id="revnumber">version 0.dev9,</span>
 <span id="revdate">2020-02-16</span>
 </div>
 </div>
@@ -531,6 +531,10 @@ Internal default values for Sanesecurity can be used by enabling an optional sec
 db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 # Store downloaded files here:
 local_directory = /var/lib/clamav
+# Optional: Execute a command if any data was downloaded.
+on_update_exec = clamdscan --reload
+# Optional: Timeout (in seconds, default: 30)
+on_update_timeout = 42
 
 # Optional section: Enable internal defaults for Sanesecurity.
 [sanesecurity]
@@ -677,6 +681,8 @@ enabled = no
 integrity_check = sha256
 local_directory = /var/lib/clamav
 db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
+on_update_exec = clamdscan --reload
+on_update_timeout = 42
 
 [sanesecurity]
 max_age = 120
@@ -735,8 +741,8 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.dev8<br>
-Last updated 2020-02-16 16:49:23 +0100
+Version 0.dev9<br>
+Last updated 2020-02-16 17:36:25 +0100
 </div>
 </div>
 </body>

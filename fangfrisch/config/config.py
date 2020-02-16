@@ -58,10 +58,16 @@ class Configuration:
     def db_url(self):
         return self.parser.get(configparser.DEFAULTSECT, DB_URL, fallback=None)
 
+    def on_update_exec(self):
+        return self.parser.get(configparser.DEFAULTSECT, 'on_update_exec', fallback=None)
+
+    def on_update_timeout(self, fallback='30'):
+        return self.parser.get(configparser.DEFAULTSECT, 'on_update_timeout', fallback=fallback)
+
     def is_enabled(self, section: str, fallback=False) -> bool:
         return self.parser.getboolean(section, ENABLED, fallback=fallback)
 
-    def max_age(self, section: str, fallback=(24 * 60)):
+    def max_age(self, section: str, fallback=1440):
         return self.parser.getint(section, MAX_AGE, fallback=fallback)
 
     def integrity_check(self, section: str, fallback=None):
