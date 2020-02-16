@@ -1,32 +1,27 @@
 # vim:ts=4:noet
 
-AD_OPTS		= -v
-DOC_HTML	= docs/index.html
-DOC_SOURCE	= docs/fangfrisch.adoc
-PACKAGE		= contrib/package.sh
+package = contrib/package.sh
+subdirs = docs
 
-all:
-	@echo "Available targets: doc, clean, init"
+.PHONY:	subdirs $(subdirs) clean dist init upload
 
-doc:	docs/fangfrisch.pdf $(DOC_HTML)
+subdirs: $(subdirs)
 
-$(DOC_HTML):	$(DOC_SOURCE)
-	asciidoctor -o $@ $(AD_OPTS) $<
-
-%.pdf:	%.adoc
-	asciidoctor-pdf $(AD_OPTS) $<
+$(subdirs):
+	make -C $@
 
 clean:
+	make -C $(subdirs) clean
 	find tmp -type f -delete
-	$(PACKAGE) clean
+	$(package) clean
 
-dist:	doc
-	$(PACKAGE) dist
+dist:
+	$(package) dist
 
 init:
 	mkdir -p tmp/sanesecurity
 
 upload:
 	@echo -e '\nExecute one of the following:\n'
-	@echo -e '# a) Test release\n$(PACKAGE) upload testpypi\n'
-	@echo -e '# b) Production release\n$(PACKAGE) upload pypi\n'
+	@echo -e '# a) Test release\n$(package) upload testpypi\n'
+	@echo -e '# b) Production release\n$(package) upload pypi\n'

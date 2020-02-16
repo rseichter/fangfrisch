@@ -128,5 +128,5 @@ To contact the author {author} directly you can send email to {email}.
 The following effective configuration is the result of combining internal defaults with the example settings shown in <<Configuration>>.
 
 ----
-include::sampleeff.conf[]
+include::eff.conf[]
 ----
