@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.dev9,</span>
+<span id="revnumber">version 0.dev10,</span>
 <span id="revdate">2020-02-16</span>
 </div>
 </div>
@@ -538,6 +538,16 @@ on_update_timeout = 42
 
 # Optional section: Enable internal defaults for Sanesecurity.
 [sanesecurity]
+enabled = yes
+
+# Optional section: Enable internal defaults for SecuriteInfo.
+[securiteinfo]
+enabled = yes
+# Specifiy your personal customer ID here:
+customer_id = abcdef123456
+
+# Optional section: Enable internal defaults for URLhaus.
+[urlhaus]
 enabled = yes</pre>
 </div>
 </div>
@@ -731,9 +741,25 @@ url_winnow_phish_complete_url = ${prefix}winnow_phish_complete_url.ndb
 url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb
 enabled = yes
 
+[securiteinfo]
+customer_id = abcdef123456
+max_age = 720
+prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
+url_android = ${prefix}securiteinfoandroid.hdb
+url_ascii = ${prefix}securiteinfoascii.hdb
+url_html = ${prefix}securiteinfohtml.hdb
+url_javascript = ${prefix}javascript.ndb
+url_old = ${prefix}securiteinfoold.hdb
+url_pdf = ${prefix}securiteinfopdf.hdb
+url_securiteinfo = ${prefix}securiteinfo.hdb
+url_securiteinfo_ign2 = ${prefix}securiteinfo.ign2
+url_spam_marketing = ${prefix}spam_marketing.ndb
+enabled = yes
+
 [urlhaus]
 max_age = 15
-url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
+url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb
+enabled = yes</pre>
 </div>
 </div>
 </div>
@@ -741,8 +767,8 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.dev9<br>
-Last updated 2020-02-16 17:36:25 +0100
+Version 0.dev10<br>
+Last updated 2020-02-16 19:09:49 +0100
 </div>
 </div>
 </body>

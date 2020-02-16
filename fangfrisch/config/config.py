@@ -27,6 +27,7 @@ from fangfrisch.config import INTEGRITY_CHECK
 from fangfrisch.config import LOCAL_DIR
 from fangfrisch.config import MAX_AGE
 from fangfrisch.config.sanesecurity import sanesecurity
+from fangfrisch.config.securiteinfo import securiteinfo
 from fangfrisch.config.urlhaus import urlhaus
 
 config_defaults = {
@@ -34,7 +35,7 @@ config_defaults = {
     INTEGRITY_CHECK: 'sha256',
     LOCAL_DIR: '/tmp/fangfrisch',
 }
-config_other = [sanesecurity, urlhaus]
+config_other = [sanesecurity, securiteinfo, urlhaus]
 
 
 class Configuration:
@@ -76,8 +77,8 @@ class Configuration:
             return None
         return check
 
-    def local_dir(self, section: str):
-        return self.parser.get(section, LOCAL_DIR)
+    def local_dir(self, section: str, fallback='.'):
+        return self.parser.get(section, LOCAL_DIR, fallback=fallback)
 
     def options(self, section: str):
         return self.parser.options(section)
