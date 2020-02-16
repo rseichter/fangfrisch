@@ -22,7 +22,7 @@ from fangfrisch.config import PREFIX
 securiteinfo = {
     'securiteinfo': {
         'customer_id': 'you_forgot_to_configure_customer_id',
-        MAX_AGE: str(720),  # Max age in minutes
+        MAX_AGE: '720',  # String representation of max age (in minutes)
         PREFIX: 'https://www.securiteinfo.com/get/signatures/${customer_id}/',
         'url_android': f'${{{PREFIX}}}securiteinfoandroid.hdb',
         'url_ascii': f'${{{PREFIX}}}securiteinfoascii.hdb',

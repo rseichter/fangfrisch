@@ -33,7 +33,6 @@ from fangfrisch.config.urlhaus import urlhaus
 config_defaults = {
     ENABLED: 'no',
     INTEGRITY_CHECK: 'sha256',
-    LOCAL_DIR: '/tmp/fangfrisch',
 }
 config_other = [sanesecurity, securiteinfo, urlhaus]
 

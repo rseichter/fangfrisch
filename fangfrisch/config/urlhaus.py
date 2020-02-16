@@ -20,7 +20,7 @@ from fangfrisch.config import MAX_AGE
 
 urlhaus = {
     'urlhaus': {
-        MAX_AGE: str(15),  # Max age in minutes
+        MAX_AGE: '15',  # String representation of max age (in minutes)
         'url_urlhaus': 'https://urlhaus.abuse.ch/downloads/urlhaus.ndb',
     }
 }
