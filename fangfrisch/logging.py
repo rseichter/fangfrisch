@@ -19,7 +19,6 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import logging
 import os
 
-level = os.getenv('LOG_LEVEL')
-if level:
-    logging.basicConfig(level=level.upper())
+level = os.getenv('LOG_LEVEL', 'INFO')
+logging.basicConfig(level=level.upper(), format='%(message)s')
 log = logging.getLogger(__name__)
