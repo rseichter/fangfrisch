@@ -1,0 +1,10 @@
+usage: __main__.py [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
+
+positional arguments:
+  {dumpconf,initdb,refresh}
+                        Action to perform
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONF, --conf CONF  Configuration file
+  -f, --force           Force action (default: False)

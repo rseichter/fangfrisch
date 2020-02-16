@@ -5,7 +5,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="keywords" content="antivirus, clamav, fangfrisch, freshclam, refresh, update">
 <meta name="author" content="Ralph Seichter">
+<meta name="copyright" content="© 2020 Ralph Seichter">
 <title>Fangfrisch</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -451,9 +453,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Copyright © 2020 Ralph Seichter</p>
-</div>
-<div class="paragraph">
 <p>Fangfrisch (German for "freshly caught") is a sibling to the <a href="https://www.clamav.net">Clam Anti-Virus</a>
 freshclam utility.
 It allows downloading virus definition files that are not official ClamAV canon, e.g. from <a href="https://sanesecurity.com">Sanesecurity</a>.</p>
@@ -461,29 +460,129 @@ It allows downloading virus definition files that are not official ClamAV canon,
 </div>
 </div>
 <div class="sect1">
-<h2 id="_update_strategy"><a class="anchor" href="#_update_strategy"></a>1. Update strategy</h2>
+<h2 id="_license"><a class="anchor" href="#_license"></a>1. License</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Fangfrisch is expected to run periodically, for example using <code>cron</code>.
+<p>Copyright © 2020 Ralph Seichter</p>
+</div>
+<div class="paragraph">
+<p>This file is part of "Fangfrisch".</p>
+</div>
+<div class="paragraph">
+<p>Fangfrisch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+</div>
+<div class="paragraph">
+<p>Fangfrisch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+</div>
+<div class="paragraph">
+<p>You should have received a copy of the GNU General Public License along with Fangfrisch.
+If not, see <a href="https://www.gnu.org/licenses/" class="bare">https://www.gnu.org/licenses/</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_update_strategy"><a class="anchor" href="#_update_strategy"></a>2. Update strategy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fangfrisch is expected to run periodically, for example using <a href="https://en.wikipedia.org/wiki/Cron">cron</a>.
 Download attempts are recorded in a database and new attempts are only made after the defined age threshold is reached.
 Additionally, Fangfrisch will check digests first (if available), and only download virus definitions when their recorded digest changes, minimising transfer volumes.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_usage"><a class="anchor" href="#_usage"></a>2. Usage</h2>
+<h2 id="_installation"><a class="anchor" href="#_installation"></a>3. Installation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fangfrisch requires Python 3.7 or newer.
+The recommended installation method is using the <a href="https://packaging.python.org/tutorials/installing-packages/">pip command</a> in a virtual Python environment.
+Here is an example listing of commands for BASH:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Create venv home directory
+mkdir -p /var/lib/fangfrisch
+cd /var/lib/fangfrisch
+
+# Prepare and activate venv
+python3 -m venv venv
+source venv/bin/activate
+
+# Install from PyPI.org
+pip install fangfrisch</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>4. Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A configuration file is mandatory and uses an INI File structure.
+It must contain at least a default section with the options shown below.
+A description of SQLAlchemy&#8217;s DB URL syntax is available <a href="https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases">here</a>.
+Typically, a local <a href="https://www.sqlite.org">SQLite</a> database will suffice.
+Internal default values for Sanesecurity can be used by enabling the <code>[sanesecurity]</code> section.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Mandatory section.
+[DEFAULT]
+db_url = sqlite:////var/lib/clamav/fangfrisch.sqlite
+local_directory = /var/lib/clamav
+
+# Optional section, enables internal defaults for Sanesecurity.
+[sanesecurity]
+enabled = yes</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also add your own sections for additional virus definition providers.
+See <a href="https://docs.python.org/3.7/library/configparser.html">here</a> for a detailed description of the supported configuration file parser.
+The parser uses extended interpolation, i.e. <code>${section:option}</code> style references to options defined elsewhere in the file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[fictional_provider]
+enabled = yes
+integrity_check = md5
+# Download no more than once ever 12 hours
+max_age = 720
+prefix = http://fictional-provider.tld/clamav-unofficial/
+url_eggs = ${prefix}eggs.ndb
+url_spam = ${prefix}spam.hdb</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fangfrisch will scan enabled sections for lines prefixed with <code>url_</code> to determine download sources for virus definition files.
+The value of <code>integrity_check</code> determines both the expected filename suffix for digests and the hashing mechanism used for verification.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Max age is specified in minutes.
+Integrity checks can be turned off by using the value <code>disabled</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage"><a class="anchor" href="#_usage"></a>5. Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can display command line arguments as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>python -m fangfrisch --help</pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>usage: __main__.py [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
+<pre>$ python -m fangfrisch --help
+
+usage: __main__.py [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
 
 positional arguments:
   {dumpconf,initdb,refresh}
@@ -501,7 +600,8 @@ optional arguments:
 <div class="ulist">
 <ul>
 <li>
-<p><strong>dumpconf</strong>: Dump the effective configuration to stdout, combining both internal defaults and your own configuration.</p>
+<p><strong>dumpconf</strong>: Dump the effective configuration to stdout, combining both internal defaults and your own settings.
+The effective configuration for the example shown in the <a href="#_configuration">Configuration</a> section is available <a href="sampleeff.conf">here</a>.</p>
 </li>
 <li>
 <p><strong>initdb</strong>: Create the database structure.
@@ -525,73 +625,11 @@ An example crontab looks like this:</p>
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>3. Configuration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>A configuration file is mandatory and must contain a <code>db_url</code> entry.
-For example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>[DEFAULT]
-db_url = sqlite:////var/lib/clamav/fangfrisch.sqlite
-local_directory = /var/lib/clamav
-
-[sanesecurity]
-enabled = yes</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>See <a href="https://docs.python.org/3.7/library/configparser.html">here</a> for a detailed description of the supported configuration file syntax with extended interpolation.
-A description of SQLAlchemy&#8217;s DB URL syntax is available <a href="https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases">here</a>.
-Typically, a local <a href="https://www.sqlite.org">SQLite</a> database will suffice.</p>
-</div>
-<div class="paragraph">
-<p>Internal default values for Sanesecurity can be used by enabling the <code>[sanesecurity]</code> config section as shown above.
-The resulting <a href="../contrib/sample-dump.conf">effective configuration</a> can be displayed using the <code>dumpconf</code>
-action.</p>
-</div>
-<div class="paragraph">
-<p>You can add your own sections for additional virus definition providers:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>[exampleprovider]
-enabled = yes
-integrity_check = md5
-# Set max age to 12 hours
-max_age = 720
-prefix = http://example.tld/clamav-unofficial/
-url_eggs = ${prefix}eggs.ndb
-url_spam = ${prefix}spam.hdb</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Fangfrisch will scan enabled sections for lines with the prefix <code>url_</code> to determine download sources for virus definition files.
-Supported schemas include FTP, HTTP and HTTPS.
-The value of <code>integrity_check</code> determines both the expected filename suffix for digests and the hashing mechanism used for verification.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Max age is specified in minutes.
-Integrity checks can be turned off using the value <code>disabled</code>.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.7<br>
-Last updated 2020-02-16 00:30:20 +0100
+Last updated 2020-02-16 10:51:27 +0100
 </div>
 </div>
 </body>
