@@ -3,7 +3,7 @@
 package = contrib/package.sh
 subdirs = docs
 
-.PHONY:	subdirs $(subdirs) clean dist init upload
+.PHONY:	subdirs $(subdirs) clean dist upload
 
 subdirs: $(subdirs)
 
@@ -18,10 +18,7 @@ clean:
 dist:
 	$(package) dist
 
-init:
-	mkdir -p tmp/sanesecurity
-
 upload:
-	@echo -e '\nExecute one of the following:\n'
+	@echo -e '\nExecute one of the following commands:\n'
 	@echo -e '# a) Test release\n$(package) upload testpypi\n'
 	@echo -e '# b) Production release\n$(package) upload pypi\n'

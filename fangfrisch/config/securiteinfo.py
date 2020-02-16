@@ -24,14 +24,14 @@ securiteinfo = {
         'customer_id': 'you_forgot_to_configure_customer_id',
         MAX_AGE: '720',  # String representation of max age (in minutes)
         PREFIX: 'https://www.securiteinfo.com/get/signatures/${customer_id}/',
+        '!url_old': f'${{{PREFIX}}}securiteinfoold.hdb',
+        '!url_spam_marketing': f'${{{PREFIX}}}spam_marketing.ndb',
         'url_android': f'${{{PREFIX}}}securiteinfoandroid.hdb',
         'url_ascii': f'${{{PREFIX}}}securiteinfoascii.hdb',
         'url_html': f'${{{PREFIX}}}securiteinfohtml.hdb',
         'url_javascript': f'${{{PREFIX}}}javascript.ndb',
-        'url_old': f'${{{PREFIX}}}securiteinfoold.hdb',
         'url_pdf': f'${{{PREFIX}}}securiteinfopdf.hdb',
         'url_securiteinfo': f'${{{PREFIX}}}securiteinfo.hdb',
         'url_securiteinfo_ign2': f'${{{PREFIX}}}securiteinfo.ign2',
-        'url_spam_marketing': f'${{{PREFIX}}}spam_marketing.ndb',
     }
 }
