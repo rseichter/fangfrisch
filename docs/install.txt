@@ -1,6 +1,6 @@
 # Create venv home directory
-mkdir -p /var/lib/clamav/fangfrisch
-cd /var/lib/clamav/fangfrisch
+mkdir -p /var/lib/fangfrisch
+cd /var/lib/fangfrisch
 
 # Prepare and activate venv
 python3 -m venv venv

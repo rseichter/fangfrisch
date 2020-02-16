@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.dev6,</span>
+<span id="revnumber">version 0.dev7,</span>
 <span id="revdate">2020-02-16</span>
 </div>
 </div>
@@ -501,8 +501,8 @@ Here is an example listing of commands for BASH:</p>
 <div class="listingblock">
 <div class="content">
 <pre># Create venv home directory
-mkdir -p /var/lib/clamav/fangfrisch
-cd /var/lib/clamav/fangfrisch
+mkdir -p /var/lib/fangfrisch
+cd /var/lib/fangfrisch
 
 # Prepare and activate venv
 python3 -m venv venv
@@ -529,8 +529,8 @@ Internal default values for Sanesecurity can be used by enabling an optional sec
 <div class="content">
 <pre># Mandatory section.
 [DEFAULT]
-db_url = sqlite:////var/lib/clamav/fangfrisch.sqlite
-# Store downloads here. Ensure write access.
+db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
+# Store downloaded files here:
 local_directory = /var/lib/clamav
 
 # Optional section: Enable internal defaults for Sanesecurity.
@@ -670,17 +670,15 @@ To contact the author Ralph Seichter directly you can send email to <a href="mai
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre># This is the effective configuration when using sample.conf
-
-[DEFAULT]
-db_url = sqlite:////var/lib/clamav/fangfrisch.sqlite
+<pre>[DEFAULT]
+db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 enabled = no
 integrity_check = sha256
 local_directory = /var/lib/clamav
 
 [sanesecurity]
 enabled = yes
-max_age = 1440
+max_age = 120
 prefix = http://ftp.swin.edu.au/sanesecurity/
 url_badmacro = ${prefix}badmacro.ndb
 url_blurl = ${prefix}blurl.ndb
@@ -731,8 +729,8 @@ url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.dev6<br>
-Last updated 2020-02-16 15:12:38 +0100
+Version 0.dev7<br>
+Last updated 2020-02-16 15:48:32 +0100
 </div>
 </div>
 </body>
