@@ -1,19 +1,19 @@
 # vim:ts=4:noet
 
-ADSRC	= docs/fangfrisch.adoc
-ADDST	= docs/fangfrisch.html docs/fangfrisch.pdf
-ADOPT	= -v
+AD_OPTS		= -v
+DOC_HTML	= docs/index.html
+DOC_SOURCE	= docs/fangfrisch.adoc
 
 all:
-	@echo "Available targets: adoc, clean, init"
+	@echo "Available targets: doc, clean, init"
 
-adoc:	$(ADDST)
+doc:	docs/fangfrisch.pdf $(DOC_HTML)
 
-%.html:	%.adoc
-	asciidoctor $(ADOPT) $<
+$(DOC_HTML):	$(DOC_SOURCE)
+	asciidoctor -o $@ $(AD_OPTS) $<
 
 %.pdf:	%.adoc
-	asciidoctor-pdf $(ADOPT) $<
+	asciidoctor-pdf $(AD_OPTS) $<
 
 clean:
 	find tmp -type f -delete
