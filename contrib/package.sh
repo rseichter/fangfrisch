@@ -11,23 +11,17 @@ set -e
 function usage() {
 	local bn
 	bn="$(basename $0)"
-	echo "Usage: ${bn} {clean | dist | doc}" >&2
+	echo "Usage: ${bn} {clean | dist}" >&2
 	echo "       ${bn} upload [repository]" >&2
 	exit 1
 }
 
 function do_clean() {
-	/bin/rm -r build/* dist/*
+	/bin/rm -r build/* dist/* || true
 }
 
 function do_dist() {
 	python setup.py sdist bdist_wheel
-}
-
-function do_doc() {
-	pushd doc >/dev/null
-	asciidoctor -r asciidoctor-diagram fangfrisch.adoc
-	popd >/dev/null
 }
 
 function do_upload() {
@@ -48,7 +42,7 @@ function do_upload() {
 arg="$1"
 shift
 case "$arg" in
-	clean | doc)
+	clean)
 		do_$arg
 		;;
 	dist | upload)

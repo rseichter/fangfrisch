@@ -20,30 +20,37 @@ import setuptools
 
 import fangfrisch
 
+url = 'https://github.com/rseichter/fangfrisch/'
 with open('README.md', 'r') as f:
     long_description = f.read()
 setuptools.setup(
     name='fangfrisch',
-    version=fangfrisch.VERSION,
+    version=fangfrisch.__version__,
     packages=[
         'fangfrisch',
-        'fangfrisch.config'
+        'fangfrisch.config',
     ],
-    url='https://github.com/rseichter/fangfrisch',
+    url=url,
+    project_urls={
+        'Documentation': f'{url}blob/master/doc/fangfrisch.adoc',
+        'Source': f'{url}',
+        'Tracker': f'{url}issues',
+    },
     license='GPLv3+',
     author='Ralph Seichter',
     author_email='fangfrisch@seichter.de',
     description='Update and verify unofficial Clam Anti-Virus signatures',
     long_description=long_description,
     long_description_content_type='text/markdown',
+    keywords='antivirus clamav freshclam refresh update',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-        'Operating System :: OS Independent'
+        'Operating System :: OS Independent',
     ],
     install_requires=[
         'requests >= 2.22.0',
-        'SQLAlchemy >= 1.3.13'
+        'SQLAlchemy >= 1.3.13',
     ],
-    python_requires='>=3.7'
+    python_requires='>=3.7',
 )
