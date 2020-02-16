@@ -126,6 +126,8 @@ To contact the author {author} directly you can send email to {email}.
 [appendix]
 == Effective configuration
 
+The following effective configuration is the result of combining internal defaults with the example settings shown in <<Configuration>>.
+
 ----
 include::sampleeff.conf[]
 ----
