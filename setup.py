@@ -21,7 +21,7 @@ import setuptools
 import fangfrisch
 
 with open('README.md', 'r') as f:
-    readme = f.read()
+    long_description = f.read()
 setuptools.setup(
     name='fangfrisch',
     version=fangfrisch.VERSION,
@@ -33,8 +33,8 @@ setuptools.setup(
     license='GPLv3+',
     author='Ralph Seichter',
     author_email='fangfrisch@seichter.de',
-    description='Sibling to Clam Anti-Virus freshclam utility',
-    long_description=readme,
+    description='Update and verify unofficial Clam Anti-Virus signatures',
+    long_description=long_description,
     long_description_content_type='text/markdown',
     classifiers=[
         'Development Status :: 3 - Alpha',
