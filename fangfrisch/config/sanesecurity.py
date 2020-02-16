@@ -21,7 +21,7 @@ from fangfrisch.config import PREFIX
 
 sanesecurity = {
     'sanesecurity': {
-        MAX_AGE: str(2 * 60),  # Max age in minutes
+        MAX_AGE: str(120),  # Max age in minutes
         PREFIX: 'http://ftp.swin.edu.au/sanesecurity/',
         'url_badmacro': f'${{{PREFIX}}}badmacro.ndb',
         'url_blurl': f'${{{PREFIX}}}blurl.ndb',

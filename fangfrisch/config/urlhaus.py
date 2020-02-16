@@ -16,13 +16,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-from fangfrisch.config import INTEGRITY_CHECK
 from fangfrisch.config import MAX_AGE
 
 urlhaus = {
     'urlhaus': {
-        MAX_AGE: str(30),  # Max age in minutes
-        INTEGRITY_CHECK: 'disabled',
+        MAX_AGE: str(15),  # Max age in minutes
         'url_urlhaus': 'https://urlhaus.abuse.ch/downloads/urlhaus.ndb',
     }
 }

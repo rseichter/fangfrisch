@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.dev7,</span>
+<span id="revnumber">version 0.dev8,</span>
 <span id="revdate">2020-02-16</span>
 </div>
 </div>
@@ -674,13 +674,12 @@ To contact the author Ralph Seichter directly you can send email to <a href="mai
 <div class="listingblock">
 <div class="content">
 <pre>[DEFAULT]
-db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 enabled = no
 integrity_check = sha256
 local_directory = /var/lib/clamav
+db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 
 [sanesecurity]
-enabled = yes
 max_age = 120
 prefix = http://ftp.swin.edu.au/sanesecurity/
 url_badmacro = ${prefix}badmacro.ndb
@@ -725,10 +724,10 @@ url_winnow_malware_links = ${prefix}winnow_malware_links.ndb
 url_winnow_phish_complete = ${prefix}winnow_phish_complete.ndb
 url_winnow_phish_complete_url = ${prefix}winnow_phish_complete_url.ndb
 url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb
+enabled = yes
 
 [urlhaus]
-max_age = 30
-integrity_check = disabled
+max_age = 15
 url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 </div>
 </div>
@@ -737,8 +736,8 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.dev7<br>
-Last updated 2020-02-16 16:09:41 +0100
+Version 0.dev8<br>
+Last updated 2020-02-16 16:31:59 +0100
 </div>
 </div>
 </body>

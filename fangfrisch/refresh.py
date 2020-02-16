@@ -44,13 +44,14 @@ def _clamav_items() -> List[ClamavItem]:
         if not config.is_enabled(section):
             continue
         for option in config.options(section):
+            check = config.integrity_check(section)
+            max_age = config.max_age(section)
             if option.startswith('url_'):
                 url = config.get(section, option)
                 path: str = urlparse(url).path
                 slash_pos = path.rfind('/')  # returns -1 if not found
-                path = path[slash_pos + 1:]
-                item = ClamavItem(section, option, url, config.integrity_check(section),
-                                  os.path.join(config.local_dir(section), path), config.max_age(section))
+                path = os.path.join(config.local_dir(section), path[slash_pos + 1:])
+                item = ClamavItem(section, option, url, check, path, max_age)
                 item_list.append(item)
     return item_list
 
