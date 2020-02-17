@@ -531,6 +531,8 @@ Internal default values for Sanesecurity can be used by enabling an optional sec
 db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 # Store downloaded files here:
 local_directory = /var/lib/clamav
+# Optional: Local data max age (default: 1d)
+max_age = 12h
 # Optional: Download size limit in bytes per file (default: 10MB).
 max_size = 500KB
 # Optional: Execute a command if any data was downloaded.
@@ -579,8 +581,8 @@ The parser uses extended interpolation, i.e. <code>${section:option}</code> styl
 <pre>[fictional_provider]
 enabled = yes
 integrity_check = md5
-# Download no more than once ever 12 hours
-max_age = 720
+# Download no more than once ever 8 hours
+max_age = 8h
 prefix = http://fictional-provider.tld/clamav-unofficial/
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb</pre>
@@ -691,7 +693,7 @@ To contact the author Ralph Seichter directly you can send email to <a href="mai
 <pre>[DEFAULT]
 enabled = no
 integrity_check = sha256
-max_age = 1d
+max_age = 12h
 max_size = 500KB
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
