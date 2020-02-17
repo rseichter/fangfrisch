@@ -121,11 +121,23 @@ If you come across bugs or have suggestions, you should https://github.com/rseic
 To avoid unnecessary effort for all involved parties, please _always_ check existing issues first, including closed ones.
 To contact the author {author} directly you can send email to {email}.
 
+[[internalconf]]
+[appendix]
+== Default configuration
+
+Fangfrisch contains the following internal configuration settings as defaults.
+All sections are disabled, and entries with the `!url_` prefix are included for reference only.
+These usually represent data sources that have a high risk of false positives, and enabling the section will not enable these entries.
+
+----
+include::internal.conf[]
+----
+
 [[sampleeff]]
 [appendix]
 == Effective configuration
 
-The following effective configuration is the result of combining internal defaults with the example settings shown in <<Configuration>>.
+The following effective configuration is the result of combining internal defaults (see <<internalconf>>) with the example settings shown in <<Configuration>>.
 
 ----
 include::eff.conf[]

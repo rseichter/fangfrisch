@@ -6,7 +6,9 @@ html_doc = index.html
 pdf_doc = fangfrisch.pdf
 sample_conf = sample.conf
 effective_conf = eff.conf
-doc_sources = fangfrisch.adoc $(sample_conf) $(effective_conf) install.txt usage.txt user.conf
+internal_conf = internal.conf
+doc_sources = fangfrisch.adoc $(sample_conf) $(effective_conf) \
+	$(internal_conf) install.txt usage.txt user.conf
 
 .PHONY:	clean docs
 
@@ -14,6 +16,9 @@ docs: $(html_doc) $(pdf_doc)
 
 $(effective_conf): $(sample_conf)
 	../local/fangfrisch -c $< dumpconf > $@
+
+$(internal_conf):
+	../local/fangfrisch -c /dev/null dumpconf > $@
 
 $(html_doc): $(doc_sources)
 	asciidoctor -o $@ $(ad_opts) $<
