@@ -19,10 +19,12 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import hashlib
 
 
-def check_integrity(content, algorithm: str, digest: str) -> bool:
+def check_integrity(content, algorithm: str, expected: str):
     if not algorithm:
-        return True
+        return True, None
     _hash = hashlib.new(algorithm)
     _hash.update(content)
-    hexdigest = _hash.hexdigest()
-    return hexdigest == digest
+    digest = _hash.hexdigest()
+    if digest != expected:
+        return False, f'{algorithm} check failed (expected {expected}, got {digest})'
+    return True, None

@@ -77,8 +77,9 @@ class ClamavRefresh:
             status, payload = get_payload(ci)
             if not status:
                 return False
-            if not check_integrity(payload, ci.check, digest):
-                log.warning(f'{ci.url} integrity check failed')
+            status, message = check_integrity(payload, ci.check, digest)
+            if not status:
+                log.warning(f'{ci.url} {message}')
                 return False
             log.info(f'Updating {ci.path}')
             with open(ci.path, 'wb') as f:

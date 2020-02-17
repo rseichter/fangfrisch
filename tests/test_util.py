@@ -29,20 +29,27 @@ SAMPLE_SHA256 = '64ab093d2f42fe686ee229ab50f650752a74975347141f2e8e947a9d059b891
 class UtilTests(FangfrischTest):
 
     def test_md5_fail(self):
-        self.assertFalse(check_integrity(SAMPLE_DATA, 'md5', 'a b'))
+        status, msg = check_integrity(SAMPLE_DATA, 'md5', 'a b')
+        self.assertFalse(status)
+        self.assertIsNotNone(msg)
 
     def test_md5_ok(self):
-        self.assertTrue(check_integrity(SAMPLE_DATA, 'md5', SAMPLE_MD5))
+        status, msg = check_integrity(SAMPLE_DATA, 'md5', SAMPLE_MD5)
+        self.assertTrue(status)
+        self.assertIsNone(msg)
 
     def test_sha256_fail(self):
-        self.assertFalse(check_integrity(SAMPLE_DATA, 'sha256', 'b c'))
+        status, msg = check_integrity(SAMPLE_DATA, 'sha256', 'b c')
+        self.assertFalse(status)
 
     def test_sha256_ok(self):
-        self.assertTrue(check_integrity(SAMPLE_DATA, 'sha256', SAMPLE_SHA256))
+        status, msg = check_integrity(SAMPLE_DATA, 'sha256', SAMPLE_SHA256)
+        self.assertTrue(status)
 
     def test_unknown(self):
         with self.assertRaises(ValueError):
-            self.assertFalse(check_integrity(SAMPLE_DATA, 'UNKNOWN_ALGO', ''))
+            status, msg = check_integrity(SAMPLE_DATA, 'UNKNOWN_ALGO', '')
+            self.assertFalse(status)
 
 
 if __name__ == '__main__':
