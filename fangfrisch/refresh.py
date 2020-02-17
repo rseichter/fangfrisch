@@ -49,7 +49,8 @@ def _clamav_items() -> List[ClamavItem]:
                 path: str = urlparse(url).path
                 slash_pos = path.rfind('/')  # returns -1 if not found
                 path = os.path.join(local_dir, path[slash_pos + 1:])
-                item = ClamavItem(section, option, url, config.integrity_check(section), path, config.max_age(section), max_size)
+                item = ClamavItem(section, option, url, config.integrity_check(section),
+                                  path, config.max_age(section), max_size)
                 item_list.append(item)
     return item_list
 
