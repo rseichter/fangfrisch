@@ -30,6 +30,9 @@ setuptools.setup(
         'fangfrisch',
         'fangfrisch.config',
     ],
+    entry_points={
+        'console_scripts': ['fangfrisch = fangfrisch.__main__:main'],
+    },
     url=source_url,
     project_urls={
         'Documentation': 'https://rseichter.github.io/fangfrisch/',

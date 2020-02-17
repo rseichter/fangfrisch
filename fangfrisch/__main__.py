@@ -24,21 +24,26 @@ from fangfrisch.db import RefreshLog
 from fangfrisch.logging import log
 from fangfrisch.refresh import ClamavRefresh
 
-DUMP = 'dumpconf'
-INITDB = 'initdb'
-REFRESH = 'refresh'
 
-parser = argparse.ArgumentParser()
-parser.add_argument('action', choices=[DUMP, INITDB, REFRESH], help='Action to perform')
-parser.add_argument('-c', '--conf', default=None, help='Configuration file')
-parser.add_argument('-f', '--force', default=False, action='store_true', help='Force action (default: False)')
-args = parser.parse_args()
-if not config.init(args.conf):
-    log.error(f'Cannot parse configuration file: {args.conf}')
-    sys.exit(1)
-if DUMP == args.action:
-    config.dump()
-elif INITDB == args.action:
-    RefreshLog.init(create_all=True)
-else:
-    ClamavRefresh(args).refresh_all()
+def main() -> int:
+    dumpconf = 'dumpconf'
+    initdb = 'initdb'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('action', choices=[dumpconf, initdb, 'refresh'], help='Action to perform')
+    parser.add_argument('-c', '--conf', default=None, help='Configuration file')
+    parser.add_argument('-f', '--force', default=False, action='store_true', help='Force action (default: False)')
+    args = parser.parse_args()
+    if not config.init(args.conf):
+        log.error(f'Cannot parse configuration file: {args.conf}')
+        sys.exit(1)
+    if dumpconf == args.action:
+        config.dump()
+    elif initdb == args.action:
+        RefreshLog.init(create_all=True)
+    else:
+        ClamavRefresh(args).refresh_all()
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
