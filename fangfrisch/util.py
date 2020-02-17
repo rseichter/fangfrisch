@@ -35,7 +35,7 @@ def check_integrity(content, algorithm: str, expected: str):
     _hash.update(content)
     digest = _hash.hexdigest()
     if digest != expected:
-        return False, f'{algorithm} check failed (expected {expected}, got {digest})'
+        return False, f'{algorithm} digest mismatch (expected {expected}, got {digest})'
     return True, None
 
 
