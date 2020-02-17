@@ -2,5 +2,4 @@
 .coverage
 build/
 dist/
-htmlcov/
 venv/
