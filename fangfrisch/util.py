@@ -19,28 +19,21 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import hashlib
 import re
 
-_hr_bytes_pattern = re.compile(r'(\d+)([KM]B?)?', re.IGNORECASE)
-_hr_time_pattern = re.compile(r'(\d+)([dhm])', re.IGNORECASE)
-_hr_bytes_multipliers = {
-    'K': 10 ** 3,
-    'KB': 2 ** 10,
-    'M': 10 ** 6,
-    'MB': 2 ** 20,
-}
-_hr_time_multipliers = {
-    'd': 24 * 60,
-    'h': 60,
-    'm': 1,
-}
-
 
 class StatusDataPair:
-    def __init__(self, ok: bool, data: object = None) -> None:
+    def __init__(self, ok: bool, data=None) -> None:
         self.data = data
         self.ok = ok
 
 
 def check_integrity(content, algorithm: str, expected: str) -> StatusDataPair:
+    """Check integrity of a content object.
+
+    :param content: Object to verify.
+    :param algorithm: Mechanism used to calculate a digest.
+    :param expected: Expected digest.
+    :return: True if digests match, False otherwise.
+    """
     if algorithm:
         _hash = hashlib.new(algorithm)
         _hash.update(content)
@@ -52,21 +45,42 @@ def check_integrity(content, algorithm: str, expected: str) -> StatusDataPair:
 
 
 def parse_hr_bytes(s: str) -> int:
-    match = _hr_bytes_pattern.fullmatch(s)
+    """Parse human-readable bytes representation (e.g. 5MB, 250K)
+
+    :param s: String to parse.
+    :return: Number of bytes.
+    """
+    match = re.fullmatch(r'(\d+)([KM]B?)?', s, re.IGNORECASE)
     if match:
-        i = int(match[1])
+        _bytes = int(match[1])
         if match[2]:
-            m = _hr_bytes_multipliers[match[2].upper()]
+            multipliers = {
+                'K': 10 ** 3,
+                'KB': 2 ** 10,
+                'M': 10 ** 6,
+                'MB': 2 ** 20,
+            }
+            m = multipliers[match[2].upper()]
         else:
             m = 1
-        return i * m
+        return _bytes * m
     return -1
 
 
 def parse_hr_time(s: str) -> int:
-    match = _hr_time_pattern.fullmatch(s)
+    """Parse human-readable time representation (e.g. 2d, 3h, 20m)
+
+    :param s: String to parse.
+    :return: Number of minutes.
+    """
+    match = re.fullmatch(r'(\d+)([dhm])', s, re.IGNORECASE)
     if match:
-        i = int(match[1])
-        m = _hr_time_multipliers[match[2].lower()]
-        return i * m
+        multipliers = {
+            'd': 24 * 60,
+            'h': 60,
+            'm': 1,
+        }
+        minutes = int(match[1])
+        m = multipliers[match[2].lower()]
+        return minutes * m
     return -1
