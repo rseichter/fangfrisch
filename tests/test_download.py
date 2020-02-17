@@ -18,6 +18,7 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import unittest
 
+# noinspection PyProtectedMember
 from fangfrisch.download import _get_data
 from tests import FangfrischTest
 from tests import MAX_SIZE

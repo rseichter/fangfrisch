@@ -19,6 +19,7 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import unittest
 
 from fangfrisch.util import check_integrity
+from fangfrisch.util import parse_hr_bytes
 from tests import FangfrischTest
 
 SAMPLE_DATA = 'fangfrisch'.encode('utf-8')
@@ -50,6 +51,18 @@ class UtilTests(FangfrischTest):
         with self.assertRaises(ValueError):
             status, msg = check_integrity(SAMPLE_DATA, 'UNKNOWN_ALGO', '')
             self.assertFalse(status)
+
+    def test_parse_bytes(self):
+        self.assertEqual(123, parse_hr_bytes('123'))
+
+    def test_parse_bytes_bad(self):
+        self.assertTrue(parse_hr_bytes('BAD') < 0)
+
+    def test_parse_bytes_k(self):
+        self.assertEqual(30000, parse_hr_bytes('30k'))
+
+    def test_parse_bytes_mb(self):
+        self.assertEqual(2 * 1024 * 1024, parse_hr_bytes('2MB'))
 
 
 if __name__ == '__main__':

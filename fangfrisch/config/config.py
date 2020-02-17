@@ -33,12 +33,13 @@ from fangfrisch.config import ON_UPDATE_TIMEOUT
 from fangfrisch.config.sanesecurity import sanesecurity
 from fangfrisch.config.securiteinfo import securiteinfo
 from fangfrisch.config.urlhaus import urlhaus
+from fangfrisch.util import parse_hr_bytes
 
 config_defaults = {
     ENABLED: 'no',
     INTEGRITY_CHECK: 'sha256',
     MAX_AGE: '1440',  # 24h in minutes
-    MAX_SIZE: str(1024 * 1024 * 10),  # 10 MB
+    MAX_SIZE: '10MB',
     ON_UPDATE_EXEC: '',
     ON_UPDATE_TIMEOUT: '30',  # Timeout in seconds
 }
@@ -79,7 +80,8 @@ class Configuration:
         return self.parser.getint(section, MAX_AGE)
 
     def max_size(self, section: str) -> int:
-        return self.parser.getint(section, MAX_SIZE)
+        size = self.parser.get(section, MAX_SIZE)
+        return parse_hr_bytes(size)
 
     def integrity_check(self, section: str) -> Optional[str]:
         check: str = self.parser.get(section, INTEGRITY_CHECK)

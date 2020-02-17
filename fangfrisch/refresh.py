@@ -41,6 +41,9 @@ def _clamav_items() -> List[ClamavItem]:
             check = config.integrity_check(section)
             max_age = config.max_age(section)
             max_size = config.max_size(section)
+            if max_size < 1:
+                log.error(f"Cannot parse max size for section '{section}'")
+                continue
             if option.startswith('url_'):
                 url = config.get(section, option)
                 path: str = urlparse(url).path
