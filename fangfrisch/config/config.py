@@ -38,7 +38,7 @@ from fangfrisch.util import parse_hr_bytes
 config_defaults = {
     ENABLED: 'no',
     INTEGRITY_CHECK: 'sha256',
-    MAX_AGE: '1440',  # 24h in minutes
+    MAX_AGE: '1d',
     MAX_SIZE: '10MB',
     ON_UPDATE_EXEC: '',
     ON_UPDATE_TIMEOUT: '30',  # Timeout in seconds

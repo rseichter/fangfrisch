@@ -20,11 +20,17 @@ import hashlib
 import re
 
 _hr_bytes_pattern = re.compile(r'(\d+)([KM]B?)?', re.IGNORECASE)
+_hr_time_pattern = re.compile(r'(\d+)([dhm])', re.IGNORECASE)
 _hr_bytes_multipliers = {
     'K': 10 ** 3,
     'KB': 2 ** 10,
     'M': 10 ** 6,
     'MB': 2 ** 20,
+}
+_hr_time_multipliers = {
+    'd': 24 * 60,
+    'h': 60,
+    'm': 1,
 }
 
 
@@ -47,5 +53,14 @@ def parse_hr_bytes(s: str) -> int:
             m = _hr_bytes_multipliers[match[2].upper()]
         else:
             m = 1
+        return i * m
+    return -1
+
+
+def parse_hr_time(s: str) -> int:
+    match = _hr_time_pattern.fullmatch(s)
+    if match:
+        i = int(match[1])
+        m = _hr_time_multipliers[match[2].lower()]
         return i * m
     return -1

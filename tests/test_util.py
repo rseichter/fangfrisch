@@ -19,7 +19,7 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import unittest
 
 from fangfrisch.util import check_integrity
-from fangfrisch.util import parse_hr_bytes
+from fangfrisch.util import parse_hr_bytes, parse_hr_time
 from tests import FangfrischTest
 
 SAMPLE_DATA = 'fangfrisch'.encode('utf-8')
@@ -63,6 +63,18 @@ class UtilTests(FangfrischTest):
 
     def test_parse_bytes_mb(self):
         self.assertEqual(2 * 1024 * 1024, parse_hr_bytes('2MB'))
+
+    def test_parse_time(self):
+        self.assertEqual(123, parse_hr_time('123m'))
+
+    def test_parse_time_bad(self):
+        self.assertTrue(parse_hr_time('321') < 0)
+
+    def test_parse_time_d(self):
+        self.assertEqual(24 * 60 * 3, parse_hr_time('3d'))
+
+    def test_parse_time_h(self):
+        self.assertEqual(48 * 60, parse_hr_time('48h'))
 
 
 if __name__ == '__main__':

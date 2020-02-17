@@ -22,7 +22,7 @@ from fangfrisch.config import PREFIX
 sanesecurity = {
     # See https://sanesecurity.com/usage/signatures/
     'sanesecurity': {
-        MAX_AGE: '120',  # String representation of max age (in minutes)
+        MAX_AGE: '2h',  # String representation of max age (in minutes)
         PREFIX: 'http://ftp.swin.edu.au/sanesecurity/',
         '!url_foxhole_all_cdb': f'${{{PREFIX}}}foxhole_all.cdb',
         '!url_foxhole_all_ndb': f'${{{PREFIX}}}foxhole_all.ndb',
