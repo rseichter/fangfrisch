@@ -30,10 +30,6 @@ URL_MISSING = 'https://seichter.de/index.html'
 URL_SHA256 = 'https://seichter.de/favicon-16x16.png'
 
 
-def to_bool(x: str) -> bool:
-    return x and x.lower() in ['1', 'enabled', 'y', 'yes', 'true']
-
-
 class FangfrischTest(unittest.TestCase):
     CONF = 'tests/tests.conf'
     TMPDIR = f'/tmp/fangfrisch/unittest'
@@ -42,4 +38,4 @@ class FangfrischTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        log.setLevel(logging.ERROR)
+        log.setLevel(logging.FATAL)
