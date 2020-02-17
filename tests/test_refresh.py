@@ -32,8 +32,6 @@ from tests import URL_MD5
 from tests import URL_MISSING
 from tests import URL_SHA256
 
-MINUTES_IN_TEN_YEARS = 10 * 365 * 24 * 60
-
 config.init(FangfrischTest.CONF)
 
 
@@ -47,7 +45,7 @@ class RefreshTests(FangfrischTest):
 
     def setUp(self) -> None:
         super().setUp()
-        RefreshLog.init()
+        RefreshLog.init(create_all=True)
         self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
         self.s.commit()

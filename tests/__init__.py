@@ -42,4 +42,4 @@ class FangfrischTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        log.setLevel(logging.FATAL)
+        log.setLevel(logging.ERROR)
