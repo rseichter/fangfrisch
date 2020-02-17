@@ -21,16 +21,21 @@ from argparse import Namespace
 
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
-from fangfrisch.refresh import ClamavItem
+from fangfrisch.download import ClamavItem
 from fangfrisch.refresh import ClamavRefresh
 from tests import FangfrischTest
-
-URL_BAD_SHA256 = 'https://seichter.de/favicon.ico'
-URL_MD5 = 'https://seichter.de/favicon-32x32.png'
-URL_MISSING = 'https://seichter.de/index.html'
-URL_SHA256 = 'https://seichter.de/favicon-16x16.png'
+from tests import MAX_SIZE
+from tests import URL_BAD_SHA256
+from tests import URL_MD5
+from tests import URL_MISSING
+from tests import URL_SHA256
 
 config.init(FangfrischTest.CONF)
+
+
+class _CI(ClamavItem):
+    def __init__(self, section, option, url, check=None, path=None, max_age=0, max_size=MAX_SIZE) -> None:
+        super().__init__(section, option, url, check, path, max_age, max_size)
 
 
 class RefreshTests(FangfrischTest):
@@ -44,27 +49,27 @@ class RefreshTests(FangfrischTest):
         self.s.commit()
 
     def test_404(self):
-        ci = ClamavItem(self.UNITTEST, 'x', URL_BAD_SHA256 + 'BAD', None, None, 0)
+        ci = _CI(self.UNITTEST, 'x', URL_BAD_SHA256 + 'BAD')
         self.assertFalse(self.ref.refresh(ci))
 
     def test_bad_sha256(self):
-        ci = ClamavItem(self.UNITTEST, 'x', URL_BAD_SHA256, 'sha256', None, 0)
+        ci = _CI(self.UNITTEST, 'x', URL_BAD_SHA256, 'sha256')
         self.assertFalse(self.ref.refresh(ci))
 
     def test_good_sha256(self):
-        ci = ClamavItem(self.UNITTEST, 'x', URL_SHA256, 'sha256', f'{self.TMPDIR}/x', 0)
+        ci = _CI(self.UNITTEST, 'x', URL_SHA256, 'sha256', f'{self.TMPDIR}/x')
         self.assertTrue(self.ref.refresh(ci))
 
     def test_good_md5(self):
-        ci = ClamavItem(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x', 0)
+        ci = _CI(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x')
         self.assertTrue(self.ref.refresh(ci))
 
     def test_missing_checksum(self):
-        ci = ClamavItem(self.UNITTEST, 'x', URL_MISSING, 'sha256', None, 0)
+        ci = _CI(self.UNITTEST, 'x', URL_MISSING, 'sha256', None)
         self.assertFalse(self.ref.refresh(ci))
 
     def test_unknown_check(self):
-        ci = ClamavItem(self.UNITTEST, 'x', URL_BAD_SHA256, 'BAD', None, 0)
+        ci = _CI(self.UNITTEST, 'x', URL_BAD_SHA256, 'BAD', None)
         self.assertFalse(self.ref.refresh(ci))
 
     def test_refresh_force(self):

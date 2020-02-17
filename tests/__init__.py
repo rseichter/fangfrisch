@@ -22,6 +22,12 @@ import uuid
 
 from fangfrisch.logging import log
 
+MAX_SIZE = 1024 * 1024
+URL_BAD_SHA256 = 'https://seichter.de/favicon.ico'
+URL_MD5 = 'https://seichter.de/favicon-32x32.png'
+URL_MISSING = 'https://seichter.de/index.html'
+URL_SHA256 = 'https://seichter.de/favicon-16x16.png'
+
 
 def to_bool(x: str) -> bool:
     return x and x.lower() in ['1', 'enabled', 'y', 'yes', 'true']

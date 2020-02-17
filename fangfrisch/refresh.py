@@ -23,22 +23,13 @@ from subprocess import run
 from typing import List
 from urllib.parse import urlparse
 
-import requests
-
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
+from fangfrisch.download import ClamavItem
+from fangfrisch.download import get_digest
+from fangfrisch.download import get_payload
 from fangfrisch.logging import log
 from fangfrisch.util import check_integrity
-
-
-class ClamavItem:
-    def __init__(self, section, option, url, check, path, max_age) -> None:
-        self.check = check
-        self.max_age = max_age
-        self.option = option
-        self.path = path
-        self.section = section
-        self.url = url
 
 
 def _clamav_items() -> List[ClamavItem]:
@@ -49,33 +40,15 @@ def _clamav_items() -> List[ClamavItem]:
         for option in config.options(section):
             check = config.integrity_check(section)
             max_age = config.max_age(section)
+            max_size = config.max_size(section)
             if option.startswith('url_'):
                 url = config.get(section, option)
                 path: str = urlparse(url).path
                 slash_pos = path.rfind('/')  # returns -1 if not found
                 path = os.path.join(config.local_dir(section), path[slash_pos + 1:])
-                item = ClamavItem(section, option, url, check, path, max_age)
+                item = ClamavItem(section, option, url, check, path, max_age, max_size)
                 item_list.append(item)
     return item_list
-
-
-def _get_digest(ci: ClamavItem):
-    if not ci.check:
-        return True, None
-    r = requests.get(f'{ci.url}.{ci.check}')
-    if r.status_code != requests.codes.ok:
-        log.error(f'Failed to download checksum file: {r.status_code} {r.reason}')
-        return False, None
-    digest = r.text.split(' ')[0]
-    return True, digest
-
-
-def _get_payload(ci: ClamavItem):
-    r = requests.get(ci.url)
-    if r.status_code != requests.codes.ok:
-        log.error(f'Failed to download data file: {r.status_code} {r.reason}')
-        return False, None
-    return True, r.content
 
 
 class ClamavRefresh:
@@ -94,18 +67,18 @@ class ClamavRefresh:
             elif not RefreshLog.is_outdated(ci.url, ci.max_age):
                 log.debug(f'{ci.url} below max age')
                 return False
-            status, digest = _get_digest(ci)
+            status, digest = get_digest(ci)
             if not status:
                 return False
             if RefreshLog.digest_matches(ci.url, digest):
                 log.debug(f'{ci.url} unchanged')
                 RefreshLog.update(ci.url, digest)  # Update timestamp
                 return False
-            status, payload = _get_payload(ci)
+            status, payload = get_payload(ci)
             if not status:
                 return False
             if not check_integrity(payload, ci.check, digest):
-                log.error(f'{ci.url} integrity check failed')
+                log.warning(f'{ci.url} integrity check failed')
                 return False
             log.info(f'Updating {ci.path}')
             with open(ci.path, 'wb') as f:
@@ -117,13 +90,13 @@ class ClamavRefresh:
 
     def refresh_all(self) -> int:
         count = 0
-        for clamav_item in _clamav_items():
-            if self.refresh(clamav_item):
+        for ci in _clamav_items():
+            if self.refresh(ci):
                 count += 1
         _exec = config.on_update_exec()
         if count > 0 and _exec:
             try:
-                timeout = int(config.on_update_timeout())
+                timeout = config.on_update_timeout()
                 p: CompletedProcess = run(_exec, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
                 if p.stdout:
                     log.info(p.stdout)

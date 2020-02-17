@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.dev12,</span>
+<span id="revnumber">version 0.dev13,</span>
 <span id="revdate">2020-02-17</span>
 </div>
 </div>
@@ -531,9 +531,11 @@ Internal default values for Sanesecurity can be used by enabling an optional sec
 db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 # Store downloaded files here:
 local_directory = /var/lib/clamav
+# Optional: Download size limit in bytes per file (default: 10485760).
+max_size = 5242880
 # Optional: Execute a command if any data was downloaded.
 on_update_exec = clamdscan --reload
-# Optional: Timeout (in seconds, default: 30)
+# Optional: Execution timeout in seconds (default: 30)
 on_update_timeout = 42
 
 # Optional section: Enable internal defaults for Sanesecurity.
@@ -689,10 +691,12 @@ To contact the author Ralph Seichter directly you can send email to <a href="mai
 <pre>[DEFAULT]
 enabled = no
 integrity_check = sha256
-db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
-local_directory = /var/lib/clamav
+max_age = 1440
+max_size = 5242880
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
+db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
+local_directory = /var/lib/clamav
 
 [sanesecurity]
 max_age = 120
@@ -772,8 +776,8 @@ enabled = yes</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.dev12<br>
-Last updated 2020-02-17 00:02:20 +0100
+Version 0.dev13<br>
+Last updated 2020-02-17 13:04:00 +0100
 </div>
 </div>
 </body>

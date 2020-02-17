@@ -20,12 +20,16 @@ import configparser
 import sys
 from configparser import ConfigParser
 from configparser import ExtendedInterpolation
+from typing import Optional
 
 from fangfrisch.config import DB_URL
 from fangfrisch.config import ENABLED
 from fangfrisch.config import INTEGRITY_CHECK
 from fangfrisch.config import LOCAL_DIR
 from fangfrisch.config import MAX_AGE
+from fangfrisch.config import MAX_SIZE
+from fangfrisch.config import ON_UPDATE_EXEC
+from fangfrisch.config import ON_UPDATE_TIMEOUT
 from fangfrisch.config.sanesecurity import sanesecurity
 from fangfrisch.config.securiteinfo import securiteinfo
 from fangfrisch.config.urlhaus import urlhaus
@@ -33,6 +37,10 @@ from fangfrisch.config.urlhaus import urlhaus
 config_defaults = {
     ENABLED: 'no',
     INTEGRITY_CHECK: 'sha256',
+    MAX_AGE: '1440',  # 24h in minutes
+    MAX_SIZE: str(1024 * 1024 * 10),  # 10 MB
+    ON_UPDATE_EXEC: '',
+    ON_UPDATE_TIMEOUT: '30',  # Timeout in seconds
 }
 config_other = [sanesecurity, securiteinfo, urlhaus]
 
@@ -49,34 +57,37 @@ class Configuration:
             return len(parsed) == 1
         return True
 
-    def dump(self):  # pragma: no cover
+    def dump(self) -> None:  # pragma: no cover
         self.parser.write(sys.stdout)
 
-    def get(self, section: str, option: str, fallback=None):
+    def get(self, section: str, option: str, fallback=None) -> Optional[str]:
         return self.parser.get(section, option, fallback=fallback)
 
-    def db_url(self):
-        return self.parser.get(configparser.DEFAULTSECT, DB_URL, fallback=None)
+    def db_url(self) -> Optional[str]:
+        return self.parser.get(configparser.DEFAULTSECT, DB_URL)
 
-    def on_update_exec(self):
-        return self.parser.get(configparser.DEFAULTSECT, 'on_update_exec', fallback=None)
+    def on_update_exec(self) -> Optional[str]:
+        return self.parser.get(configparser.DEFAULTSECT, ON_UPDATE_EXEC)
 
-    def on_update_timeout(self, fallback='30'):
-        return self.parser.get(configparser.DEFAULTSECT, 'on_update_timeout', fallback=fallback)
+    def on_update_timeout(self) -> int:
+        return self.parser.getint(configparser.DEFAULTSECT, ON_UPDATE_TIMEOUT)
 
     def is_enabled(self, section: str, fallback=False) -> bool:
         return self.parser.getboolean(section, ENABLED, fallback=fallback)
 
-    def max_age(self, section: str, fallback=1440):
-        return self.parser.getint(section, MAX_AGE, fallback=fallback)
+    def max_age(self, section: str) -> int:
+        return self.parser.getint(section, MAX_AGE)
 
-    def integrity_check(self, section: str, fallback=None):
-        check: str = self.parser.get(section, INTEGRITY_CHECK, fallback=fallback)
+    def max_size(self, section: str) -> int:
+        return self.parser.getint(section, MAX_SIZE)
+
+    def integrity_check(self, section: str) -> Optional[str]:
+        check: str = self.parser.get(section, INTEGRITY_CHECK)
         if check and check.lower() in ['disabled', 'no', 'off']:
             return None
         return check
 
-    def local_dir(self, section: str, fallback='.'):
+    def local_dir(self, section: str, fallback='.') -> str:
         return self.parser.get(section, LOCAL_DIR, fallback=fallback)
 
     def options(self, section: str):

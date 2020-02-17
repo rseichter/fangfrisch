@@ -16,4 +16,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-__version__ = '0.dev13'
+import unittest
+
+from fangfrisch.download import _get_data
+from tests import FangfrischTest
+from tests import MAX_SIZE
+from tests import URL_SHA256
+
+
+class DownloadTests(FangfrischTest):
+    def test_get_ok(self):
+        status, r = _get_data(URL_SHA256, MAX_SIZE)
+        self.assertTrue(status)
+
+    def test_get_oversized(self):
+        status, r = _get_data(URL_SHA256, 1)
+        self.assertFalse(status)
+
+
+if __name__ == '__main__':
+    unittest.main()
