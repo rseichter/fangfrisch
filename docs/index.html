@@ -666,8 +666,10 @@ An example crontab looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre># minute hour day-of-month month day-of-week user command
-*/30 * * * * clamav python -m fangfrisch --conf /etc/fangfrisch.conf refresh</pre>
+<pre>HOME=/var/lib/fangfrisch
+LOG_LEVEL=INFO
+# minute hour day-of-month month day-of-week user command
+*/15 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh</pre>
 </div>
 </div>
 </div>
@@ -869,7 +871,7 @@ enabled = yes</pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.dev17<br>
-Last updated 2020-02-17 23:04:31 +0100
+Last updated 2020-02-17 23:19:49 +0100
 </div>
 </div>
 </body>

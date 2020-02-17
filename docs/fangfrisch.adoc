@@ -111,8 +111,10 @@ As stated before, Fanfrisch is typically run using cron.
 An example crontab looks like this:
 
 ----
+HOME=/var/lib/fangfrisch
+LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
-*/30 * * * * clamav python -m fangfrisch --conf /etc/fangfrisch.conf refresh
+*/15 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh
 ----
 
 == Contact
