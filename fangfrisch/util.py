@@ -32,7 +32,7 @@ def check_integrity(content, algorithm: str, expected: str) -> StatusDataPair:
     :param content: Object to verify.
     :param algorithm: Mechanism used to calculate a digest.
     :param expected: Expected digest.
-    :return: True if digests match, False otherwise.
+    :return: True if calculated and expected digests match, False otherwise.
     """
     if algorithm:
         _hash = hashlib.new(algorithm)
@@ -48,11 +48,11 @@ def parse_hr_bytes(s: str) -> int:
     """Parse human-readable bytes representation (e.g. 5MB, 250K)
 
     :param s: String to parse.
-    :return: Number of bytes.
+    :return: Number of bytes or -1 for parsing errors.
     """
     match = re.fullmatch(r'(\d+)([KM]B?)?', s, re.IGNORECASE)
     if match:
-        _bytes = int(match[1])
+        n = int(match[1])
         if match[2]:
             multipliers = {
                 'K': 10 ** 3,
@@ -63,7 +63,7 @@ def parse_hr_bytes(s: str) -> int:
             m = multipliers[match[2].upper()]
         else:
             m = 1
-        return _bytes * m
+        return n * m
     return -1
 
 
@@ -71,7 +71,7 @@ def parse_hr_time(s: str) -> int:
     """Parse human-readable time representation (e.g. 2d, 3h, 20m)
 
     :param s: String to parse.
-    :return: Number of minutes.
+    :return: Number of minutes or -1 for parsing errors.
     """
     match = re.fullmatch(r'(\d+)([dhm])', s, re.IGNORECASE)
     if match:
@@ -80,7 +80,7 @@ def parse_hr_time(s: str) -> int:
             'h': 60,
             'm': 1,
         }
-        minutes = int(match[1])
+        n = int(match[1])
         m = multipliers[match[2].lower()]
-        return minutes * m
+        return n * m
     return -1
