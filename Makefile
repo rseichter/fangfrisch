@@ -11,7 +11,6 @@ $(subdirs):
 	make -C $@
 
 clean:
-	make -C $(subdirs) clean
 	find tmp -type f -delete
 	$(package) clean
 
