@@ -40,40 +40,52 @@ class ClamavItem:
         self.url = url
 
 
-def _content_length(r: Response, limit: int) -> StatusDataPair:
-    if CONTENT_LENGTH not in r.headers:  # pragma: no cover
+def _has_valid_length(response: Response, max_length: int) -> StatusDataPair:
+    """Check if content length in response is below a given limit.
+
+    :param response: Response object.
+    :param max_length: Maximum permitted content length.
+    :return: True if length is permitted, False otherwise.
+    """
+    if CONTENT_LENGTH not in response.headers:  # pragma: no cover
         log.error(f'Response is missing {CONTENT_LENGTH} header')
         return StatusDataPair(False, -1)
-    length = int(r.headers[CONTENT_LENGTH])
-    if length > limit:
-        log.error(f'{r.url} size exceeds defined limit ({length}/{limit})')
+    length = int(response.headers[CONTENT_LENGTH])
+    if length > max_length:
+        log.error(f'{response.url} size exceeds defined limit ({length}/{max_length})')
         return StatusDataPair(False, length)
     return StatusDataPair(True, length)
 
 
-def _download(url, max_size: int) -> StatusDataPair:
-    r = _session.get(url)
-    if r.status_code != requests.codes.ok:
-        log.error(f'{url} download failed: {r.status_code} {r.reason}')
+def _download(url, max_length: int) -> StatusDataPair:
+    """Download from specified URL if content length is below a given limit.
+
+    :param url: Source URL.
+    :param max_length: Maximum permitted content length.
+    :return: True/Data for successfull downloads, False/None otherwise.
+    """
+    response = _session.get(url, stream=True)
+    if response.status_code != requests.codes.ok:
+        log.error(f'{url} download failed: {response.status_code} {response.reason}')
         return StatusDataPair(False)
-    cl = _content_length(r, max_size)
-    if not cl.ok:
+    check = _has_valid_length(response, max_length)
+    if not check.ok:
         return StatusDataPair(False)
-    return StatusDataPair(True, r)
+    return StatusDataPair(True, response)
 
 
 def get_digest(ci: ClamavItem, max_size: int = 1024) -> StatusDataPair:
     if not ci.check:
         return StatusDataPair(True)
-    d = _download(f'{ci.url}.{ci.check}', max_size)
-    if not d.ok:
+    download = _download(f'{ci.url}.{ci.check}', max_size)
+    if not download.ok:
         return StatusDataPair(False)
-    d = d.data.text.split(' ')[0]  # Returns original text if no space is found
-    return StatusDataPair(True, d)
+    digest = download.data.text.split(' ')[0]  # Returns original text if no space is found
+    return StatusDataPair(True, digest)
 
 
 def get_payload(ci: ClamavItem) -> StatusDataPair:
-    d = _download(ci.url, ci.max_size)
-    if not d.ok:
+    download = _download(ci.url, ci.max_size)
+    if not download.ok:
         return StatusDataPair(False)
-    return StatusDataPair(True, d.data.content)
+    return StatusDataPair(True, download.data.content)

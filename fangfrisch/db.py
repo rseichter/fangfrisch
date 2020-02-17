@@ -46,7 +46,11 @@ class RefreshLog(Base):
         self.url = url
 
     @classmethod
-    def init(cls, create_all=False):
+    def init(cls, create_all=False) -> None:
+        """Initialise database session.
+
+        :param create_all: Create DB structure?
+        """
         if not cls._session:
             db_url = config.db_url()
             if not db_url:  # pragma: no cover
@@ -59,6 +63,12 @@ class RefreshLog(Base):
 
     @staticmethod
     def is_outdated(url, max_age) -> bool:
+        """Check if local data for a given URL is outdated.
+
+        :param url: Log database key.
+        :param max_age: Maximum permitted age of local data.
+        :return: True if outdated, False otherwise.
+        """
         threshold = datetime.utcnow() - timedelta(minutes=max_age)
         RefreshLog.init()
         entry: RefreshLog = _query_url(url, RefreshLog._session())
@@ -66,12 +76,23 @@ class RefreshLog(Base):
 
     @staticmethod
     def digest_matches(url, digest: str) -> bool:
+        """Check if locally recorded digest matches the provided value.
+
+        :param url: Log database key.
+        :param digest: Expected digest.
+        :return: True if digests match, False otherwise.
+        """
         RefreshLog.init()
         entry: RefreshLog = _query_url(url, RefreshLog._session())
         return (entry is not None) and (entry.digest == digest)
 
     @staticmethod
     def update(url, digest) -> None:
+        """Update digest and update timestamp for a given URL.
+
+        :param url: Log database key.
+        :param digest: New digest.
+        """
         RefreshLog.init()
         session = RefreshLog._session()
         entry: RefreshLog = _query_url(url, session)
