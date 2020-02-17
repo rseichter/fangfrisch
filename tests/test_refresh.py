@@ -18,17 +18,21 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import unittest
 from argparse import Namespace
+from datetime import timedelta
 
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
 from fangfrisch.download import ClamavItem
 from fangfrisch.refresh import ClamavRefresh
+from tests import DIGEST_MD5
 from tests import FangfrischTest
 from tests import MAX_SIZE
 from tests import URL_BAD_SHA256
 from tests import URL_MD5
 from tests import URL_MISSING
 from tests import URL_SHA256
+
+MINUTES_IN_TEN_YEARS = 10 * 365 * 24 * 60
 
 config.init(FangfrischTest.CONF)
 
@@ -76,10 +80,25 @@ class RefreshTests(FangfrischTest):
         cr = ClamavRefresh(Namespace(force=True))
         self.assertEqual(3, cr.refresh_all())
 
+    def test_refresh_age(self):
+        r = RefreshLog(URL_SHA256)
+        r.updated += timedelta(minutes=10)
+        self.s.add(r)
+        self.s.commit()
+        ci = _CI(self.UNITTEST, 'x', URL_SHA256, 'sha256', f'{self.TMPDIR}/x')
+        self.assertFalse(self.ref.refresh(ci))
+
+    def test_refresh_digest_match(self):
+        r = RefreshLog(URL_MD5, DIGEST_MD5)
+        self.s.add(r)
+        self.s.commit()
+        ci = _CI(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x')
+        self.assertFalse(self.ref.refresh(ci))
+
     def test_refresh(self):
         self.s.add(RefreshLog(URL_MD5))
         self.s.commit()
-        self.assertEqual(1, self.ref.refresh_all())
+        self.assertEqual(3, self.ref.refresh_all())
 
 
 if __name__ == '__main__':

@@ -34,6 +34,7 @@ from fangfrisch.config.sanesecurity import sanesecurity
 from fangfrisch.config.securiteinfo import securiteinfo
 from fangfrisch.config.urlhaus import urlhaus
 from fangfrisch.util import parse_hr_bytes
+from fangfrisch.util import parse_hr_time
 
 config_defaults = {
     ENABLED: 'no',
@@ -77,7 +78,8 @@ class Configuration:
         return self.parser.getboolean(section, ENABLED, fallback=fallback)
 
     def max_age(self, section: str) -> int:
-        return self.parser.getint(section, MAX_AGE)
+        age = self.parser.get(section, MAX_AGE)
+        return parse_hr_time(age)
 
     def max_size(self, section: str) -> int:
         size = self.parser.get(section, MAX_SIZE)

@@ -22,6 +22,7 @@ import uuid
 
 from fangfrisch.logging import log
 
+DIGEST_MD5 = '6087a61850f22a132f8522f35779c04d'
 MAX_SIZE = 1024 * 1024
 URL_BAD_SHA256 = 'https://seichter.de/favicon.ico'
 URL_MD5 = 'https://seichter.de/favicon-32x32.png'
