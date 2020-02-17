@@ -21,6 +21,7 @@ from requests import Response
 
 from fangfrisch import __version__
 from fangfrisch.logging import log
+from fangfrisch.util import StatusDataPair
 
 CONTENT_LENGTH = 'Content-Length'
 
@@ -39,40 +40,40 @@ class ClamavItem:
         self.url = url
 
 
-def _content_length(r: Response, limit: int):
+def _content_length(r: Response, limit: int) -> StatusDataPair:
     if CONTENT_LENGTH not in r.headers:  # pragma: no cover
         log.error(f'Response is missing {CONTENT_LENGTH} header')
-        return -1, False
+        return StatusDataPair(False, -1)
     length = int(r.headers[CONTENT_LENGTH])
     if length > limit:
         log.error(f'{r.url} size exceeds defined limit ({length}/{limit})')
-        return length, False
-    return length, True
+        return StatusDataPair(False, length)
+    return StatusDataPair(True, length)
 
 
-def _get_data(url, max_size: int):
+def _download(url, max_size: int) -> StatusDataPair:
     r = _session.get(url)
     if r.status_code != requests.codes.ok:
         log.error(f'{url} download failed: {r.status_code} {r.reason}')
-        return False, None
-    length, permitted = _content_length(r, max_size)
-    if not permitted:
-        return False, None
-    return True, r
+        return StatusDataPair(False)
+    cl = _content_length(r, max_size)
+    if not cl.ok:
+        return StatusDataPair(False)
+    return StatusDataPair(True, r)
 
 
-def get_digest(ci: ClamavItem, max_size: int = 1024):
+def get_digest(ci: ClamavItem, max_size: int = 1024) -> StatusDataPair:
     if not ci.check:
-        return True, None
-    status, r = _get_data(f'{ci.url}.{ci.check}', max_size)
-    if not status:
-        return False, None
-    digest = r.text.split(' ')[0]  # Returns original text if no space is found
-    return True, digest
+        return StatusDataPair(True)
+    d = _download(f'{ci.url}.{ci.check}', max_size)
+    if not d.ok:
+        return StatusDataPair(False)
+    d = d.data.text.split(' ')[0]  # Returns original text if no space is found
+    return StatusDataPair(True, d)
 
 
-def get_payload(ci: ClamavItem):
-    status, r = _get_data(ci.url, ci.max_size)
-    if not status:
-        return False, None
-    return True, r.content
+def get_payload(ci: ClamavItem) -> StatusDataPair:
+    d = _download(ci.url, ci.max_size)
+    if not d.ok:
+        return StatusDataPair(False)
+    return StatusDataPair(True, d.data.content)

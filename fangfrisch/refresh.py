@@ -38,18 +38,18 @@ def _clamav_items() -> List[ClamavItem]:
         if not config.is_enabled(section):
             continue
         for option in config.options(section):
-            check = config.integrity_check(section)
-            max_age = config.max_age(section)
+            local_dir = config.local_dir(section)
             max_size = config.max_size(section)
             if max_size < 1:
                 log.error(f"Cannot parse max size for section '{section}'")
                 continue
+            os.makedirs(local_dir, exist_ok=True)
             if option.startswith('url_'):
                 url = config.get(section, option)
                 path: str = urlparse(url).path
                 slash_pos = path.rfind('/')  # returns -1 if not found
-                path = os.path.join(config.local_dir(section), path[slash_pos + 1:])
-                item = ClamavItem(section, option, url, check, path, max_age, max_size)
+                path = os.path.join(local_dir, path[slash_pos + 1:])
+                item = ClamavItem(section, option, url, config.integrity_check(section), path, config.max_age(section), max_size)
                 item_list.append(item)
     return item_list
 
@@ -70,24 +70,24 @@ class ClamavRefresh:
             elif not RefreshLog.is_outdated(ci.url, ci.max_age):
                 log.debug(f'{ci.url} below max age')
                 return False
-            status, digest = get_digest(ci)
-            if not status:
+            digest = get_digest(ci)
+            if not digest.ok:
                 return False
-            if RefreshLog.digest_matches(ci.url, digest):
+            if RefreshLog.digest_matches(ci.url, digest.data):
                 log.debug(f'{ci.url} unchanged')
-                RefreshLog.update(ci.url, digest)  # Update timestamp
+                RefreshLog.update(ci.url, digest.data)  # Update timestamp
                 return False
-            status, payload = get_payload(ci)
-            if not status:
+            payload = get_payload(ci)
+            if not payload.ok:
                 return False
-            status, message = check_integrity(payload, ci.check, digest)
-            if not status:
-                log.warning(f'{ci.url} {message}')
+            integrity = check_integrity(payload.data, ci.check, digest.data)
+            if not integrity.ok:
+                log.warning(f'{ci.url} {integrity.data}')
                 return False
             log.info(f'Updating {ci.path}')
             with open(ci.path, 'wb') as f:
-                f.write(payload)
-                RefreshLog.update(ci.url, digest)  # Update digest and timestamp
+                f.write(payload.data)
+                RefreshLog.update(ci.url, digest.data)  # Update digest and timestamp
         except OSError as e:  # pragma: no cover
             log.exception(e)
         return True

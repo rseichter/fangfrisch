@@ -34,15 +34,21 @@ _hr_time_multipliers = {
 }
 
 
-def check_integrity(content, algorithm: str, expected: str):
-    if not algorithm:
-        return True, None
-    _hash = hashlib.new(algorithm)
-    _hash.update(content)
-    digest = _hash.hexdigest()
-    if digest != expected:
-        return False, f'{algorithm} digest mismatch (expected {expected}, got {digest})'
-    return True, None
+class StatusDataPair:
+    def __init__(self, ok: bool, data: object = None) -> None:
+        self.data = data
+        self.ok = ok
+
+
+def check_integrity(content, algorithm: str, expected: str) -> StatusDataPair:
+    if algorithm:
+        _hash = hashlib.new(algorithm)
+        _hash.update(content)
+        digest = _hash.hexdigest()
+        if digest != expected:
+            message = f'{algorithm} digest mismatch (expected {expected}, got {digest})'
+            return StatusDataPair(False, message)
+    return StatusDataPair(True)
 
 
 def parse_hr_bytes(s: str) -> int:

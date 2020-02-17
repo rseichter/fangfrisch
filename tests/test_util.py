@@ -19,7 +19,8 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import unittest
 
 from fangfrisch.util import check_integrity
-from fangfrisch.util import parse_hr_bytes, parse_hr_time
+from fangfrisch.util import parse_hr_bytes
+from fangfrisch.util import parse_hr_time
 from tests import FangfrischTest
 
 SAMPLE_DATA = 'fangfrisch'.encode('utf-8')
@@ -30,27 +31,27 @@ SAMPLE_SHA256 = '64ab093d2f42fe686ee229ab50f650752a74975347141f2e8e947a9d059b891
 class UtilTests(FangfrischTest):
 
     def test_md5_fail(self):
-        status, msg = check_integrity(SAMPLE_DATA, 'md5', 'a b')
-        self.assertFalse(status)
-        self.assertIsNotNone(msg)
+        i = check_integrity(SAMPLE_DATA, 'md5', 'a b')
+        self.assertFalse(i.ok)
+        self.assertIsNotNone(i.data)
 
     def test_md5_ok(self):
-        status, msg = check_integrity(SAMPLE_DATA, 'md5', SAMPLE_MD5)
-        self.assertTrue(status)
-        self.assertIsNone(msg)
+        i = check_integrity(SAMPLE_DATA, 'md5', SAMPLE_MD5)
+        self.assertTrue(i.ok)
+        self.assertIsNone(i.data)
 
     def test_sha256_fail(self):
-        status, msg = check_integrity(SAMPLE_DATA, 'sha256', 'b c')
-        self.assertFalse(status)
+        i = check_integrity(SAMPLE_DATA, 'sha256', 'b c')
+        self.assertFalse(i.ok)
 
     def test_sha256_ok(self):
-        status, msg = check_integrity(SAMPLE_DATA, 'sha256', SAMPLE_SHA256)
-        self.assertTrue(status)
+        i = check_integrity(SAMPLE_DATA, 'sha256', SAMPLE_SHA256)
+        self.assertTrue(i.ok)
 
     def test_unknown(self):
         with self.assertRaises(ValueError):
-            status, msg = check_integrity(SAMPLE_DATA, 'UNKNOWN_ALGO', '')
-            self.assertFalse(status)
+            i = check_integrity(SAMPLE_DATA, 'UNKNOWN_ALGO', '')
+            self.assertFalse(i.ok)
 
     def test_parse_bytes(self):
         self.assertEqual(123, parse_hr_bytes('123'))

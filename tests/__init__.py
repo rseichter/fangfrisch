@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import logging
+import os
 import unittest
 import uuid
 
@@ -32,10 +33,11 @@ URL_SHA256 = 'https://seichter.de/favicon-16x16.png'
 
 class FangfrischTest(unittest.TestCase):
     CONF = 'tests/tests.conf'
-    TMPDIR = f'/tmp/fangfrisch/unittest'
+    TMPDIR = '/tmp/fangfrisch/unittest'
     UNITTEST = 'unittest'
     UNKNOWN = uuid.uuid4().hex
 
     @classmethod
     def setUpClass(cls) -> None:
+        os.makedirs(FangfrischTest.TMPDIR, exist_ok=True)
         log.setLevel(logging.FATAL)

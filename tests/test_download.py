@@ -19,7 +19,7 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import unittest
 
 # noinspection PyProtectedMember
-from fangfrisch.download import _get_data
+from fangfrisch.download import _download
 from tests import FangfrischTest
 from tests import MAX_SIZE
 from tests import URL_SHA256
@@ -27,12 +27,12 @@ from tests import URL_SHA256
 
 class DownloadTests(FangfrischTest):
     def test_get_ok(self):
-        status, r = _get_data(URL_SHA256, MAX_SIZE)
-        self.assertTrue(status)
+        d = _download(URL_SHA256, MAX_SIZE)
+        self.assertTrue(d.ok)
 
     def test_get_oversized(self):
-        status, r = _get_data(URL_SHA256, 1)
-        self.assertFalse(status)
+        d = _download(URL_SHA256, 1)
+        self.assertFalse(d.ok)
 
 
 if __name__ == '__main__':
