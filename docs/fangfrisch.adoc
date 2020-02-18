@@ -124,7 +124,7 @@ url_spam = ${prefix}spam.hdb
 
 # Local file names will be determined by parsing URLs, but
 # can be manually overridden:
-filename_spam = ${prefix}spam_spam_spam_wonderful_spam.db
+filename_spam = spam_spam_spam_wonderful_spam.db
 ----
 
 Fangfrisch will scan enabled sections for lines prefixed with `url_` to determine download sources for virus definition files.
