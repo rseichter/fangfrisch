@@ -19,6 +19,11 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import hashlib
 import re
 
+_byte_multipliers = {'K': 10 ** 3, 'KB': 2 ** 10, 'M': 10 ** 6, 'MB': 2 ** 20}
+_byte_pattern = re.compile(r'(\d+)([KM]B?)?', re.IGNORECASE)
+_minute_multipliers = {'d': 24 * 60, 'h': 60, 'm': 1}
+_minute_pattern = re.compile(r'(\d+)([dhm])', re.IGNORECASE)
+
 
 class StatusDataPair:
     def __init__(self, ok: bool, data=None) -> None:
@@ -32,7 +37,7 @@ def check_integrity(content, algorithm: str, expected: str) -> StatusDataPair:
     :param content: Object to verify.
     :param algorithm: Mechanism used to calculate a digest.
     :param expected: Expected digest.
-    :return: True if calculated and expected digests match, False otherwise.
+    :return: True/None if calculated and expected digests match, False/Message otherwise.
     """
     if algorithm:
         _hash = hashlib.new(algorithm)
@@ -50,20 +55,13 @@ def parse_hr_bytes(s: str) -> int:
     :param s: String to parse.
     :return: Number of bytes or -1 for parsing errors.
     """
-    match = re.fullmatch(r'(\d+)([KM]B?)?', s, re.IGNORECASE)
-    if match:
-        n = int(match[1])
-        if match[2]:
-            multipliers = {
-                'K': 10 ** 3,
-                'KB': 2 ** 10,
-                'M': 10 ** 6,
-                'MB': 2 ** 20,
-            }
-            m = multipliers[match[2].upper()]
+    m = _byte_pattern.fullmatch(s)
+    if m:
+        if m[2]:
+            multiplier = _byte_multipliers[m[2].upper()]
         else:
-            m = 1
-        return n * m
+            multiplier = 1
+        return int(m[1]) * multiplier
     return -1
 
 
@@ -73,14 +71,8 @@ def parse_hr_time(s: str) -> int:
     :param s: String to parse.
     :return: Number of minutes or -1 for parsing errors.
     """
-    match = re.fullmatch(r'(\d+)([dhm])', s, re.IGNORECASE)
-    if match:
-        multipliers = {
-            'd': 24 * 60,
-            'h': 60,
-            'm': 1,
-        }
-        n = int(match[1])
-        m = multipliers[match[2].lower()]
-        return n * m
+    m = _minute_pattern.fullmatch(s)
+    if m:
+        multiplier = _minute_multipliers[m[2].lower()]
+        return int(m[1]) * multiplier
     return -1
