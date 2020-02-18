@@ -1,1 +1,0 @@
-export LOG_LEVEL='ERROR'

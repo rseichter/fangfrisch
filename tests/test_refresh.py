@@ -96,7 +96,8 @@ class RefreshTests(FangfrischTest):
     def test_refresh(self):
         self.s.add(RefreshLog(URL_MD5))
         self.s.commit()
-        self.assertEqual(1, self.ref.refresh_all())
+        n = self.ref.refresh_all()
+        self.assertEqual(3, n)
 
 
 if __name__ == '__main__':

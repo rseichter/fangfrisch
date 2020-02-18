@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# vim:tabstop=4:noexpandtab
+# vim:ts=4:noet
 #
 # Runs unittests for automx2. Example usage:
 #
@@ -10,24 +10,19 @@
 # Run all unittests and collect coverage data. This will also
 # generate a HTML-based coverage report.
 
-CONF='tests/tests.conf'
-SETTINGS='tests/settings.sh'
-
 set -e
-
 source venv/bin/activate
-if [ -f ${SETTINGS} ]; then
-	source ${SETTINGS}
-fi
 
-if [ ! -f ${CONF} ]; then
-	echo "Missing config file ${CONF}" >&2
-	exit 1
+DIR='/tmp/fangfrisch/unittest'
+DB="$DIR/db.sqlite"
+if [ -d $DIR ]; then
+	rm -r $DIR
 fi
+mkdir -p $DIR
+sqlite3 $DB < tests/tests.sql
 
-if [ ! -d /tmp/fangfrisch/unittest ]; then
-	mkdir -p /tmp/fangfrisch/unittest
-fi
+CONF='tests/tests.conf'
+sed -i '' -e "s,^db_url.*,db_url = sqlite:///${DB}," $CONF
 
 function usage() {
 	echo "Usage: $(basename $0) [coverage]" >&2
