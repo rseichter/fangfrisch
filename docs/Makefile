@@ -1,18 +1,17 @@
 # vim:ts=4:noet
 
-ad_opts = -v
+asciidoctor_opts = -v
 
-html_doc = index.html
-pdf_doc = fangfrisch.pdf
+ff_html = index.html
+ff_pdf = fangfrisch.pdf
 sample_conf = sample.conf
 effective_conf = eff.conf
 internal_conf = internal.conf
-doc_sources = fangfrisch.adoc $(sample_conf) $(effective_conf) \
-	$(internal_conf) install.txt usage.txt user.conf
+doc_sources = fangfrisch.adoc $(sample_conf) $(effective_conf) $(internal_conf) usage.txt
 
-.PHONY:	clean docs
+.PHONY:	clean docs force
 
-docs: $(html_doc) $(pdf_doc)
+docs: $(ff_html) $(ff_pdf)
 
 $(effective_conf): $(sample_conf)
 	../local/fangfrisch -c $< dumpconf > $@
@@ -20,11 +19,15 @@ $(effective_conf): $(sample_conf)
 $(internal_conf):
 	../local/fangfrisch -c /dev/null dumpconf > $@
 
-$(html_doc): $(doc_sources)
-	asciidoctor -o $@ $(ad_opts) $<
+$(ff_html): $(doc_sources)
+	asciidoctor -o $@ $(asciidoctor_opts) $<
 
-$(pdf_doc): $(doc_sources)
-	asciidoctor-pdf $(ad_opts) $<
+$(ff_pdf): $(doc_sources)
+	asciidoctor-pdf $(asciidoctor_opts) $<
 
 clean:
-	/bin/rm $(html_doc) $(pdf_doc) || true
+	/bin/rm $(ff_html) $(ff_pdf) || true
+
+force:
+	touch $(sample_conf)
+	make

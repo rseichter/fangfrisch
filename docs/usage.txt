@@ -1,4 +1,4 @@
-usage: __main__.py [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
+usage: fangfrisch [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
 
 positional arguments:
   {dumpconf,initdb,refresh}

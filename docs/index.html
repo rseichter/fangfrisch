@@ -445,15 +445,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.dev17,</span>
-<span id="revdate">2020-02-17</span>
+<span id="revnumber">version 0.1b1,</span>
+<span id="revdate">2020-02-18</span>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Fangfrisch (German for "freshly caught") is a sibling to the <a href="https://www.clamav.net">Clam Anti-Virus</a> freshclam utility.
+<p>Fangfrisch (German for "freshly caught") is a sibling of the <a href="https://www.clamav.net">Clam Anti-Virus</a> freshclam utility.
 It allows downloading virus definition files that are not official ClamAV canon, e.g. from <a href="https://sanesecurity.com">Sanesecurity</a> and <a href="https://urlhaus.abuse.ch">URLhaus</a>.</p>
 </div>
 </div>
@@ -497,18 +497,33 @@ Fangfrisch will attempt to download digests first (if available upstream), and o
 The recommended installation method is using the <a href="https://packaging.python.org/tutorials/installing-packages/">pip command</a> in a virtual Python environment.
 Here is an example listing of commands for BASH:</p>
 </div>
+<div class="sect2">
+<h3 id="_create_home_directory"><a class="anchor" href="#_create_home_directory"></a>3.1. Create home directory</h3>
 <div class="listingblock">
 <div class="content">
-<pre># Create venv home directory
-mkdir -p /var/lib/fangfrisch
-cd /var/lib/fangfrisch
-
-# Prepare and activate venv
-python3 -m venv venv
-source venv/bin/activate
-
-# Install from PyPI.org
-pip install fangfrisch</pre>
+<pre>mkdir -p /var/lib/fangfrisch
+cd /var/lib/fangfrisch</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prepare_and_activate_venv"><a class="anchor" href="#_prepare_and_activate_venv"></a>3.2. Prepare and activate venv</h3>
+<div class="listingblock">
+<div class="content">
+<pre>python3 -m venv venv
+source venv/bin/activate</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_install_via_pypi"><a class="anchor" href="#_install_via_pypi"></a>3.3. Install via <a href="https://pypi.org/project/fangfrisch/">PyPI</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre>pip install fangfrisch</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This step will also create an executable launcher script <code>venv/bin/fangfrisch</code>.</p>
 </div>
 </div>
 </div>
@@ -517,73 +532,94 @@ pip install fangfrisch</pre>
 <h2 id="_configuration"><a class="anchor" href="#_configuration"></a>4. Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A configuration file is mandatory and uses an INI File structure.
-It must contain at least a default section with the options shown below.
-The suggested path is <code>/etc/fangfrisch.conf</code> but the file can be stored elsewhere if you prefer.
-A description of SQLAlchemy&#8217;s DB URL syntax is available <a href="https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases">here</a>.
-Typically, a local <a href="https://www.sqlite.org">SQLite</a> database will suffice.
-Internal default values for Sanesecurity can be used by enabling an optional section as shown below.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre># Mandatory section.
-[DEFAULT]
-db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
-# Store downloaded files here:
-local_directory = /var/lib/clamav
-# Optional: Local data max age (default: 1d)
-max_age = 12h
-# Optional: Download size limit in bytes per file (default: 10MB).
-max_size = 500KB
-# Optional: Execute a command if any data was downloaded.
-on_update_exec = clamdscan --reload
-# Optional: Execution timeout in seconds (default: 30)
-on_update_timeout = 42
-
-# Optional section: Enable internal defaults for Sanesecurity.
-[sanesecurity]
-enabled = yes
-
-# Optional section: Enable internal defaults for SecuriteInfo.
-[securiteinfo]
-enabled = yes
-# Specify your personal customer ID here:
-customer_id = abcdef123456
-
-# Optional section: Enable internal defaults for URLhaus.
-[urlhaus]
-enabled = yes</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Points of note:</p>
+<p>A configuration file is mandatory, uses an INI-File-like structure and must contain a <code>db_url</code> entry.
+All other settings are optional.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Section names are case-sensitive.</p>
+<p><strong>db_url</strong>: Database URL in <a href="https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases">SQLAlchemy syntax</a>.
+Mandatory, no default.
+Typically, a local <a href="https://www.sqlite.org">SQLite</a> database will suffice.</p>
 </li>
 <li>
-<p>Max age is specified in minutes.</p>
+<p><strong>enabled</strong>: Scan this section for URLs?
+Default: <code>false</code>.</p>
 </li>
 <li>
-<p>Integrity checks can be turned off by using the value <code>disabled</code>.</p>
+<p><strong>integrity_check</strong>: Mechanism for integrity checks.
+Default: <code>sha256</code>.
+You can use <code>disabled</code> if the signature file provider offers no checksums.</p>
+</li>
+<li>
+<p><strong>interval</strong>: Interval between downloads.
+Default: <code>1d</code>.
+Values are provider-dependent and can be expressed in human-readable form (e.g. <code>12h</code> or <code>45m</code>).
+Please respect the limits set by each provider.</p>
+</li>
+<li>
+<p><strong>max_size</strong>: Maximum file size expected from the provider.
+Default: <code>10MB</code>.
+Values are can be expressed in human-readable form (e.g. <code>250KB</code> or <code>3MB</code>) and should be set per provider.
+Fangfrisch attempts to inspect the content length before downloading virus signature files so as not to download files larger than the defined limit.</p>
+</li>
+<li>
+<p><strong>on_update_exec</strong>: If any files were downloaded during a pass, a command can be executed in after the pass finishes.
+No default.
+A typical value is <code>clamdscan --reload</code>.</p>
+</li>
+<li>
+<p><strong>on_update_timeout</strong>: Timeout for the <code>on_update_exec</code> command, in seconds.
+Default: 30.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>You can also add your own sections for additional virus definition providers.
-See <a href="https://docs.python.org/3.7/library/configparser.html">here</a> for a detailed description of the configuration file parser.
-The parser uses extended interpolation, i.e. <code>${section:option}</code> style references to options defined elsewhere in the file.</p>
+<p>Details about the configuration parser and extended interpolation are avalable <a href="https://docs.python.org/3.7/library/configparser.html">here</a>.
+Internal default values for providers can be used by enabling sections as shown below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>[fictional_provider]
+<pre># Example configuration
+
+[DEFAULT]
+db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
+
+# The following settings are optional. Other sections inherit
+# values from DEFAULT and may also overwrite values.
+
+local_directory = /var/lib/clamav
+interval = 8h
+max_size = 5MB
+on_update_exec = clamdscan --reload
+on_update_timeout = 42
+
+[sanesecurity]
+enabled = yes
+
+[securiteinfo]
+enabled = yes
+# Replace with your personal SecuriteInfo customer ID
+customer_id = abcdef123456
+
+[urlhaus]
+enabled = yes
+interval = 15m
+max_size = 2MB</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also add your own sections for additional virus definition providers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[fictionalprovider]
 enabled = yes
 integrity_check = md5
-# Download no more than once ever 8 hours
-max_age = 8h
+interval = 90m
 prefix = http://fictional-provider.tld/clamav-unofficial/
+# Reference the defined prefix in URL definitions. Values in
+# other sections can be referenced using ${section:option}.
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb</pre>
 </div>
@@ -595,14 +631,14 @@ The value of <code>integrity_check</code> determines both the expected filename 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_prepare_the_database"><a class="anchor" href="#_prepare_the_database"></a>5. Prepare the database</h2>
+<h2 id="_preparing_the_database"><a class="anchor" href="#_preparing_the_database"></a>5. Preparing the database</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>python -m fangfrisch --conf /etc/fangfrisch.conf initdb</pre>
+<pre>venv/bin/fangfrisch --conf /etc/fangfrisch.conf initdb</pre>
 </div>
 </div>
 <div class="admonitionblock warning">
@@ -627,9 +663,9 @@ Fangfrisch should never be run as <code>root</code>, but as an unprivileged user
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ python -m fangfrisch --help
+<pre>$ venv/bin/fangfrisch --help
 
-usage: __main__.py [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
+usage: fangfrisch [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
 
 positional arguments:
   {dumpconf,initdb,refresh}
@@ -678,8 +714,10 @@ LOG_LEVEL=INFO
 <h2 id="_contact"><a class="anchor" href="#_contact"></a>7. Contact</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you come across bugs or have suggestions, you should <a href="https://github.com/rseichter/fangfrisch/issues">file an issue</a> on GitHub.
-To avoid unnecessary effort for all involved parties, please <em>always</em> check existing issues first, including closed ones.
+<p>The project is hosted on <a href="https://github.com/rseichter/fangfrisch">GitHub</a>.
+If you experience problems or have suggestions, you should <a href="https://github.com/rseichter/fangfrisch/issues">file an issue</a>.
+When doing so, please always check existing issues first, including closed ones.
+This saves time and effort for all involved.
 To contact the author Ralph Seichter directly you can send email to <a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a>.</p>
 </div>
 </div>
@@ -697,13 +735,13 @@ These usually represent data sources that have a high risk of false positives, a
 <pre>[DEFAULT]
 enabled = no
 integrity_check = sha256
-max_age = 1d
+interval = 1d
 max_size = 10MB
 on_update_exec =
 on_update_timeout = 30
 
 [sanesecurity]
-max_age = 2h
+interval = 2h
 prefix = http://ftp.swin.edu.au/sanesecurity/
 !url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
 !url_foxhole_all_ndb = ${prefix}foxhole_all.ndb
@@ -755,7 +793,7 @@ url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb
 
 [securiteinfo]
 customer_id = you_forgot_to_configure_customer_id
-max_age = 12h
+interval = 12h
 prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
 !url_old = ${prefix}securiteinfoold.hdb
 !url_spam_marketing = ${prefix}spam_marketing.ndb
@@ -768,7 +806,7 @@ url_securiteinfo = ${prefix}securiteinfo.hdb
 url_securiteinfo_ign2 = ${prefix}securiteinfo.ign2
 
 [urlhaus]
-max_age = 10m
+interval = 10m
 url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 </div>
 </div>
@@ -783,17 +821,17 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 <div class="listingblock">
 <div class="content">
 <pre>[DEFAULT]
-enabled = no
+enabled = false
 integrity_check = sha256
-max_age = 12h
-max_size = 500KB
+interval = 8h
+max_size = 5MB
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
 db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 local_directory = /var/lib/clamav
 
 [sanesecurity]
-max_age = 2h
+interval = 2h
 prefix = http://ftp.swin.edu.au/sanesecurity/
 !url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
 !url_foxhole_all_ndb = ${prefix}foxhole_all.ndb
@@ -846,7 +884,7 @@ enabled = yes
 
 [securiteinfo]
 customer_id = abcdef123456
-max_age = 12h
+interval = 12h
 prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
 !url_old = ${prefix}securiteinfoold.hdb
 !url_spam_marketing = ${prefix}spam_marketing.ndb
@@ -860,9 +898,10 @@ url_securiteinfo_ign2 = ${prefix}securiteinfo.ign2
 enabled = yes
 
 [urlhaus]
-max_age = 10m
+interval = 15m
 url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb
-enabled = yes</pre>
+enabled = yes
+max_size = 2MB</pre>
 </div>
 </div>
 </div>
@@ -870,8 +909,8 @@ enabled = yes</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.dev17<br>
-Last updated 2020-02-17 23:19:49 +0100
+Version 0.1b1<br>
+Last updated 2020-02-18 13:06:30 +0100
 </div>
 </div>
 </body>

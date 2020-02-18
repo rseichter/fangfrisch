@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v0.dev17, {docdate}
+v0.1b1, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -14,7 +14,7 @@ v0.dev17, {docdate}
 :subject: Update and verify unofficial Clam Anti-Virus signatures
 :xrefstyle: short
 
-Fangfrisch (German for "freshly caught") is a sibling to the https://www.clamav.net[Clam Anti-Virus] freshclam utility.
+Fangfrisch (German for "freshly caught") is a sibling of the https://www.clamav.net[Clam Anti-Virus] freshclam utility.
 It allows downloading virus definition files that are not official ClamAV canon, e.g. from https://sanesecurity.com[Sanesecurity] and https://urlhaus.abuse.ch[URLhaus].
 
 == License
@@ -42,46 +42,85 @@ Fangfrisch requires Python 3.7 or newer.
 The recommended installation method is using the https://packaging.python.org/tutorials/installing-packages/[pip command] in a virtual Python environment.
 Here is an example listing of commands for BASH:
 
+=== Create home directory
+
 ----
-include::install.txt[]
+mkdir -p /var/lib/fangfrisch
+cd /var/lib/fangfrisch
 ----
+
+=== Prepare and activate venv
+
+----
+python3 -m venv venv
+source venv/bin/activate
+----
+
+=== Install via https://pypi.org/project/fangfrisch/[PyPI]
+
+----
+pip install fangfrisch
+----
+
+This step will also create an executable launcher script `venv/bin/fangfrisch`.
 
 == Configuration
 
-A configuration file is mandatory and uses an INI File structure.
-It must contain at least a default section with the options shown below.
-The suggested path is `/etc/fangfrisch.conf` but the file can be stored elsewhere if you prefer.
-A description of SQLAlchemy's DB URL syntax is available https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases[here].
+A configuration file is mandatory, uses an INI-File-like structure and must contain a `db_url` entry.
+All other settings are optional.
+
+* *db_url*: Database URL in https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases[SQLAlchemy syntax].
+Mandatory, no default.
 Typically, a local https://www.sqlite.org[SQLite] database will suffice.
-Internal default values for Sanesecurity can be used by enabling an optional section as shown below.
+* *enabled*: Scan this section for URLs?
+Default: `false`.
+* *integrity_check*: Mechanism for integrity checks.
+Default: `sha256`.
+You can use `disabled` if the signature file provider offers no checksums.
+* *interval*: Interval between downloads.
+Default: `1d`.
+Values are provider-dependent and can be expressed in human-readable form (e.g. `12h` or `45m`).
+Please respect the limits set by each provider.
+* *max_size*: Maximum file size expected from the provider.
+Default: `10MB`.
+Values are can be expressed in human-readable form (e.g. `250KB` or `3MB`) and should be set per provider.
+Fangfrisch attempts to inspect the content length before downloading virus signature files so as not to download files larger than the defined limit.
+* *on_update_exec*: If any files were downloaded during a pass, a command can be executed in after the pass finishes.
+No default.
+A typical value is `clamdscan --reload`.
+* *on_update_timeout*: Timeout for the `on_update_exec` command, in seconds.
+Default: 30.
+
+Details about the configuration parser and extended interpolation are avalable https://docs.python.org/3.7/library/configparser.html[here].
+Internal default values for providers can be used by enabling sections as shown below.
 
 ----
 include::sample.conf[]
 ----
 
-Points of note:
-
-* Section names are case-sensitive.
-* Max age is specified in minutes.
-* Integrity checks can be turned off by using the value `disabled`.
-
-You can also add your own sections for additional virus definition providers.
-See https://docs.python.org/3.7/library/configparser.html[here] for a detailed description of the configuration file parser.
-The parser uses extended interpolation, i.e. `${section:option}` style references to options defined elsewhere in the file.
+You can also add your own sections for additional virus definition providers:
 
 ----
-include::user.conf[]
+[fictionalprovider]
+enabled = yes
+integrity_check = md5
+interval = 90m
+prefix = http://fictional-provider.tld/clamav-unofficial/
+# Reference the defined prefix in URL definitions. Values in
+# other sections can be referenced using ${section:option}.
+url_eggs = ${prefix}eggs.ndb
+url_spam = ${prefix}spam.hdb
 ----
 
 Fangfrisch will scan enabled sections for lines prefixed with `url_` to determine download sources for virus definition files.
 The value of `integrity_check` determines both the expected filename suffix for digests and the hashing mechanism used for verification.
 
-== Prepare the database
+== Preparing the database
 
 After completing the configuration, make sure to create the database structure by running the `initdb` command.
 
 ----
-python -m fangfrisch --conf /etc/fangfrisch.conf initdb
+venv/bin/fangfrisch --conf /etc/fangfrisch.conf initdb
 ----
 
 WARNING: Fangfrisch should never be run as `root`, but as an unprivileged user like `clamav`.
@@ -91,7 +130,7 @@ WARNING: Fangfrisch should never be run as `root`, but as an unprivileged user l
 You can display command line arguments as follows:
 
 ----
-$ python -m fangfrisch --help
+$ venv/bin/fangfrisch --help
 
 include::usage.txt[]
 ----
@@ -119,8 +158,10 @@ LOG_LEVEL=INFO
 
 == Contact
 
-If you come across bugs or have suggestions, you should https://github.com/rseichter/fangfrisch/issues[file an issue] on GitHub.
-To avoid unnecessary effort for all involved parties, please _always_ check existing issues first, including closed ones.
+The project is hosted on https://github.com/rseichter/fangfrisch[GitHub].
+If you experience problems or have suggestions, you should https://github.com/rseichter/fangfrisch/issues[file an issue].
+When doing so, please always check existing issues first, including closed ones.
+This saves time and effort for all involved.
 To contact the author {author} directly you can send email to {email}.
 
 [[internalconf]]
