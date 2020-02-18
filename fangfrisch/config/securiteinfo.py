@@ -17,12 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 from fangfrisch.config import INTERVAL
+from fangfrisch.config import MAX_SIZE
 from fangfrisch.config import PREFIX
 
 securiteinfo = {
     'securiteinfo': {
         'customer_id': 'you_forgot_to_configure_customer_id',
         INTERVAL: '12h',
+        MAX_SIZE: '20MB',
         PREFIX: r'https://www.securiteinfo.com/get/signatures/${customer_id}/',
         '!url_old': f'${{{PREFIX}}}securiteinfoold.hdb',
         '!url_spam_marketing': f'${{{PREFIX}}}spam_marketing.ndb',
