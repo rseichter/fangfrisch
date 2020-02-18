@@ -48,7 +48,7 @@ def _has_valid_length(response: Response, max_length: int) -> StatusDataPair:
     :return: True if length is permitted, False otherwise.
     """
     if CONTENT_LENGTH not in response.headers:  # pragma: no cover
-        log.warning(f'Response is missing {CONTENT_LENGTH} header')
+        log.warning(f'{response.url} content length unknown')
         return StatusDataPair(True, -1)
     length = int(response.headers[CONTENT_LENGTH])
     if length > max_length:
