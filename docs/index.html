@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.1b3,</span>
+<span id="revnumber">version 0.1b4,</span>
 <span id="revdate">2020-02-18</span>
 </div>
 </div>
@@ -832,6 +832,7 @@ url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb
 [securiteinfo]
 customer_id = you_forgot_to_configure_customer_id
 interval = 12h
+max_size = 20MB
 prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
 !url_old = ${prefix}securiteinfoold.hdb
 !url_spam_marketing = ${prefix}spam_marketing.ndb
@@ -932,6 +933,7 @@ enabled = yes
 [securiteinfo]
 customer_id = abcdef123456
 interval = 12h
+max_size = 20MB
 prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
 !url_old = ${prefix}securiteinfoold.hdb
 !url_spam_marketing = ${prefix}spam_marketing.ndb
@@ -956,8 +958,8 @@ max_size = 2MB</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1b3<br>
-Last updated 2020-02-18 16:26:33 +0100
+Version 0.1b4<br>
+Last updated 2020-02-18 17:41:38 +0100
 </div>
 </div>
 </body>
