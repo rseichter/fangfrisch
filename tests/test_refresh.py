@@ -36,8 +36,8 @@ config.init(FangfrischTest.CONF)
 
 
 class _CI(ClamavItem):
-    def __init__(self, section, option, url, check=None, path=None, max_age=0, max_size=MAX_SIZE) -> None:
-        super().__init__(section, option, url, check, path, max_age, max_size)
+    def __init__(self, section, option, url, check=None, path=None, interval=0, max_size=MAX_SIZE) -> None:
+        super().__init__(section, option, url, check, path, interval, max_size)
 
 
 class RefreshTests(FangfrischTest):
@@ -96,7 +96,7 @@ class RefreshTests(FangfrischTest):
     def test_refresh(self):
         self.s.add(RefreshLog(URL_MD5))
         self.s.commit()
-        self.assertEqual(3, self.ref.refresh_all())
+        self.assertEqual(1, self.ref.refresh_all())
 
 
 if __name__ == '__main__':

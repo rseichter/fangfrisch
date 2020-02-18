@@ -25,8 +25,8 @@ from typing import Optional
 from fangfrisch.config import DB_URL
 from fangfrisch.config import ENABLED
 from fangfrisch.config import INTEGRITY_CHECK
+from fangfrisch.config import INTERVAL
 from fangfrisch.config import LOCAL_DIR
-from fangfrisch.config import MAX_AGE
 from fangfrisch.config import MAX_SIZE
 from fangfrisch.config import ON_UPDATE_EXEC
 from fangfrisch.config import ON_UPDATE_TIMEOUT
@@ -37,9 +37,9 @@ from fangfrisch.util import parse_hr_bytes
 from fangfrisch.util import parse_hr_time
 
 config_defaults = {
-    ENABLED: 'no',
+    ENABLED: 'false',
     INTEGRITY_CHECK: 'sha256',
-    MAX_AGE: '1d',
+    INTERVAL: '1d',
     MAX_SIZE: '10MB',
     ON_UPDATE_EXEC: '',
     ON_UPDATE_TIMEOUT: '30',  # Timeout in seconds
@@ -77,8 +77,8 @@ class Configuration:
     def is_enabled(self, section: str, fallback=False) -> bool:
         return self.parser.getboolean(section, ENABLED, fallback=fallback)
 
-    def max_age(self, section: str) -> int:
-        age = self.parser.get(section, MAX_AGE)
+    def interval(self, section: str) -> int:
+        age = self.parser.get(section, INTERVAL)
         return parse_hr_time(age)
 
     def max_size(self, section: str) -> int:

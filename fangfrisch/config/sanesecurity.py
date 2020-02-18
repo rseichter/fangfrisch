@@ -16,13 +16,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-from fangfrisch.config import MAX_AGE
+from fangfrisch.config import INTERVAL
 from fangfrisch.config import PREFIX
 
 sanesecurity = {
     # See https://sanesecurity.com/usage/signatures/
     'sanesecurity': {
-        MAX_AGE: '2h',  # String representation of max age (in minutes)
+        INTERVAL: '2h',  # String representation of max age (in minutes)
         PREFIX: 'http://ftp.swin.edu.au/sanesecurity/',
         '!url_foxhole_all_cdb': f'${{{PREFIX}}}foxhole_all.cdb',
         '!url_foxhole_all_ndb': f'${{{PREFIX}}}foxhole_all.ndb',

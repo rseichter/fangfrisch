@@ -16,13 +16,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-from fangfrisch.config import MAX_AGE
+from fangfrisch.config import INTERVAL
 from fangfrisch.config import PREFIX
 
 securiteinfo = {
     'securiteinfo': {
         'customer_id': 'you_forgot_to_configure_customer_id',
-        MAX_AGE: '12h',  # String representation of max age (in minutes)
+        INTERVAL: '12h',  # String representation of max age (in minutes)
         PREFIX: 'https://www.securiteinfo.com/get/signatures/${customer_id}/',
         '!url_old': f'${{{PREFIX}}}securiteinfoold.hdb',
         '!url_spam_marketing': f'${{{PREFIX}}}spam_marketing.ndb',

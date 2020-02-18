@@ -62,14 +62,14 @@ class RefreshLog(Base):
                 cls.metadata.create_all(engine)
 
     @staticmethod
-    def is_outdated(url, max_age) -> bool:
+    def is_outdated(url, interval) -> bool:
         """Check if local data for a given URL is outdated.
 
         :param url: Log database key.
-        :param max_age: Maximum permitted age of local data.
+        :param interval: Maximum permitted age of local data.
         :return: True if outdated, False otherwise.
         """
-        threshold = datetime.utcnow() - timedelta(minutes=max_age)
+        threshold = datetime.utcnow() - timedelta(minutes=interval)
         RefreshLog.init()
         entry: RefreshLog = _query_url(url, RefreshLog._session())
         return (entry is None) or entry.updated < threshold

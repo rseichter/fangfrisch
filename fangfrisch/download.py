@@ -30,9 +30,9 @@ _session.headers['User-Agent'] = f'fangfrisch/{__version__}'
 
 
 class ClamavItem:
-    def __init__(self, section, option, url, check, path, max_age, max_size) -> None:
+    def __init__(self, section, option, url, check, path, interval, max_size) -> None:
         self.check = check
-        self.max_age = max_age
+        self.interval = interval
         self.max_size = max_size
         self.option = option
         self.path = path

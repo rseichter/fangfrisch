@@ -50,7 +50,7 @@ def _clamav_items() -> List[ClamavItem]:
                 slash_pos = path.rfind('/')  # returns -1 if not found
                 path = os.path.join(local_dir, path[slash_pos + 1:])
                 item = ClamavItem(section, option, url, config.integrity_check(section),
-                                  path, config.max_age(section), max_size)
+                                  path, config.interval(section), max_size)
                 item_list.append(item)
     return item_list
 
@@ -68,7 +68,7 @@ class ClamavRefresh:
         try:
             if self.args.force:
                 log.debug(f'{ci.url} refresh forced')
-            elif not RefreshLog.is_outdated(ci.url, ci.max_age):
+            elif not RefreshLog.is_outdated(ci.url, ci.interval):
                 log.debug(f'{ci.url} below max age')
                 return False
             digest = get_digest(ci)
