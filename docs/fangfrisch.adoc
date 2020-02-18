@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v0.1b4, {docdate}
+v0.1b3, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -92,13 +92,23 @@ A typical value is `clamdscan --reload`.
 Default: 30.
 
 Details about the configuration parser and extended interpolation are avalable https://docs.python.org/3.7/library/configparser.html[here].
-Internal default values for providers can be used by enabling sections as shown below.
+Fangfrisch contains internal defaults for the following providers (in alphabetical order):
+
+* https://www.malwarepatrol.net[Malwarepatrol]
+* https://sanesecurity.com[Sanesecurity]
+* https://www.securiteinfo.com[SecuriteInfo]
+* https://urlhaus.abuse.ch[URLhaus]
+
+The internal default values for providers can be used by specifiying `enabled = yes` in the desired sections.
+Some providers require additional configuration as shown in the following example configuration.
 
 ----
 include::example.conf[]
 ----
 
-You can also add your own sections for additional virus definition providers:
+Fangfrisch is of course not limited to the internal defaults.
+You can define as many additional virus definition providers as you like.
+The following defines a fictional provider:
 
 ----
 [fictionalprovider]
@@ -106,10 +116,15 @@ enabled = yes
 integrity_check = md5
 interval = 90m
 prefix = http://fictional-provider.tld/clamav-unofficial/
+
 # Reference the defined prefix in URL definitions. Values in
 # other sections can be referenced using ${section:option}.
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb
+
+# Local file names will be determined by parsing URLs, but
+# can be manually overridden:
+filename_spam = ${prefix}spam_spam_spam_wonderful_spam.db
 ----
 
 Fangfrisch will scan enabled sections for lines prefixed with `url_` to determine download sources for virus definition files.

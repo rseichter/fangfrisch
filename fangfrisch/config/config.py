@@ -30,6 +30,7 @@ from fangfrisch.config import LOCAL_DIR
 from fangfrisch.config import MAX_SIZE
 from fangfrisch.config import ON_UPDATE_EXEC
 from fangfrisch.config import ON_UPDATE_TIMEOUT
+from fangfrisch.config.malwarepatrol import malwarepatrol
 from fangfrisch.config.sanesecurity import sanesecurity
 from fangfrisch.config.securiteinfo import securiteinfo
 from fangfrisch.config.urlhaus import urlhaus
@@ -43,7 +44,7 @@ config_defaults = {
     ON_UPDATE_EXEC: '',
     ON_UPDATE_TIMEOUT: '30',  # Timeout in seconds
 }
-config_other = [sanesecurity, securiteinfo, urlhaus]
+config_other = [malwarepatrol, sanesecurity, securiteinfo, urlhaus]
 
 
 class Configuration:

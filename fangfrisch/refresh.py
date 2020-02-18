@@ -46,11 +46,14 @@ def _clamav_items() -> List[ClamavItem]:
             os.makedirs(local_dir, exist_ok=True)
             if option.startswith('url_'):
                 url = config.get(section, option)
-                path: str = urlparse(url).path
-                slash_pos = path.rfind('/')  # returns -1 if not found
-                path = os.path.join(local_dir, path[slash_pos + 1:])
+                filename = config.get(section, f'filename_{option[4:]}')
+                if not filename:
+                    url_path: str = urlparse(url).path
+                    slash_pos = url_path.rfind('/')  # returns -1 if not found
+                    filename = url_path[slash_pos + 1:]
+                filename = os.path.join(local_dir, filename)
                 item = ClamavItem(section, option, url, config.integrity_check(section),
-                                  path, config.interval(section), max_size)
+                                  filename, config.interval(section), max_size)
                 item_list.append(item)
     return item_list
 
@@ -74,7 +77,7 @@ class ClamavRefresh:
             digest = get_digest(ci)
             if not digest.ok:
                 return False
-            if RefreshLog.digest_matches(ci.url, digest.data):
+            if digest.data and RefreshLog.digest_matches(ci.url, digest.data):
                 log.debug(f'{ci.url} unchanged')
                 RefreshLog.update(ci.url, digest.data)  # Update timestamp
                 return False

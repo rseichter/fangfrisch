@@ -29,5 +29,5 @@ clean:
 	/bin/rm $(out_html) $(out_pdf) || true
 
 force:
-	rm -f $(cf_internal)
+	rm -f $(cf_combined) $(cf_internal)
 	make

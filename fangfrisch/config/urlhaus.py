@@ -20,7 +20,7 @@ from fangfrisch.config import INTERVAL
 
 urlhaus = {
     'urlhaus': {
-        INTERVAL: '10m',  # String representation of max age (in minutes)
-        'url_urlhaus': 'https://urlhaus.abuse.ch/downloads/urlhaus.ndb',
+        INTERVAL: '10m',
+        'url_urlhaus': r'https://urlhaus.abuse.ch/downloads/urlhaus.ndb',
     }
 }

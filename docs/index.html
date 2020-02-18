@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.1b4,</span>
+<span id="revnumber">version 0.1b3,</span>
 <span id="revdate">2020-02-18</span>
 </div>
 </div>
@@ -576,7 +576,27 @@ Default: 30.</p>
 </div>
 <div class="paragraph">
 <p>Details about the configuration parser and extended interpolation are avalable <a href="https://docs.python.org/3.7/library/configparser.html">here</a>.
-Internal default values for providers can be used by enabling sections as shown below.</p>
+Fangfrisch contains internal defaults for the following providers (in alphabetical order):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://www.malwarepatrol.net">Malwarepatrol</a></p>
+</li>
+<li>
+<p><a href="https://sanesecurity.com">Sanesecurity</a></p>
+</li>
+<li>
+<p><a href="https://www.securiteinfo.com">SecuriteInfo</a></p>
+</li>
+<li>
+<p><a href="https://urlhaus.abuse.ch">URLhaus</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The internal default values for providers can be used by specifiying <code>enabled = yes</code> in the desired sections.
+Some providers require additional configuration as shown in the following example configuration.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -593,6 +613,11 @@ max_size = 5MB
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
 
+[malwarepatrol]
+enabled = yes
+# Replace with your personal Malwarepatrol receipt
+receipt = abcd1234
+
 [sanesecurity]
 enabled = yes
 
@@ -607,7 +632,9 @@ max_size = 2MB</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can also add your own sections for additional virus definition providers:</p>
+<p>Fangfrisch is of course not limited to the internal defaults.
+You can define as many additional virus definition providers as you like.
+The following defines a fictional provider:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -616,10 +643,15 @@ enabled = yes
 integrity_check = md5
 interval = 90m
 prefix = http://fictional-provider.tld/clamav-unofficial/
+
 # Reference the defined prefix in URL definitions. Values in
 # other sections can be referenced using ${section:option}.
 url_eggs = ${prefix}eggs.ndb
-url_spam = ${prefix}spam.hdb</pre>
+url_spam = ${prefix}spam.hdb
+
+# Local file names will be determined by parsing URLs, but
+# can be manually overridden:
+filename_spam = ${prefix}spam_spam_spam_wonderful_spam.db</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -737,6 +769,15 @@ max_size = 10MB
 on_update_exec =
 on_update_timeout = 30
 
+[malwarepatrol]
+interval = 1d
+integrity_check = disabled
+product = 8
+receipt = you_forgot_to_configure_receipt
+prefix = https://lists.malwarepatrol.net/cgi/getfile?product=${product}&amp;receipt=${receipt}&amp;list=
+url_clamav_basic = ${prefix}clamav_basic
+filename_clamav_basic = malwarepatrol.db
+
 [sanesecurity]
 interval = 2h
 prefix = http://ftp.swin.edu.au/sanesecurity/
@@ -826,6 +867,16 @@ on_update_timeout = 42
 db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 local_directory = /var/lib/clamav
 
+[malwarepatrol]
+interval = 1d
+integrity_check = disabled
+product = 8
+receipt = abcd1234
+prefix = https://lists.malwarepatrol.net/cgi/getfile?product=${product}&amp;receipt=${receipt}&amp;list=
+url_clamav_basic = ${prefix}clamav_basic
+filename_clamav_basic = malwarepatrol.db
+enabled = yes
+
 [sanesecurity]
 interval = 2h
 prefix = http://ftp.swin.edu.au/sanesecurity/
@@ -905,8 +956,8 @@ max_size = 2MB</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1b4<br>
-Last updated 2020-02-18 14:45:38 +0100
+Version 0.1b3<br>
+Last updated 2020-02-18 16:05:03 +0100
 </div>
 </div>
 </body>
