@@ -1,33 +1,33 @@
 # vim:ts=4:noet
 
 asciidoctor_opts = -v
+ff = ../local/fangfrisch
+cf_combined = combined.conf
+cf_example = example.conf
+cf_internal = internal.conf
+out_html = index.html
+out_pdf = fangfrisch.pdf
+sources = fangfrisch.adoc $(cf_combined) $(cf_example) $(cf_internal) usage.txt
 
-ff_html = index.html
-ff_pdf = fangfrisch.pdf
-sample_conf = sample.conf
-effective_conf = eff.conf
-internal_conf = internal.conf
-doc_sources = fangfrisch.adoc $(sample_conf) $(effective_conf) $(internal_conf) usage.txt
+.PHONY:	all clean force
 
-.PHONY:	clean docs force
+all: $(out_html) $(out_pdf)
 
-docs: $(ff_html) $(ff_pdf)
+$(cf_combined): $(cf_example)
+	$(ff) -c $< dumpconf > $@
 
-$(effective_conf): $(sample_conf)
-	../local/fangfrisch -c $< dumpconf > $@
+$(cf_internal):
+	$(ff) -c /dev/null dumpconf > $@
 
-$(internal_conf):
-	../local/fangfrisch -c /dev/null dumpconf > $@
-
-$(ff_html): $(doc_sources)
+$(out_html): $(sources)
 	asciidoctor -o $@ $(asciidoctor_opts) $<
 
-$(ff_pdf): $(doc_sources)
+$(out_pdf): $(sources)
 	asciidoctor-pdf $(asciidoctor_opts) $<
 
 clean:
-	/bin/rm $(ff_html) $(ff_pdf) || true
+	/bin/rm $(out_html) $(out_pdf) || true
 
 force:
-	touch $(sample_conf)
+	rm -f $(cf_internal)
 	make

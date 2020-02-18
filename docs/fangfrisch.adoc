@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v0.1b1, {docdate}
+v0.1b2, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -78,8 +78,8 @@ Default: `false`.
 Default: `sha256`.
 You can use `disabled` if the signature file provider offers no checksums.
 * *interval*: Interval between downloads.
-Default: `1d`.
-Values are provider-dependent and can be expressed in human-readable form (e.g. `12h` or `45m`).
+Defaults are provider-dependent.
+Values can be expressed in human-readable form (e.g. `12h` or `45m`).
 Please respect the limits set by each provider.
 * *max_size*: Maximum file size expected from the provider.
 Default: `10MB`.
@@ -95,7 +95,7 @@ Details about the configuration parser and extended interpolation are avalable h
 Internal default values for providers can be used by enabling sections as shown below.
 
 ----
-include::sample.conf[]
+include::example.conf[]
 ----
 
 You can also add your own sections for additional virus definition providers:
@@ -183,5 +183,5 @@ include::internal.conf[]
 The following effective configuration is the result of combining internal defaults (see <<internalconf>>) with the example settings shown in <<Configuration>>.
 
 ----
-include::eff.conf[]
+include::combined.conf[]
 ----

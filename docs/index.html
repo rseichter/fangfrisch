@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.1b1,</span>
+<span id="revnumber">version 0.1b2,</span>
 <span id="revdate">2020-02-18</span>
 </div>
 </div>
@@ -553,8 +553,8 @@ You can use <code>disabled</code> if the signature file provider offers no check
 </li>
 <li>
 <p><strong>interval</strong>: Interval between downloads.
-Default: <code>1d</code>.
-Values are provider-dependent and can be expressed in human-readable form (e.g. <code>12h</code> or <code>45m</code>).
+Defaults are provider-dependent.
+Values can be expressed in human-readable form (e.g. <code>12h</code> or <code>45m</code>).
 Please respect the limits set by each provider.</p>
 </li>
 <li>
@@ -589,7 +589,6 @@ db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 # values from DEFAULT and may also overwrite values.
 
 local_directory = /var/lib/clamav
-interval = 8h
 max_size = 5MB
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
@@ -604,7 +603,6 @@ customer_id = abcdef123456
 
 [urlhaus]
 enabled = yes
-interval = 15m
 max_size = 2MB</pre>
 </div>
 </div>
@@ -733,9 +731,8 @@ These usually represent data sources that have a high risk of false positives, a
 <div class="listingblock">
 <div class="content">
 <pre>[DEFAULT]
-enabled = no
+enabled = false
 integrity_check = sha256
-interval = 1d
 max_size = 10MB
 on_update_exec =
 on_update_timeout = 30
@@ -823,7 +820,6 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 <pre>[DEFAULT]
 enabled = false
 integrity_check = sha256
-interval = 8h
 max_size = 5MB
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
@@ -898,7 +894,7 @@ url_securiteinfo_ign2 = ${prefix}securiteinfo.ign2
 enabled = yes
 
 [urlhaus]
-interval = 15m
+interval = 10m
 url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb
 enabled = yes
 max_size = 2MB</pre>
@@ -909,8 +905,8 @@ max_size = 2MB</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1b1<br>
-Last updated 2020-02-18 13:06:30 +0100
+Version 0.1b2<br>
+Last updated 2020-02-18 13:31:56 +0100
 </div>
 </div>
 </body>

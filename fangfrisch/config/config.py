@@ -39,7 +39,6 @@ from fangfrisch.util import parse_hr_time
 config_defaults = {
     ENABLED: 'false',
     INTEGRITY_CHECK: 'sha256',
-    INTERVAL: '1d',
     MAX_SIZE: '10MB',
     ON_UPDATE_EXEC: '',
     ON_UPDATE_TIMEOUT: '30',  # Timeout in seconds
