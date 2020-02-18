@@ -81,6 +81,9 @@ You can use `disabled` if the signature file provider offers no checksums.
 Defaults are provider-dependent.
 Values can be expressed in human-readable form (e.g. `12h` or `45m`).
 Please respect the limits set by each provider.
+* *local_directory*: Downloaded files are stored here.
+The default is the current working directory of the Python process, which can vary depending on how you launch Fangfrisch.
+It is highly recommended to define an absolute path like `/var/lib/clamav` instead.
 * *max_size*: Maximum file size expected from the provider.
 Default: `10MB`.
 Values are can be expressed in human-readable form (e.g. `250KB` or `3MB`) and should be set per provider.
