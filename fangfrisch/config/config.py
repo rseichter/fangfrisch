@@ -76,8 +76,8 @@ class Configuration:
     def is_enabled(self, section: str, fallback=False) -> bool:
         return self.parser.getboolean(section, ENABLED, fallback=fallback)
 
-    def interval(self, section: str) -> int:
-        age = self.parser.get(section, INTERVAL)
+    def interval(self, section: str, fallback='') -> int:
+        age = self.parser.get(section, INTERVAL, fallback=fallback)
         return parse_hr_time(age)
 
     def max_size(self, section: str) -> int:
