@@ -91,7 +91,7 @@ A typical value is `clamdscan --reload`.
 * *on_update_timeout*: Timeout for the `on_update_exec` command, in seconds.
 Default: 30.
 
-Details about the configuration parser and extended interpolation are avalable https://docs.python.org/3.7/library/configparser.html[here].
+Details about the configuration parser and extended interpolation are available https://docs.python.org/3.7/library/configparser.html[here].
 Fangfrisch contains internal defaults for the following providers (in alphabetical order):
 
 * https://www.malwarepatrol.net[Malwarepatrol]
