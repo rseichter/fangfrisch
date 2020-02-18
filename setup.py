@@ -47,7 +47,7 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     keywords='antivirus clamav freshclam refresh update',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Operating System :: OS Independent',
     ],
