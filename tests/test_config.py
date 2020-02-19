@@ -16,10 +16,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+import os
 import unittest
 
 from fangfrisch.config import PREFIX
 from fangfrisch.config.config import Configuration
+from fangfrisch.config.config import means_disabled
 from tests import FangfrischTest
 
 SECTION = 'sanesecurity'
@@ -30,6 +32,11 @@ class ConfigTests(FangfrischTest):
 
     def setUp(self) -> None:
         self.c = Configuration()
+
+    def test_dump(self):
+        self.c.init()
+        with open(os.devnull, 'w') as f:
+            self.assertTrue(self.c.write(f))
 
     def test_sanesec_base_url(self):
         self.c.init()
@@ -62,6 +69,15 @@ class ConfigTests(FangfrischTest):
     def test_interval(self):
         self.c.init(self.CONF)
         self.assertEqual(60 * 2, self.c.interval(SECTION))
+
+    def test_disabled_none(self):
+        self.assertFalse(means_disabled(None))
+
+    def test_disabled_yes(self):
+        self.assertFalse(means_disabled('yes'))
+
+    def test_disabled_no(self):
+        self.assertTrue(means_disabled('no'))
 
 
 if __name__ == '__main__':

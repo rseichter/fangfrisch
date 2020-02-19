@@ -37,7 +37,7 @@ def main() -> int:
         log.error(f'Cannot parse configuration file: {args.conf}')
         sys.exit(1)
     if dumpconf == args.action:
-        config.dump()
+        config.write(sys.stdout)
     elif initdb == args.action:
         RefreshLog.init(create_all=True)
     else:

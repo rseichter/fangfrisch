@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import configparser
-import sys
 from configparser import ConfigParser
 from configparser import ExtendedInterpolation
 from typing import Optional
@@ -34,6 +33,10 @@ from fangfrisch.config.securiteinfo import securiteinfo
 from fangfrisch.config.urlhaus import urlhaus
 from fangfrisch.util import parse_hr_bytes
 from fangfrisch.util import parse_hr_time
+
+
+def means_disabled(s: Optional[str]) -> bool:
+    return s and s.lower() in ['disabled', 'false', 'no', 'off']
 
 
 class Configuration:
@@ -53,8 +56,9 @@ class Configuration:
             return len(parsed) == 1
         return True
 
-    def dump(self) -> None:  # pragma: no cover
-        self.parser.write(sys.stdout)
+    def write(self, file_descriptor) -> bool:
+        self.parser.write(file_descriptor)
+        return True  # Not reached in case of exceptions
 
     def get(self, section: str, option: str, fallback=None) -> Optional[str]:
         return self.parser.get(section, option, fallback=fallback)
@@ -81,7 +85,7 @@ class Configuration:
 
     def integrity_check(self, section: str) -> Optional[str]:
         check: str = self.parser.get(section, INTEGRITY_CHECK)
-        if check and check.lower() in ['disabled', 'false', 'no', 'off']:
+        if means_disabled(check):
             return None
         return check
 
