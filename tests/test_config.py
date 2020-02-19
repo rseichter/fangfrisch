@@ -66,6 +66,10 @@ class ConfigTests(FangfrischTest):
         s = self.c.sections()
         self.assertIn(self.UNITTEST, s)
 
+    def test_timeout(self):
+        self.c.init(self.CONF)
+        self.assertEqual(5, self.c.on_update_timeout(self.UNITTEST))
+
     def test_interval(self):
         self.c.init(self.CONF)
         self.assertEqual(60 * 2, self.c.interval(SECTION))

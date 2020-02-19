@@ -69,7 +69,7 @@ class Configuration:
     def on_update_exec(self, fallback='') -> str:
         return self.parser.get(configparser.DEFAULTSECT, 'on_update_exec', fallback=fallback)
 
-    def on_update_timeout(self, fallback='30') -> int:
+    def on_update_timeout(self, fallback=30) -> int:
         return self.parser.getint(configparser.DEFAULTSECT, 'on_update_timeout', fallback=fallback)
 
     def is_enabled(self, section: str, fallback=False) -> bool:
