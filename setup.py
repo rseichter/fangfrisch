@@ -21,7 +21,7 @@ import setuptools
 import fangfrisch
 
 source_url = 'https://github.com/rseichter/fangfrisch/'
-with open('README.md', 'r') as f:
+with open('README.rst', 'r') as f:
     long_description = f.read()
 setuptools.setup(
     name='fangfrisch',
@@ -44,7 +44,7 @@ setuptools.setup(
     author_email='fangfrisch@seichter.de',
     description='Update and verify unofficial Clam Anti-Virus signatures',
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type='text/x-rst',
     keywords='antivirus clamav freshclam refresh update',
     classifiers=[
         'Development Status :: 4 - Beta',
