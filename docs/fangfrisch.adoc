@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v0.1b4, {docdate}
+v0.1b5, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -68,6 +68,18 @@ This step will also create an executable launcher script `venv/bin/fangfrisch`.
 
 A configuration file is mandatory, uses an INI-File-like structure and must contain a `db_url` entry.
 All other settings are optional.
+However, unless you enable one signature file provider section, Fangfrisch naturally won't do much.
+
+----
+# Minimal example configuration, meant for testing.
+
+[DEFAULT]
+db_url = sqlite:////var/lib/fangfrisch/db.sqlite
+local_directory = /var/lib/clamav
+
+[urlhaus]
+enabled = yes
+----
 
 * *db_url*: Database URL in https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases[SQLAlchemy syntax].
 Mandatory, no default.
@@ -82,12 +94,14 @@ Defaults are provider-dependent.
 Values can be expressed in human-readable form (e.g. `12h` or `45m`).
 Please respect the limits set by each provider.
 * *local_directory*: Downloaded files are stored here.
-The default is the current working directory of the Python process, which can vary depending on how you launch Fangfrisch.
-It is highly recommended to define an absolute path like `/var/lib/clamav` instead.
-* *max_size*: Maximum file size expected from the provider.
-Default: `10MB`.
-Values are can be expressed in human-readable form (e.g. `250KB` or `3MB`) and should be set per provider.
+No default, so the current working directory of the Python process is used.
+As this can vary depending on how you launch Fangfrisch, it is highly recommended to define an absolute path like `/var/lib/clamav` instead.
+You can override this option in provider sections to separate downloads based on origin.
+* *max_size*: Maximum expected file size.
+The default is `10MB`, but all predefined providers have individual size limits (see <<internalconf>>).
+Values are can be expressed in human-readable form (e.g. `250KB` or `3MB`).
 Fangfrisch attempts to inspect the content length before downloading virus signature files so as not to download files larger than the defined limit.
+If providers don't respond with content length information, Fangfrisch will log a warning but download the data anyway.
 * *on_update_exec*: If any files were downloaded during a pass, a command can be executed in after the pass finishes.
 No default.
 A typical value is `clamdscan --reload`.

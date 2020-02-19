@@ -445,8 +445,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.1b4,</span>
-<span id="revdate">2020-02-18</span>
+<span id="revnumber">version 0.1b5,</span>
+<span id="revdate">2020-02-19</span>
 </div>
 </div>
 <div id="content">
@@ -533,7 +533,20 @@ source venv/bin/activate</pre>
 <div class="sectionbody">
 <div class="paragraph">
 <p>A configuration file is mandatory, uses an INI-File-like structure and must contain a <code>db_url</code> entry.
-All other settings are optional.</p>
+All other settings are optional.
+However, unless you enable one signature file provider section, Fangfrisch naturally won&#8217;t do much.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Minimal example configuration, meant for testing.
+
+[DEFAULT]
+db_url = sqlite:////var/lib/fangfrisch/db.sqlite
+local_directory = /var/lib/clamav
+
+[urlhaus]
+enabled = yes</pre>
+</div>
 </div>
 <div class="ulist">
 <ul>
@@ -559,14 +572,16 @@ Please respect the limits set by each provider.</p>
 </li>
 <li>
 <p><strong>local_directory</strong>: Downloaded files are stored here.
-The default is the current working directory of the Python process, which can vary depending on how you launch Fangfrisch.
-It is highly recommended to define an absolute path like <code>/var/lib/clamav</code> instead.</p>
+No default, so the current working directory of the Python process is used.
+As this can vary depending on how you launch Fangfrisch, it is highly recommended to define an absolute path like <code>/var/lib/clamav</code> instead.
+You can override this option in provider sections to separate downloads based on origin.</p>
 </li>
 <li>
-<p><strong>max_size</strong>: Maximum file size expected from the provider.
-Default: <code>10MB</code>.
-Values are can be expressed in human-readable form (e.g. <code>250KB</code> or <code>3MB</code>) and should be set per provider.
-Fangfrisch attempts to inspect the content length before downloading virus signature files so as not to download files larger than the defined limit.</p>
+<p><strong>max_size</strong>: Maximum expected file size.
+The default is <code>10MB</code>, but all predefined providers have individual size limits (see <a href="#internalconf">Appendix A</a>).
+Values are can be expressed in human-readable form (e.g. <code>250KB</code> or <code>3MB</code>).
+Fangfrisch attempts to inspect the content length before downloading virus signature files so as not to download files larger than the defined limit.
+If providers don&#8217;t respond with content length information, Fangfrisch will log a warning but download the data anyway.</p>
 </li>
 <li>
 <p><strong>on_update_exec</strong>: If any files were downloaded during a pass, a command can be executed in after the pass finishes.
@@ -608,7 +623,7 @@ Some providers require additional configuration as shown in the following exampl
 <pre># Example configuration
 
 [DEFAULT]
-db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
+db_url = sqlite:////var/lib/fangfrisch/db.sqlite
 
 # The following settings are optional. Other sections inherit
 # values from DEFAULT and may also overwrite values.
@@ -866,7 +881,7 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 enabled = false
 integrity_check = sha256
 max_size = 5MB
-db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
+db_url = sqlite:////var/lib/fangfrisch/db.sqlite
 local_directory = /var/lib/clamav
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
@@ -961,8 +976,8 @@ max_size = 2MB</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1b4<br>
-Last updated 2020-02-18 18:45:31 +0100
+Version 0.1b5<br>
+Last updated 2020-02-19 13:18:52 +0100
 </div>
 </div>
 </body>
