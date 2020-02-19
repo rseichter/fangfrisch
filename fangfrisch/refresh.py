@@ -90,9 +90,9 @@ class ClamavRefresh:
             if not integrity.ok:
                 log.warning(f'{ci.url} {integrity.data}')
                 return False
-            log.info(f'Updating {ci.path}')
             with open(ci.path, 'wb') as f:
-                f.write(payload.data)
+                size = f.write(payload.data)
+                log.info(f'{ci.path} updated ({size} bytes)')
                 RefreshLog.update(ci.url, digest.data)  # Update digest and timestamp
         except OSError as e:  # pragma: no cover
             log.exception(e)

@@ -52,7 +52,7 @@ def _has_valid_length(response: Response, max_length: int) -> StatusDataPair:
         return StatusDataPair(True, -1)
     length = int(response.headers[CONTENT_LENGTH])
     if length > max_length:
-        log.error(f'{response.url} size exceeds defined limit ({length}/{max_length})')
+        log.error(f'{response.url} size exceeds defined limit ({length}/{max_length} bytes)')
         return StatusDataPair(False, length)
     return StatusDataPair(True, length)
 
