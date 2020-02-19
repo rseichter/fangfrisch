@@ -28,8 +28,6 @@ from fangfrisch.config import INTEGRITY_CHECK
 from fangfrisch.config import INTERVAL
 from fangfrisch.config import LOCAL_DIR
 from fangfrisch.config import MAX_SIZE
-from fangfrisch.config import ON_UPDATE_EXEC
-from fangfrisch.config import ON_UPDATE_TIMEOUT
 from fangfrisch.config.malwarepatrol import malwarepatrol
 from fangfrisch.config.sanesecurity import sanesecurity
 from fangfrisch.config.securiteinfo import securiteinfo
@@ -37,22 +35,18 @@ from fangfrisch.config.urlhaus import urlhaus
 from fangfrisch.util import parse_hr_bytes
 from fangfrisch.util import parse_hr_time
 
-config_defaults = {
-    ENABLED: 'false',
-    INTEGRITY_CHECK: 'sha256',
-    MAX_SIZE: '10MB',
-    ON_UPDATE_EXEC: '',
-    ON_UPDATE_TIMEOUT: '30',  # Timeout in seconds
-}
-config_other = [malwarepatrol, sanesecurity, securiteinfo, urlhaus]
-
 
 class Configuration:
     parser: configparser.ConfigParser = None
 
     def init(self, filename: str = None) -> bool:
-        self.parser = ConfigParser(defaults=config_defaults, interpolation=ExtendedInterpolation())
-        for c in config_other:
+        defaults = {
+            ENABLED: 'false',
+            INTEGRITY_CHECK: 'sha256',
+            MAX_SIZE: '10MB',
+        }
+        self.parser = ConfigParser(defaults=defaults, interpolation=ExtendedInterpolation())
+        for c in [malwarepatrol, sanesecurity, securiteinfo, urlhaus]:
             self.parser.read_dict(c)
         if filename:
             parsed = self.parser.read([filename])
@@ -68,11 +62,11 @@ class Configuration:
     def db_url(self) -> Optional[str]:
         return self.parser.get(configparser.DEFAULTSECT, DB_URL)
 
-    def on_update_exec(self) -> Optional[str]:
-        return self.parser.get(configparser.DEFAULTSECT, ON_UPDATE_EXEC)
+    def on_update_exec(self, fallback='') -> str:
+        return self.parser.get(configparser.DEFAULTSECT, 'on_update_exec', fallback=fallback)
 
-    def on_update_timeout(self) -> int:
-        return self.parser.getint(configparser.DEFAULTSECT, ON_UPDATE_TIMEOUT)
+    def on_update_timeout(self, fallback='30') -> int:
+        return self.parser.getint(configparser.DEFAULTSECT, 'on_update_timeout', fallback=fallback)
 
     def is_enabled(self, section: str, fallback=False) -> bool:
         return self.parser.getboolean(section, ENABLED, fallback=fallback)
@@ -87,7 +81,7 @@ class Configuration:
 
     def integrity_check(self, section: str) -> Optional[str]:
         check: str = self.parser.get(section, INTEGRITY_CHECK)
-        if check and check.lower() in ['disabled', 'no', 'off']:
+        if check and check.lower() in ['disabled', 'false', 'no', 'off']:
             return None
         return check
 
