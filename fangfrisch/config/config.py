@@ -85,7 +85,7 @@ class Configuration:
             return None
         return check
 
-    def local_dir(self, section: str, fallback='.') -> str:
+    def local_dir(self, section: str, fallback='') -> str:
         return self.parser.get(section, LOCAL_DIR, fallback=fallback)
 
     def options(self, section: str):

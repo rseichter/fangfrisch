@@ -38,12 +38,13 @@ def _clamav_items() -> List[ClamavItem]:
         if not config.is_enabled(section):
             continue
         for option in config.options(section):
-            local_dir = config.local_dir(section)
             max_size = config.max_size(section)
             if max_size < 1:
                 log.error(f"Cannot parse max size for section '{section}'")
                 continue
-            os.makedirs(local_dir, exist_ok=True)
+            local_dir = config.local_dir(section)
+            if local_dir:
+                os.makedirs(local_dir, exist_ok=True)
             if option.startswith('url_'):
                 url = config.get(section, option)
                 filename = config.get(section, f'filename_{option[4:]}')
@@ -51,7 +52,8 @@ def _clamav_items() -> List[ClamavItem]:
                     url_path: str = urlparse(url).path
                     slash_pos = url_path.rfind('/')  # returns -1 if not found
                     filename = url_path[slash_pos + 1:]
-                filename = os.path.join(local_dir, filename)
+                if local_dir:
+                    filename = os.path.join(local_dir, filename)
                 item = ClamavItem(section, option, url, config.integrity_check(section),
                                   filename, config.interval(section), max_size)
                 item_list.append(item)
