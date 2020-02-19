@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.1b5,</span>
+<span id="revnumber">version 0.1b6,</span>
 <span id="revdate">2020-02-19</span>
 </div>
 </div>
@@ -454,7 +454,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="paragraph">
 <p>Fangfrisch (German for "freshly caught") is a sibling of the <a href="https://www.clamav.net">Clam Anti-Virus</a> freshclam utility.
-It allows downloading virus definition files that are not official ClamAV canon, e.g. from <a href="https://sanesecurity.com">Sanesecurity</a> and <a href="https://urlhaus.abuse.ch">URLhaus</a>.</p>
+It allows downloading virus definition files that are not official ClamAV canon, e.g. from <a href="https://sanesecurity.com">Sanesecurity</a> and <a href="https://urlhaus.abuse.ch">URLhaus</a>.
+Fangfrisch was designed with security in mind, to be run by an unprivileged user only.</p>
 </div>
 </div>
 </div>
@@ -668,15 +669,15 @@ prefix = http://fictional-provider.tld/clamav-unofficial/
 # other sections can be referenced using ${section:option}.
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb
-
-# Local file names will be determined by parsing URLs, but
-# can be manually overridden:
-filename_spam = spam_spam_spam_wonderful_spam.db</pre>
+# Override local file name for url_spam
+filename_spam = spam_spam_spam_lovely_spam.db</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Fangfrisch will scan enabled sections for lines prefixed with <code>url_</code> to determine download sources for virus definition files.
-The value of <code>integrity_check</code> determines both the expected filename suffix for digests and the hashing mechanism used for verification.</p>
+The value of <code>integrity_check</code> determines both the expected filename suffix for digests and the hashing mechanism used for verification.
+As shown above, local file names will be determined by parsing URLs, but can be manually overridden.
+To change the file name for <code>url_xyz</code> set <code>filename_xyz</code> to the desired value.</p>
 </div>
 </div>
 </div>
@@ -976,8 +977,8 @@ max_size = 2MB</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1b5<br>
-Last updated 2020-02-19 13:18:52 +0100
+Version 0.1b6<br>
+Last updated 2020-02-19 14:29:46 +0100
 </div>
 </div>
 </body>

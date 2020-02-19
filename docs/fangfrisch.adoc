@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v0.1b5, {docdate}
+v0.1b6, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -16,6 +16,7 @@ v0.1b5, {docdate}
 
 Fangfrisch (German for "freshly caught") is a sibling of the https://www.clamav.net[Clam Anti-Virus] freshclam utility.
 It allows downloading virus definition files that are not official ClamAV canon, e.g. from https://sanesecurity.com[Sanesecurity] and https://urlhaus.abuse.ch[URLhaus].
+Fangfrisch was designed with security in mind, to be run by an unprivileged user only.
 
 == License
 
@@ -138,14 +139,14 @@ prefix = http://fictional-provider.tld/clamav-unofficial/
 # other sections can be referenced using ${section:option}.
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb
-
-# Local file names will be determined by parsing URLs, but
-# can be manually overridden:
-filename_spam = spam_spam_spam_wonderful_spam.db
+# Override local file name for url_spam
+filename_spam = spam_spam_spam_lovely_spam.db
 ----
 
 Fangfrisch will scan enabled sections for lines prefixed with `url_` to determine download sources for virus definition files.
 The value of `integrity_check` determines both the expected filename suffix for digests and the hashing mechanism used for verification.
+As shown above, local file names will be determined by parsing URLs, but can be manually overridden.
+To change the file name for `url_xyz` set `filename_xyz` to the desired value.
 
 == Preparing the database
 
