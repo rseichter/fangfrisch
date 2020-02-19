@@ -771,8 +771,6 @@ These usually represent data sources that have a high risk of false positives, a
 enabled = false
 integrity_check = sha256
 max_size = 10MB
-on_update_exec =
-on_update_timeout = 30
 
 [malwarepatrol]
 interval = 1d
@@ -868,10 +866,10 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 enabled = false
 integrity_check = sha256
 max_size = 5MB
-on_update_exec = clamdscan --reload
-on_update_timeout = 42
 db_url = sqlite:////var/lib/fangfrisch/fangfrisch.sqlite
 local_directory = /var/lib/clamav
+on_update_exec = clamdscan --reload
+on_update_timeout = 42
 
 [malwarepatrol]
 interval = 1d
