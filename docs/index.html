@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 0.1rc1,</span>
+<span id="revnumber">version 0.1rc2,</span>
 <span id="revdate">2020-02-20</span>
 </div>
 </div>
@@ -669,15 +669,31 @@ prefix = http://fictional-provider.tld/clamav-unofficial/
 # other sections can be referenced using ${section:option}.
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb
+
 # Override local file name for url_spam
-filename_spam = spam_spam_spam_lovely_spam.db</pre>
+filename_spam = spam_spam_spam_lovely_spam.db
+
+# Execute command after each fresh download from url_eggs
+on_update_eggs = echo Fresh eggs in {path}</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Fangfrisch will scan enabled sections for lines prefixed with <code>url_</code> to determine download sources for virus definition files.
-The value of <code>integrity_check</code> determines both the expected filename suffix for digests and the hashing mechanism used for verification.
-As shown above, local file names will be determined by parsing URLs, but can be manually overridden.
-To change the file name for <code>url_xyz</code> set <code>filename_xyz</code> to the desired value.</p>
+<p>Fangfrisch will scan enabled sections for lines prefixed with <code>url_</code> to determine download sources for virus definition files.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The value of <code>integrity_check</code> determines both the expected filename suffix for digests and the hashing mechanism used for verification.</p>
+</li>
+<li>
+<p>Local file names will be determined by parsing URLs, but can be manually overridden.
+To change the file name for <code>url_xyz</code>, set <code>filename_xyz</code> to the desired value.</p>
+</li>
+<li>
+<p>To launch a command after data was downloaded for <code>url_xyz</code>, define <code>on_update_xyz</code>.
+The command string may contain a <code>{path}</code> placeholder, which will be substituted with the full path of the downloaded file.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -977,8 +993,8 @@ max_size = 2MB</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1rc1<br>
-Last updated 2020-02-20 13:19:12 +0100
+Version 0.1rc2<br>
+Last updated 2020-02-20 15:45:42 +0100
 </div>
 </div>
 </body>

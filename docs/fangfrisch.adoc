@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v0.1rc1, {docdate}
+v0.1rc2, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -139,14 +139,21 @@ prefix = http://fictional-provider.tld/clamav-unofficial/
 # other sections can be referenced using ${section:option}.
 url_eggs = ${prefix}eggs.ndb
 url_spam = ${prefix}spam.hdb
+
 # Override local file name for url_spam
 filename_spam = spam_spam_spam_lovely_spam.db
+
+# Execute command after each fresh download from url_eggs
+on_update_eggs = echo Fresh eggs in {path}
 ----
 
 Fangfrisch will scan enabled sections for lines prefixed with `url_` to determine download sources for virus definition files.
-The value of `integrity_check` determines both the expected filename suffix for digests and the hashing mechanism used for verification.
-As shown above, local file names will be determined by parsing URLs, but can be manually overridden.
-To change the file name for `url_xyz` set `filename_xyz` to the desired value.
+
+* The value of `integrity_check` determines both the expected filename suffix for digests and the hashing mechanism used for verification.
+* Local file names will be determined by parsing URLs, but can be manually overridden.
+To change the file name for `url_xyz`, set `filename_xyz` to the desired value.
+* To launch a command after data was downloaded for `url_xyz`, define `on_update_xyz`.
+The command string may contain a `{path}` placeholder, which will be substituted with the full path of the downloaded file.
 
 == Preparing the database
 
