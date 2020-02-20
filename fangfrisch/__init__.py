@@ -17,3 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 __version__ = '0.1rc1'
+
+
+class ClamavItem:
+    def __init__(self, section, option, url, check, path, interval, max_size, on_update) -> None:
+        self.check = check
+        self.interval = interval
+        self.max_size = max_size
+        self.on_update = on_update
+        self.option = option
+        self.path = path
+        self.section = section
+        self.url = url

@@ -17,19 +17,17 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import os
-from subprocess import CalledProcessError
-from subprocess import CompletedProcess
-from subprocess import run
 from typing import List
 from urllib.parse import urlparse
 
+from fangfrisch import ClamavItem
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
-from fangfrisch.download import ClamavItem
 from fangfrisch.download import get_digest
 from fangfrisch.download import get_payload
 from fangfrisch.logging import log
 from fangfrisch.util import check_integrity
+from fangfrisch.util import run_command
 
 
 def _clamav_items() -> List[ClamavItem]:
@@ -47,16 +45,24 @@ def _clamav_items() -> List[ClamavItem]:
                 os.makedirs(local_dir, exist_ok=True)
             if option.startswith('url_'):
                 url = config.get(section, option)
-                filename = config.get(section, f'filename_{option[4:]}')
+                stem = option[4:]
+                filename = config.get(section, f'filename_{stem}')
                 if not filename:
                     url_path: str = urlparse(url).path
                     slash_pos = url_path.rfind('/')  # returns -1 if not found
                     filename = url_path[slash_pos + 1:]
                 if local_dir:
                     filename = os.path.join(local_dir, filename)
-                item = ClamavItem(section, option, url, config.integrity_check(section),
-                                  filename, config.interval(section), max_size)
-                item_list.append(item)
+                item_list.append(ClamavItem(
+                    section=section,
+                    option=option,
+                    url=url,
+                    check=config.integrity_check(section),
+                    path=filename,
+                    interval=config.interval(section),
+                    max_size=max_size,
+                    on_update=config.get(section, f'on_update_{stem}')
+                ))
     return item_list
 
 
@@ -102,16 +108,11 @@ class ClamavRefresh:
         count = 0
         for ci in _clamav_items():
             if self.refresh(ci):
+                command = ci.on_update
+                if command:
+                    run_command(command, config.on_update_timeout(), log, path=ci.path)
                 count += 1
-        _exec = config.on_update_exec()
-        if count > 0 and _exec:
-            try:
-                timeout = config.on_update_timeout()
-                p: CompletedProcess = run(_exec, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
-                if p.stdout:
-                    log.info(p.stdout)
-                if p.stderr:
-                    log.error(p.stderr)
-            except CalledProcessError as e:  # pragma: no cover
-                log.exception(e)
+        command = config.on_update_exec()
+        if count > 0 and command:
+            run_command(command, config.on_update_timeout(), log)
         return count

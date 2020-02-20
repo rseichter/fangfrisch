@@ -19,6 +19,7 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import requests
 from requests import Response
 
+from fangfrisch import ClamavItem
 from fangfrisch import __version__
 from fangfrisch.logging import log
 from fangfrisch.util import StatusDataPair
@@ -27,17 +28,6 @@ CONTENT_LENGTH = 'Content-Length'
 
 _session = requests.Session()
 _session.headers['User-Agent'] = f'fangfrisch/{__version__}'
-
-
-class ClamavItem:
-    def __init__(self, section, option, url, check, path, interval, max_size) -> None:
-        self.check = check
-        self.interval = interval
-        self.max_size = max_size
-        self.option = option
-        self.path = path
-        self.section = section
-        self.url = url
 
 
 def _has_valid_length(response: Response, max_length: int) -> StatusDataPair:

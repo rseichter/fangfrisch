@@ -16,12 +16,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+import os
 import unittest
 
 from fangfrisch.util import check_integrity
 from fangfrisch.util import parse_hr_bytes
 from fangfrisch.util import parse_hr_time
+from fangfrisch.util import run_command
 from tests import FangfrischTest
+from tests import log
 
 SAMPLE_DATA = 'fangfrisch'.encode('utf-8')
 SAMPLE_MD5 = '5e46abab8a827e1534af3a64a3d91f00'
@@ -76,6 +79,12 @@ class UtilTests(FangfrischTest):
 
     def test_parse_time_h(self):
         self.assertEqual(48 * 60, parse_hr_time('48h'))
+
+    def test_run_echo(self):
+        self.assertEqual(0, run_command('echo > {path}', 3, log, path=os.devnull))
+
+    def test_run_unknown(self):
+        self.assertTrue(0 < run_command(self.UNKNOWN, 3, log))
 
 
 if __name__ == '__main__':

@@ -18,6 +18,12 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import hashlib
 import re
+from logging import Logger
+from string import Formatter
+from subprocess import CalledProcessError
+from subprocess import CompletedProcess
+from subprocess import run
+from typing import Optional
 
 _byte_multipliers = {'K': 10 ** 3, 'KB': 2 ** 10, 'M': 10 ** 6, 'MB': 2 ** 20}
 _byte_pattern = re.compile(r'(\d+)([KM]B?)?', re.IGNORECASE)
@@ -76,3 +82,16 @@ def parse_hr_time(s: str) -> int:
         multiplier = _minute_multipliers[m[2].lower()]
         return int(m[1]) * multiplier
     return -1
+
+
+def run_command(command: str, timeout: int, log: Logger, *args, **kwargs) -> Optional[int]:
+    try:
+        command = Formatter().vformat(command, args, kwargs)
+        p: CompletedProcess = run(command, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
+        if p.stdout:
+            log.info(p.stdout)
+        if p.stderr:
+            log.error(p.stderr)
+        return p.returncode
+    except CalledProcessError as e:  # pragma: no cover
+        log.exception(e)

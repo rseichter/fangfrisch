@@ -22,7 +22,7 @@ from datetime import timedelta
 
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
-from fangfrisch.download import ClamavItem
+from fangfrisch import ClamavItem
 from fangfrisch.refresh import ClamavRefresh
 from tests import DIGEST_MD5
 from tests import FangfrischTest
@@ -36,8 +36,9 @@ config.init(FangfrischTest.CONF)
 
 
 class _CI(ClamavItem):
-    def __init__(self, section, option, url, check=None, path=None, interval=0, max_size=MAX_SIZE) -> None:
-        super().__init__(section, option, url, check, path, interval, max_size)
+    def __init__(self, section, option, url, check=None, path=None, interval=0, max_size=MAX_SIZE,
+                 on_update=None) -> None:
+        super().__init__(section, option, url, check, path, interval, max_size, on_update=on_update)
 
 
 class RefreshTests(FangfrischTest):
