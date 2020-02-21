@@ -186,7 +186,7 @@ This needs to be run only once, before the first refresh.
 * *refresh*: Refresh the configured URLs.
 The `force` switch can be set to force downloads regardless of local file age.
 
-As stated before, Fanfrisch is typically run using cron.
+As stated before, Fangfrisch is typically run using cron.
 An example crontab looks like this:
 
 ----
