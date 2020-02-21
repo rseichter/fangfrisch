@@ -122,7 +122,7 @@ Fangfrisch contains internal defaults for the following providers (in alphabetic
 * https://urlhaus.abuse.ch[URLhaus]
 
 The internal default values for providers can be used by specifiying `enabled = yes` in the desired sections.
-Some providers require additional configuration as shown in the following example configuration.
+Some providers require additional configuration as shown in the following example.
 
 ----
 include::example.conf[]
