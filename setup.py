@@ -20,7 +20,7 @@ import setuptools
 
 import fangfrisch
 
-source_url = 'https://github.com/rseichter/fangfrisch/'
+source_url = 'https://github.com/rseichter/fangfrisch'
 with open('README.rst', 'r') as f:
     long_description = f.read()
 setuptools.setup(
@@ -37,7 +37,7 @@ setuptools.setup(
     project_urls={
         'Documentation': 'https://rseichter.github.io/fangfrisch/',
         'Source': f'{source_url}',
-        'Tracker': f'{source_url}issues',
+        'Tracker': f'{source_url}/issues',
     },
     license='GPLv3+',
     author='Ralph Seichter',
@@ -47,7 +47,8 @@ setuptools.setup(
     long_description_content_type='text/x-rst',
     keywords='antivirus clamav freshclam refresh update',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: System Administrators',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Operating System :: OS Independent',
     ],
