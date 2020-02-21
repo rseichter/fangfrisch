@@ -23,10 +23,12 @@ from fangfrisch.config import PREFIX
 securiteinfo = {
     'securiteinfo': {
         'customer_id': 'you_forgot_to_configure_customer_id',
-        INTERVAL: '12h',
+        INTERVAL: '1h',
         MAX_SIZE: '20MB',
         PREFIX: r'https://www.securiteinfo.com/get/signatures/${customer_id}/',
+        '!url_0hour': f'${{{PREFIX}}}securiteinfo0hour.hdb',
         '!url_old': f'${{{PREFIX}}}securiteinfoold.hdb',
+        '!url_securiteinfo_mdb': f'${{{PREFIX}}}securiteinfo.mdb',
         '!url_spam_marketing': f'${{{PREFIX}}}spam_marketing.ndb',
         'url_android': f'${{{PREFIX}}}securiteinfoandroid.hdb',
         'url_ascii': f'${{{PREFIX}}}securiteinfoascii.hdb',
