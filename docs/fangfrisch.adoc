@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.0.0, {docdate}
+v1.0.1, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -109,12 +109,16 @@ A typical value is `clamdscan --reload`.
 * *on_update_timeout*: Timeout for the `on_update_exec` command, in seconds.
 Default: 30.
 
-Details about the configuration parser and extended interpolation are available https://docs.python.org/3.7/library/configparser.html[here].
+See https://docs.python.org/3.7/library/configparser.html[here] for details about the configuration parser and extended interpolation.
+<<Semantics>> provides additional information on how configuration options are interpreted.
+
+=== Default providers
+
 Fangfrisch contains internal defaults for the following providers (in alphabetical order):
 
 * https://www.malwarepatrol.net[Malwarepatrol]
 * https://sanesecurity.com[Sanesecurity]
-* https://www.securiteinfo.com[SecuriteInfo]
+* https://www.securiteinfo.com/services/anti-spam-anti-virus/improve-detection-rate-of-zero-day-malwares-for-clamav.shtml[SecuriteInfo]
 * https://urlhaus.abuse.ch[URLhaus]
 
 The internal default values for providers can be used by specifiying `enabled = yes` in the desired sections.
@@ -123,6 +127,8 @@ Some providers require additional configuration as shown in the following exampl
 ----
 include::example.conf[]
 ----
+
+=== User-defined providers
 
 Fangfrisch is of course not limited to the internal defaults.
 You can define as many additional virus definition providers as you like.
@@ -146,6 +152,8 @@ filename_spam = spam_spam_spam_lovely_spam.db
 # Execute command after each fresh download from url_eggs
 on_update_eggs = echo Fresh eggs in {path}
 ----
+
+=== Semantics
 
 Fangfrisch will scan enabled sections for lines prefixed with `url_` to determine download sources for virus definition files.
 
@@ -210,7 +218,8 @@ To contact the author {author} directly you can send email to {email}.
 
 Fangfrisch contains the following internal configuration settings as defaults.
 All sections are disabled, and entries with the `!url_` prefix are included for reference only.
-These usually represent data sources that have a high risk of false positives, and enabling the section will not enable these entries.
+These represent data sources which either have a high risk of false positives or are not free to use.
+Enabling a section will not enable these specially prefixed entries.
 
 ----
 include::internal.conf[]

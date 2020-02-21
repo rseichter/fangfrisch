@@ -439,14 +439,40 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-right">
 <div id="header">
 <h1>Fangfrisch</h1>
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.0.0,</span>
+<span id="revnumber">version 1.0.1,</span>
 <span id="revdate">2020-02-21</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_license">1. License</a></li>
+<li><a href="#_update_strategy">2. Update strategy</a></li>
+<li><a href="#_installation">3. Installation</a>
+<ul class="sectlevel2">
+<li><a href="#_create_home_directory">3.1. Create home directory</a></li>
+<li><a href="#_prepare_and_activate_venv">3.2. Prepare and activate venv</a></li>
+<li><a href="#_install_via_pypi">3.3. Install via PyPI</a></li>
+</ul>
+</li>
+<li><a href="#_configuration">4. Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_default_providers">4.1. Default providers</a></li>
+<li><a href="#_user_defined_providers">4.2. User-defined providers</a></li>
+<li><a href="#_semantics">4.3. Semantics</a></li>
+</ul>
+</li>
+<li><a href="#_preparing_the_database">5. Preparing the database</a></li>
+<li><a href="#_usage">6. Usage</a></li>
+<li><a href="#_contact">7. Contact</a></li>
+<li><a href="#internalconf">Appendix A: Default configuration</a></li>
+<li><a href="#sampleeff">Appendix B: Effective configuration</a></li>
+</ul>
 </div>
 </div>
 <div id="content">
@@ -596,8 +622,13 @@ Default: 30.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Details about the configuration parser and extended interpolation are available <a href="https://docs.python.org/3.7/library/configparser.html">here</a>.
-Fangfrisch contains internal defaults for the following providers (in alphabetical order):</p>
+<p>See <a href="https://docs.python.org/3.7/library/configparser.html">here</a> for details about the configuration parser and extended interpolation.
+<a href="#_semantics">Section 4.3</a> provides additional information on how configuration options are interpreted.</p>
+</div>
+<div class="sect2">
+<h3 id="_default_providers"><a class="anchor" href="#_default_providers"></a>4.1. Default providers</h3>
+<div class="paragraph">
+<p>Fangfrisch contains internal defaults for the following providers (in alphabetical order):</p>
 </div>
 <div class="ulist">
 <ul>
@@ -608,7 +639,7 @@ Fangfrisch contains internal defaults for the following providers (in alphabetic
 <p><a href="https://sanesecurity.com">Sanesecurity</a></p>
 </li>
 <li>
-<p><a href="https://www.securiteinfo.com">SecuriteInfo</a></p>
+<p><a href="https://www.securiteinfo.com/services/anti-spam-anti-virus/improve-detection-rate-of-zero-day-malwares-for-clamav.shtml">SecuriteInfo</a></p>
 </li>
 <li>
 <p><a href="https://urlhaus.abuse.ch">URLhaus</a></p>
@@ -652,6 +683,9 @@ enabled = yes
 max_size = 2MB</pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_user_defined_providers"><a class="anchor" href="#_user_defined_providers"></a>4.2. User-defined providers</h3>
 <div class="paragraph">
 <p>Fangfrisch is of course not limited to the internal defaults.
 You can define as many additional virus definition providers as you like.
@@ -677,6 +711,9 @@ filename_spam = spam_spam_spam_lovely_spam.db
 on_update_eggs = echo Fresh eggs in {path}</pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_semantics"><a class="anchor" href="#_semantics"></a>4.3. Semantics</h3>
 <div class="paragraph">
 <p>Fangfrisch will scan enabled sections for lines prefixed with <code>url_</code> to determine download sources for virus definition files.</p>
 </div>
@@ -694,6 +731,7 @@ To change the file name for <code>url_xyz</code>, set <code>filename_xyz</code> 
 The command string may contain a <code>{path}</code> placeholder, which will be substituted with the full path of the downloaded file.</p>
 </li>
 </ul>
+</div>
 </div>
 </div>
 </div>
@@ -795,7 +833,8 @@ To contact the author Ralph Seichter directly you can send email to <a href="mai
 <div class="paragraph">
 <p>Fangfrisch contains the following internal configuration settings as defaults.
 All sections are disabled, and entries with the <code>!url_</code> prefix are included for reference only.
-These usually represent data sources that have a high risk of false positives, and enabling the section will not enable these entries.</p>
+These represent data sources which either have a high risk of false positives or are not free to use.
+Enabling a section will not enable these specially prefixed entries.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -866,10 +905,12 @@ url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb
 
 [securiteinfo]
 customer_id = you_forgot_to_configure_customer_id
-interval = 12h
+interval = 1h
 max_size = 20MB
 prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
+!url_0hour = ${prefix}securiteinfo0hour.hdb
 !url_old = ${prefix}securiteinfoold.hdb
+!url_securiteinfo_mdb = ${prefix}securiteinfo.mdb
 !url_spam_marketing = ${prefix}spam_marketing.ndb
 url_android = ${prefix}securiteinfoandroid.hdb
 url_ascii = ${prefix}securiteinfoascii.hdb
@@ -967,10 +1008,12 @@ enabled = yes
 
 [securiteinfo]
 customer_id = abcdef123456
-interval = 12h
+interval = 1h
 max_size = 20MB
 prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
+!url_0hour = ${prefix}securiteinfo0hour.hdb
 !url_old = ${prefix}securiteinfoold.hdb
+!url_securiteinfo_mdb = ${prefix}securiteinfo.mdb
 !url_spam_marketing = ${prefix}spam_marketing.ndb
 url_android = ${prefix}securiteinfoandroid.hdb
 url_ascii = ${prefix}securiteinfoascii.hdb
@@ -993,8 +1036,8 @@ max_size = 2MB</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.0<br>
-Last updated 2020-02-21 12:04:16 +0100
+Version 1.0.1<br>
+Last updated 2020-02-21 15:48:10 +0100
 </div>
 </div>
 </body>
