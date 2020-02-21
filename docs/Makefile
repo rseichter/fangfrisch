@@ -1,6 +1,6 @@
 # vim:ts=4:noet
 
-asciidoctor_opts = -v
+asciidoctor_opts = -o $@ -v
 ff = ../local/fangfrisch
 cf_combined = combined.conf
 cf_example = example.conf
@@ -20,10 +20,10 @@ $(cf_internal):
 	$(ff) -c /dev/null dumpconf > $@
 
 $(out_html): $(sources)
-	asciidoctor -o $@ $(asciidoctor_opts) $<
+	asciidoctor -a toc=right $(asciidoctor_opts) $<
 
 $(out_pdf): $(sources)
-	asciidoctor-pdf $(asciidoctor_opts) $<
+	asciidoctor-pdf -a toc=preamble $(asciidoctor_opts) $<
 
 clean:
 	/bin/rm $(out_html) $(out_pdf) || true
