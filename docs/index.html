@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
 <span id="revnumber">version 1.0.1,</span>
-<span id="revdate">2020-02-27</span>
+<span id="revdate">2020-03-07</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -460,16 +460,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_install_via_pypi">3.3. Install via PyPI</a></li>
 </ul>
 </li>
-<li><a href="#_configuration">4. Configuration</a>
+<li><a href="#_installation_packages">4. Installation packages</a></li>
+<li><a href="#_configuration">5. Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_default_providers">4.1. Default providers</a></li>
-<li><a href="#_user_defined_providers">4.2. User-defined providers</a></li>
-<li><a href="#_semantics">4.3. Semantics</a></li>
+<li><a href="#_default_providers">5.1. Default providers</a></li>
+<li><a href="#_user_defined_providers">5.2. User-defined providers</a></li>
+<li><a href="#_semantics">5.3. Semantics</a></li>
 </ul>
 </li>
-<li><a href="#_preparing_the_database">5. Preparing the database</a></li>
-<li><a href="#_usage">6. Usage</a></li>
-<li><a href="#_contact">7. Contact</a></li>
+<li><a href="#_preparing_the_database">6. Preparing the database</a></li>
+<li><a href="#_usage">7. Usage</a></li>
+<li><a href="#_contact">8. Contact</a></li>
 <li><a href="#internalconf">Appendix A: Default configuration</a></li>
 <li><a href="#sampleeff">Appendix B: Effective configuration</a></li>
 </ul>
@@ -556,7 +557,25 @@ source venv/bin/activate</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>4. Configuration</h2>
+<h2 id="_installation_packages"><a class="anchor" href="#_installation_packages"></a>4. Installation packages</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As an alternative to pip-based installation, there are packages available for the following Linux distributions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Archlinux: <a href="https://aur.archlinux.org/packages/python-fangfrisch/">pyhon-fangfrisch</a></p>
+</li>
+<li>
+<p>Gentoo Linux: <a href="https://packages.gentoo.org/packages/app-antivirus/fangfrisch">app-antivirus/fangfrisch</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>5. Configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>A configuration file is mandatory, uses an INI-File-like structure and must contain a <code>db_url</code> entry.
@@ -623,10 +642,10 @@ Default: 30.</p>
 </div>
 <div class="paragraph">
 <p>See <a href="https://docs.python.org/3.7/library/configparser.html">here</a> for details about the configuration parser and extended interpolation.
-<a href="#_semantics">Section 4.3</a> provides additional information on how configuration options are interpreted.</p>
+<a href="#_semantics">Section 5.3</a> provides additional information on how configuration options are interpreted.</p>
 </div>
 <div class="sect2">
-<h3 id="_default_providers"><a class="anchor" href="#_default_providers"></a>4.1. Default providers</h3>
+<h3 id="_default_providers"><a class="anchor" href="#_default_providers"></a>5.1. Default providers</h3>
 <div class="paragraph">
 <p>Fangfrisch contains internal defaults for the following providers (in alphabetical order):</p>
 </div>
@@ -685,7 +704,7 @@ max_size = 2MB</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_user_defined_providers"><a class="anchor" href="#_user_defined_providers"></a>4.2. User-defined providers</h3>
+<h3 id="_user_defined_providers"><a class="anchor" href="#_user_defined_providers"></a>5.2. User-defined providers</h3>
 <div class="paragraph">
 <p>Fangfrisch is of course not limited to the internal defaults.
 You can define as many additional virus definition providers as you like.
@@ -713,7 +732,7 @@ on_update_eggs = echo Fresh eggs in {path}</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_semantics"><a class="anchor" href="#_semantics"></a>4.3. Semantics</h3>
+<h3 id="_semantics"><a class="anchor" href="#_semantics"></a>5.3. Semantics</h3>
 <div class="paragraph">
 <p>Fangfrisch will scan enabled sections for lines prefixed with <code>url_</code> to determine download sources for virus definition files.</p>
 </div>
@@ -736,7 +755,7 @@ The command string may contain a <code>{path}</code> placeholder, which will be 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_preparing_the_database"><a class="anchor" href="#_preparing_the_database"></a>5. Preparing the database</h2>
+<h2 id="_preparing_the_database"><a class="anchor" href="#_preparing_the_database"></a>6. Preparing the database</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command.</p>
@@ -761,7 +780,7 @@ Fangfrisch should never be run as <code>root</code>, but as an unprivileged user
 </div>
 </div>
 <div class="sect1">
-<h2 id="_usage"><a class="anchor" href="#_usage"></a>6. Usage</h2>
+<h2 id="_usage"><a class="anchor" href="#_usage"></a>7. Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can display command line arguments as follows:</p>
@@ -789,7 +808,7 @@ optional arguments:
 <ul>
 <li>
 <p><strong>dumpconf</strong>: Dump the effective configuration to stdout, combining both internal defaults and your own settings.
-The effective configuration for the example shown in <a href="#_configuration">Section 4</a> is available in <a href="#sampleeff">Appendix B</a>.</p>
+The effective configuration for the example shown in <a href="#_configuration">Section 5</a> is available in <a href="#sampleeff">Appendix B</a>.</p>
 </li>
 <li>
 <p><strong>initdb</strong>: Create the database structure.
@@ -816,7 +835,7 @@ LOG_LEVEL=INFO
 </div>
 </div>
 <div class="sect1">
-<h2 id="_contact"><a class="anchor" href="#_contact"></a>7. Contact</h2>
+<h2 id="_contact"><a class="anchor" href="#_contact"></a>8. Contact</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The project is hosted on <a href="https://github.com/rseichter/fangfrisch">GitHub</a>.
@@ -931,7 +950,7 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 <h2 id="sampleeff"><a class="anchor" href="#sampleeff"></a>Appendix B: Effective configuration</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following effective configuration is the result of combining internal defaults (see <a href="#internalconf">Appendix A</a>) with the example settings shown in <a href="#_configuration">Section 4</a>.</p>
+<p>The following effective configuration is the result of combining internal defaults (see <a href="#internalconf">Appendix A</a>) with the example settings shown in <a href="#_configuration">Section 5</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1037,7 +1056,7 @@ max_size = 2MB</pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.1<br>
-Last updated 2020-02-27 15:25:24 +0100
+Last updated 2020-03-07 23:41:33 +0100
 </div>
 </div>
 </body>
