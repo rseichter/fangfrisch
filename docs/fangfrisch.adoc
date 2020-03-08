@@ -69,7 +69,7 @@ This step will also create an executable launcher script `venv/bin/fangfrisch`.
 
 As an alternative to pip-based installation, there are packages available for the following Linux distributions:
 
-* Archlinux: https://aur.archlinux.org/packages/python-fangfrisch/[pyhon-fangfrisch]
+* Archlinux: https://aur.archlinux.org/packages/python-fangfrisch/[python-fangfrisch]
 
 * Gentoo Linux: https://packages.gentoo.org/packages/app-antivirus/fangfrisch[app-antivirus/fangfrisch]
 
