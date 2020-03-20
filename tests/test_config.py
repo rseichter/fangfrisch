@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import os
+import tempfile
 import unittest
 
 from fangfrisch.config import PREFIX
@@ -35,8 +36,9 @@ class ConfigTests(FangfrischTest):
 
     def test_dump(self):
         self.c.init()
-        with open(os.devnull, 'w') as f:
-            self.assertTrue(self.c.write(f))
+        file = tempfile.TemporaryFile(mode='w+t')
+        self.assertTrue(self.c.write(file))
+        file.close()
 
     def test_sanesec_base_url(self):
         self.c.init()

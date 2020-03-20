@@ -22,11 +22,12 @@ from sqlalchemy.exc import IntegrityError
 
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
+from tests import DIGEST_DUMMY
 from tests import FangfrischTest
+from tests import _ClamavTestItem
 
-ID1 = 'test_1'
-ID2 = 'test_2'
-
+URL1 = 'https://u1'
+URL2 = 'https://u2'
 config.init(FangfrischTest.CONF)
 
 
@@ -35,31 +36,40 @@ class DbTests(FangfrischTest):
 
     def setUp(self) -> None:
         super().setUp()
+        self.ci = _ClamavTestItem(url=URL1, section=self.UNITTEST, option='option', path='path')
         RefreshLog.init(create_all=True)
         self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
-        self.s.add(RefreshLog(ID1))
+        self.s.add(RefreshLog(self.ci, DIGEST_DUMMY))
         self.s.commit()
 
     def test_duplicate(self):
-        self.s.add(RefreshLog(ID1))
+        self.s.add(RefreshLog(self.ci, DIGEST_DUMMY))
+        with self.assertRaises(IntegrityError):
+            self.s.commit()
+
+    def test_missing_path(self):
+        self.ci.path = None
+        self.s.add(RefreshLog(self.ci, DIGEST_DUMMY))
         with self.assertRaises(IntegrityError):
             self.s.commit()
 
     def test_insert(self):
-        self.s.add(RefreshLog(ID2))
+        self.ci.url = URL2
+        self.s.add(RefreshLog(self.ci, DIGEST_DUMMY))
         self.s.commit()
         self.assertTrue(True)  # Must not raise an exception
 
     def test_refresh_required(self):
-        self.assertTrue(RefreshLog.is_outdated(ID1, 0))
+        self.assertTrue(RefreshLog.is_outdated(URL1, 0))
 
     def test_stamp1(self):
-        RefreshLog.update(ID1, 'XXX')  # Must not raise an exception
+        RefreshLog.update(self.ci, DIGEST_DUMMY)  # Must not raise an exception
         self.assertTrue(True)
 
     def test_stamp2(self):
-        RefreshLog.update(ID2, 'XXX')  # Must not raise an exception
+        self.ci.url = URL2
+        RefreshLog.update(self.ci, DIGEST_DUMMY)  # Must not raise an exception
         self.assertTrue(True)
 
 

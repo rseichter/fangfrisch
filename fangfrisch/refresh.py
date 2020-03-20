@@ -70,6 +70,11 @@ class ClamavRefresh:
     def __init__(self, args) -> None:
         self.args = args
 
+    @staticmethod
+    def print_url_path_mappings(output_file) -> None:
+        for ci in _clamav_items():
+            print(f'{ci.section}\t{ci.url}\t{ci.path}', file=output_file)
+
     def refresh(self, ci: ClamavItem) -> bool:
         """Refresh a single ClamAV item.
 
@@ -87,7 +92,7 @@ class ClamavRefresh:
                 return False
             if digest.data and RefreshLog.digest_matches(ci.url, digest.data):
                 log.debug(f'{ci.url} unchanged')
-                RefreshLog.update(ci.url, digest.data)  # Update timestamp
+                RefreshLog.update(ci, digest.data)
                 return False
             payload = get_payload(ci)
             if not payload.ok:
@@ -99,7 +104,7 @@ class ClamavRefresh:
             with open(ci.path, 'wb') as f:
                 size = f.write(payload.data)
                 log.info(f'{ci.path} updated ({size} bytes)')
-                RefreshLog.update(ci.url, digest.data)  # Update digest and timestamp
+                RefreshLog.update(ci, digest.data)
         except OSError as e:  # pragma: no cover
             log.exception(e)
         return True

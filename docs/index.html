@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
 <span id="revnumber">version 1.0.1,</span>
-<span id="revdate">2020-03-08</span>
+<span id="revdate">2020-03-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -792,10 +792,10 @@ Fangfrisch should never be run as <code>root</code>, but as an unprivileged user
 <div class="content">
 <pre>$ venv/bin/fangfrisch --help
 
-usage: fangfrisch [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
+usage: fangfrisch [-h] [-c CONF] [-f] {dumpconf,dumppaths,initdb,refresh}
 
 positional arguments:
-  {dumpconf,initdb,refresh}
+  {dumpconf,dumppaths,initdb,refresh}
                         Action to perform
 
 optional arguments:
@@ -812,6 +812,11 @@ optional arguments:
 <li>
 <p><strong>dumpconf</strong>: Dump the effective configuration to stdout, combining both internal defaults and your own settings.
 The effective configuration for the example shown in <a href="#_configuration">Section 5</a> is available in <a href="#sampleeff">Appendix B</a>.</p>
+</li>
+<li>
+<p><strong>dumppaths</strong>: Dump URL-to-filepath mappings to stdout.
+For each active signature file URL in the given config file, a 3-tuple (section name, URL, effective file path) is printed.
+Elements are separated by horizontal tabulators to facilitate piping the output into <code>awk</code> or similar utilities.</p>
 </li>
 <li>
 <p><strong>initdb</strong>: Create the database structure.
@@ -1059,7 +1064,7 @@ max_size = 2MB</pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.1<br>
-Last updated 2020-03-08 21:12:19 +0100
+Last updated 2020-03-20 18:45:56 +0100
 </div>
 </div>
 </body>

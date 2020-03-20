@@ -1,7 +1,7 @@
-usage: fangfrisch [-h] [-c CONF] [-f] {dumpconf,initdb,refresh}
+usage: fangfrisch [-h] [-c CONF] [-f] {dumpconf,dumppaths,initdb,refresh}
 
 positional arguments:
-  {dumpconf,initdb,refresh}
+  {dumpconf,dumppaths,initdb,refresh}
                         Action to perform
 
 optional arguments:

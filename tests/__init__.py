@@ -21,14 +21,23 @@ import os
 import unittest
 import uuid
 
+from fangfrisch import ClamavItem
 from fangfrisch.logging import log
 
+DIGEST_DUMMY = 'digest_dummy'
 DIGEST_MD5 = '6087a61850f22a132f8522f35779c04d'
 MAX_SIZE = 1024 * 1024
+PATH_DUMMY = 'path_dummy'
 URL_BAD_SHA256 = 'https://seichter.de/favicon.ico'
 URL_MD5 = 'https://seichter.de/favicon-32x32.png'
 URL_MISSING = 'https://seichter.de/index.html'
 URL_SHA256 = 'https://seichter.de/favicon-16x16.png'
+
+
+class _ClamavTestItem(ClamavItem):
+    def __init__(self, section, option, url, check=None, path=None,
+                 interval=0, max_size=MAX_SIZE, on_update=None) -> None:
+        super().__init__(section, option, url, check, path, interval, max_size, on_update)
 
 
 class FangfrischTest(unittest.TestCase):

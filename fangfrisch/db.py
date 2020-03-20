@@ -27,6 +27,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from fangfrisch import ClamavItem
 from fangfrisch.config.config import config
 from fangfrisch.logging import log
 
@@ -37,13 +38,17 @@ class RefreshLog(Base):
     __tablename__ = 'refreshlog'
     url = Column(String, nullable=False, primary_key=True)
     digest = Column(String, nullable=True)
+    path = Column(String, nullable=False)
+    provider = Column(String, nullable=True)
     updated = Column(DateTime, nullable=True)
     _session = None
 
-    def __init__(self, url, digest=None) -> None:
+    def __init__(self, ci: ClamavItem, digest: str):
         self.digest = digest
+        self.path = ci.path
+        self.provider = ci.section
         self.updated = datetime.utcnow()
-        self.url = url
+        self.url = ci.url
 
     @classmethod
     def init(cls, create_all=False) -> None:
@@ -62,7 +67,7 @@ class RefreshLog(Base):
                 cls.metadata.create_all(engine)
 
     @staticmethod
-    def is_outdated(url, interval) -> bool:
+    def is_outdated(url: str, interval: int) -> bool:
         """Check if local data for a given URL is outdated.
 
         :param url: Log database key.
@@ -75,7 +80,7 @@ class RefreshLog(Base):
         return (entry is None) or entry.updated < threshold
 
     @staticmethod
-    def digest_matches(url, digest: str) -> bool:
+    def digest_matches(url: str, digest: str) -> bool:
         """Check if locally recorded digest matches the provided value.
 
         :param url: Log database key.
@@ -84,26 +89,30 @@ class RefreshLog(Base):
         """
         RefreshLog.init()
         entry: RefreshLog = _query_url(url, RefreshLog._session())
-        return (entry is not None) and (entry.digest == digest)
+        return (entry is not None) and entry.digest == digest
 
     @staticmethod
-    def update(url, digest) -> None:
+    def update(ci: ClamavItem, digest: str) -> None:
         """Update digest and update timestamp for a given URL.
 
+        :param ci: Source data structure.
         :param url: Log database key.
         :param digest: New digest.
+        :param path: Local file path.
         """
         RefreshLog.init()
         session = RefreshLog._session()
-        entry: RefreshLog = _query_url(url, session)
+        entry: RefreshLog = _query_url(ci.url, session)
         if entry:
-            entry.updated = datetime.utcnow()
             entry.digest = digest
+            entry.path = ci.path
+            entry.provider = ci.section
+            entry.updated = datetime.utcnow()
         else:
-            entry = RefreshLog(url, digest)
+            entry = RefreshLog(ci, digest)
         session.add(entry)
         session.commit()
 
 
-def _query_url(url, session):
+def _query_url(url: str, session):
     return session.query(RefreshLog).filter(RefreshLog.url == url).first()

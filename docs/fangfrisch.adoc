@@ -198,6 +198,10 @@ You can choose among following actions:
 * *dumpconf*: Dump the effective configuration to stdout, combining both internal defaults and your own settings.
 The effective configuration for the example shown in <<Configuration>> is available in <<sampleeff>>.
 
+* *dumppaths*: Dump URL-to-filepath mappings to stdout.
+For each active signature file URL in the given config file, a 3-tuple (section name, URL, effective file path) is printed.
+Elements are separated by horizontal tabulators to facilitate piping the output into `awk` or similar utilities.
+
 * *initdb*: Create the database structure.
 This needs to be run only once, before the first refresh.
 
