@@ -20,7 +20,7 @@ import argparse
 import sys
 
 from fangfrisch.config.config import config
-from fangfrisch.db import RefreshLog
+from fangfrisch.db import DbMeta
 from fangfrisch.dump import DumpDbEntries
 from fangfrisch.logging import log
 from fangfrisch.refresh import ClamavRefresh
@@ -44,8 +44,9 @@ def main() -> int:
     elif _dumpmappings == args.action:
         DumpDbEntries(args).print_url_path_mappings(sys.stdout)
     elif _initdb == args.action:
-        RefreshLog.init(create_all=True)
+        DbMeta().create_metadata()
     else:
+        DbMeta.assert_version_match()
         ClamavRefresh(args).refresh_all()
     return 0
 
