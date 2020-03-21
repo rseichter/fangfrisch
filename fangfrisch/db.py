@@ -121,9 +121,7 @@ class RefreshLog(Base):
         """Update digest and update timestamp for a given URL.
 
         :param ci: Source data structure.
-        :param url: Log database key.
         :param digest: New digest.
-        :param path: Local file path.
         """
         RefreshLog.init()
         session = RefreshLog._session()
