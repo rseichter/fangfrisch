@@ -22,6 +22,8 @@ import unittest
 import uuid
 
 from fangfrisch import ClamavItem
+from fangfrisch.config.config import config
+from fangfrisch.db import DbMeta
 from fangfrisch.logging import log
 
 DIGEST_DUMMY = 'digest_dummy'
@@ -48,5 +50,7 @@ class FangfrischTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        config.init(FangfrischTest.CONF)
         os.makedirs(FangfrischTest.TMPDIR, exist_ok=True)
         log.setLevel(logging.FATAL)
+        DbMeta.init(True)

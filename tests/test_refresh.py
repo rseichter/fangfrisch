@@ -21,7 +21,6 @@ import unittest
 from argparse import Namespace
 from datetime import timedelta
 
-from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
 from fangfrisch.refresh import ClamavRefresh
 from tests import DIGEST_DUMMY
@@ -33,15 +32,13 @@ from tests import URL_MISSING
 from tests import URL_SHA256
 from tests import _ClamavTestItem
 
-config.init(FangfrischTest.CONF)
-
 
 class RefreshTests(FangfrischTest):
     ref = ClamavRefresh(Namespace(force=False))
 
     def setUp(self) -> None:
         super().setUp()
-        RefreshLog.init(create_all=True)
+        RefreshLog.init()
         self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
         self.s.commit()

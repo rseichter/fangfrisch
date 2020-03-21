@@ -20,14 +20,11 @@ import tempfile
 import unittest
 from argparse import Namespace
 
-from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
 from fangfrisch.dump import DumpDbEntries
 from fangfrisch.refresh import ClamavRefresh
 from tests import FangfrischTest
 from tests import _ClamavTestItem
-
-config.init(FangfrischTest.CONF)
 
 
 class DumpDbTests(FangfrischTest):
@@ -35,7 +32,7 @@ class DumpDbTests(FangfrischTest):
 
     def setUp(self) -> None:
         super().setUp()
-        RefreshLog.init(create_all=True)
+        RefreshLog.init()
         self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
         cia = _ClamavTestItem('spam', 'option', 'a', path='a')

@@ -43,6 +43,7 @@ Base = declarative_base()
 class DbMeta(Base):
     __tablename__ = 'automx2'
     db_version = Column(Integer, nullable=False, primary_key=True)
+    _engine = None
     _session = None
 
     def __init__(self) -> None:
@@ -59,27 +60,27 @@ class DbMeta(Base):
             if not db_url:  # pragma: no cover
                 log.fatal('Database URL is undefined, exiting.')
                 sys.exit(1)
-            engine = create_engine(db_url, echo=False)
-            cls._session = sessionmaker(bind=engine)
+            cls._engine = create_engine(db_url, echo=False)
+            cls._session = sessionmaker(bind=cls._engine)
             if create_all:
-                cls.metadata.create_all(engine)
+                cls.metadata.create_all(cls._engine)
         return cls._session
 
     @staticmethod
-    def assert_version_match() -> None:
+    def assert_version_match() -> Optional[bool]:
         try:
             DbMeta.init(False)
             session = DbMeta._session()
             dm: DbMeta = session.query(DbMeta).one()
             if dm.db_version == DB_VERSION:
-                return
+                return True
             log.fatal(f'Unexpected database version (expected {DB_VERSION}, got {dm.db_version})')
         except DatabaseError as e:
             log.exception(e)
             log.fatal('Unexpected database version')
         sys.exit(1)
 
-    def create_metadata(self) -> None:
+    def create_metadata(self) -> Optional[bool]:
         try:
             DbMeta.init(True)
             session = DbMeta._session()
@@ -87,9 +88,9 @@ class DbMeta(Base):
             if dm is None:
                 session.add(self)
                 session.commit()
-                return
+                return True
             log.fatal(f'Database table {self.__tablename__} is not empty')
-        except DatabaseError as e:
+        except DatabaseError as e:  # pragma: no cover
             log.exception(e)
             log.fatal('Cannot write metadata')
         sys.exit(1)
@@ -112,10 +113,9 @@ class RefreshLog(Base):
         self.url = ci.url
 
     @classmethod
-    def init(cls, create_all=False):
+    def init(cls):
         """Initialise database session.
 
-        :param create_all: Create DB structure?
         """
         if not cls._session:
             db_url = config.db_url()
@@ -124,11 +124,6 @@ class RefreshLog(Base):
                 sys.exit(1)
             engine = create_engine(db_url, echo=False)
             cls._session = sessionmaker(bind=engine)
-            if create_all:
-                cls.metadata.create_all(engine)
-                x = DbMeta()
-                cls._session().add(x)
-                cls._session().commit()
         return cls._session
 
     @staticmethod
@@ -197,10 +192,6 @@ class RefreshLog(Base):
             entry = RefreshLog(ci, digest)
         session.add(entry)
         session.commit()
-
-
-def _query_meta(session) -> DbMeta:
-    return session.query(DbMeta).filter(DbMeta.db_version == DB_VERSION).one()
 
 
 def _query_provider(filter_re: str, session) -> List[RefreshLog]:
