@@ -32,7 +32,7 @@ function usage() {
 function run_tests() {
 	local cmd="$1"
 	shift
-	PYTHONPATH=".:${PYTHONPATH}" $cmd -m unittest discover tests/ "$@"
+	PYTHONPATH=".:${PYTHONPATH}" $cmd -m unittest discover tests/ -v "$@"
 }
 
 function run_coverage() {
