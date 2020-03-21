@@ -85,7 +85,6 @@ class RefreshTests(FangfrischTest):
         r.updated += timedelta(minutes=10)
         self.s.add(r)
         self.s.commit()
-        # ci = _ClamavTestItem(self.UNITTEST, 'x', URL_SHA256, 'sha256', f'{self.TMPDIR}/x')
         self.assertFalse(self.ref.refresh(ci))
 
     def test_refresh_digest_match(self):
@@ -93,7 +92,6 @@ class RefreshTests(FangfrischTest):
         r = RefreshLog(ci, DIGEST_MD5)
         self.s.add(r)
         self.s.commit()
-        # ci = _ClamavTestItem(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x')
         self.assertFalse(self.ref.refresh(ci))
 
     def test_refresh(self):
