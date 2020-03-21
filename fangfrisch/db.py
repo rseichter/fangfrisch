@@ -21,6 +21,7 @@ import sys
 from datetime import datetime
 from datetime import timedelta
 from typing import List
+from typing import Optional
 
 from sqlalchemy import Column
 from sqlalchemy import DateTime
@@ -92,6 +93,19 @@ class RefreshLog(Base):
         RefreshLog.init()
         entry: RefreshLog = _query_url(url, RefreshLog._session())
         return (entry is not None) and entry.digest == digest
+
+    @staticmethod
+    def last_logged_path(url: str) -> Optional[str]:
+        """Return previously recorded file path for the given URL.
+
+        :param url: Log database key.
+        :return: Recorded file path if available, None otherwise.
+        """
+        RefreshLog.init()
+        entry: RefreshLog = _query_url(url, RefreshLog._session())
+        if entry is None:
+            return None
+        return entry.path
 
     @staticmethod
     def url_path_mappings(provider_re: str):

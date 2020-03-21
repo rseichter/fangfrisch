@@ -101,6 +101,10 @@ class ClamavRefresh:
             if not integrity.ok:
                 log.warning(f'{ci.url} {integrity.data}')
                 return False
+            path = RefreshLog.last_logged_path(ci.url)
+            if (path is not None) and os.path.exists(path):
+                log.debug(f'Removing file {path}')
+                os.remove(path)
             with open(ci.path, 'wb') as f:
                 size = f.write(payload.data)
                 log.info(f'{ci.path} updated ({size} bytes)')
