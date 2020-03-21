@@ -16,9 +16,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+import re
 import sys
 from datetime import datetime
 from datetime import timedelta
+from typing import List
 
 from sqlalchemy import Column
 from sqlalchemy import DateTime
@@ -92,6 +94,15 @@ class RefreshLog(Base):
         return (entry is not None) and entry.digest == digest
 
     @staticmethod
+    def url_path_mappings(provider_re: str):
+        """Return URL-to-localpath mappings for providers.
+
+        :param provider_re: Provider name filter (regular expression)
+        """
+        RefreshLog.init()
+        return _query_provider(provider_re, RefreshLog._session())
+
+    @staticmethod
     def update(ci: ClamavItem, digest: str) -> None:
         """Update digest and update timestamp for a given URL.
 
@@ -112,6 +123,16 @@ class RefreshLog(Base):
             entry = RefreshLog(ci, digest)
         session.add(entry)
         session.commit()
+
+
+def _query_provider(filter_re: str, session) -> List[RefreshLog]:
+    _re = re.compile(filter_re)
+    entries = list()
+    r: RefreshLog
+    for r in session.query(RefreshLog).all():
+        if _re.search(r.provider):
+            entries.append(r)
+    return entries
 
 
 def _query_url(url: str, session):

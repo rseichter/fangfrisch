@@ -21,26 +21,28 @@ import sys
 
 from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
+from fangfrisch.dump import DumpDbEntries
 from fangfrisch.logging import log
 from fangfrisch.refresh import ClamavRefresh
 
 
 def main() -> int:
     _dumpconf = 'dumpconf'
-    _dumppaths = 'dumppaths'
     _initdb = 'initdb'
+    _dumpmappings = 'dumpmappings'
     parser = argparse.ArgumentParser()
-    parser.add_argument('action', choices=[_dumpconf, _dumppaths, _initdb, 'refresh'], help='Action to perform')
-    parser.add_argument('-c', '--conf', default=None, help='Configuration file')
-    parser.add_argument('-f', '--force', default=False, action='store_true', help='Force action (default: False)')
+    parser.add_argument('action', choices=[_dumpconf, _dumpmappings, _initdb, 'refresh'])
+    parser.add_argument('-c', '--conf', default=None, help='configuration file')
+    parser.add_argument('-f', '--force', default=False, action='store_true', help='force action (default: False)')
+    parser.add_argument('-p', '--provider', default='.', help='provider name filter (regular expression)')
     args = parser.parse_args()
     if not config.init(args.conf):
         log.error(f'Cannot parse configuration file: {args.conf}')
         sys.exit(1)
     if _dumpconf == args.action:
         config.write(sys.stdout)
-    elif _dumppaths == args.action:
-        ClamavRefresh.print_url_path_mappings(sys.stdout)
+    elif _dumpmappings == args.action:
+        DumpDbEntries(args).print_url_path_mappings(sys.stdout)
     elif _initdb == args.action:
         RefreshLog.init(create_all=True)
     else:
