@@ -178,7 +178,7 @@ The command string may contain a `{path}` placeholder, which will be substituted
 After completing the configuration, make sure to create the database structure by running the `initdb` command.
 
 ----
-venv/bin/fangfrisch --conf /etc/fangfrisch.conf initdb
+fangfrisch --conf /etc/fangfrisch.conf initdb
 ----
 
 WARNING: Fangfrisch should never be run as `root`, but as an unprivileged user like `clamav`.
@@ -188,7 +188,7 @@ WARNING: Fangfrisch should never be run as `root`, but as an unprivileged user l
 You can display command line arguments as follows:
 
 ----
-$ venv/bin/fangfrisch --help
+$ fangfrisch --help
 
 include::usage.txt[]
 ----
@@ -198,9 +198,8 @@ You can choose among following actions:
 * *dumpconf*: Dump the effective configuration to stdout, combining both internal defaults and your own settings.
 The effective configuration for the example shown in <<Configuration>> is available in <<sampleeff>>.
 
-* *dumppaths*: Dump URL-to-filepath mappings to stdout.
-For each active signature file URL in the given config file, a 3-tuple (section name, URL, effective file path) is printed.
-Elements are separated by horizontal tabulators to facilitate piping the output into `awk` or similar utilities.
+* *dumpmappings*: Dump URL-to-filepath mappings, as recorded in the database refresh log, to stdout.
+See <<dbstructure>> for details.
 
 * *initdb*: Create the database structure.
 This needs to be run only once, before the first refresh.
@@ -247,4 +246,33 @@ The following effective configuration is the result of combining internal defaul
 
 ----
 include::combined.conf[]
+----
+
+[[dbstructure]]
+[appendix]
+== Database structure
+
+While users can technically access the Fangfrisch backend database directly, its structure and content are considered *private*.
+They may change at any time, without notice.
+Related complaints will be filed under https://en.wikipedia.org/wiki/Somebody_else%27s_problem[SEP], and possibly ridiculed.
+
+=== Accessing mappings
+
+In contrast to direct database access, the *dumpmappings* action allows accessing selected parts of database entries in a stable manner.
+Specifically, it returns 3-tuples (provider name, URL, local file path).
+Elements are separated by horizontal tabulators to facilitate piping the output into `awk` or similar utilities.
+If specified, the `provider` option is interpreted as a regular expression, and only DB records with matching provider column are returned.
+That means if you have providers _foo_ and _foobar_, you need to use anchoring (e.g. `^foo$`) if you only wish to match entries for the former provider.
+Make sure to use quoting as required by your shell.
+Example usage:
+
+----
+# Print all recorded mappings for the [example] provider section.
+fangfrisch --conf /etc/fangfrisch.conf --provider '^example$' dumpmappings
+----
+
+----
+# Delete all files that were downloaded by Fangfrisch.
+# DON'T EXECUTE THIS UNLESS YOU REALLY MEAN IT!
+fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /bin/rm
 ----

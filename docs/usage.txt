@@ -1,10 +1,12 @@
-usage: fangfrisch [-h] [-c CONF] [-f] {dumpconf,dumppaths,initdb,refresh}
+usage: fangfrisch [-h] [-c CONF] [-f] [-p PROVIDER]
+                   {dumpconf,dumpmappings,initdb,refresh}
 
 positional arguments:
-  {dumpconf,dumppaths,initdb,refresh}
-                        Action to perform
+  {dumpconf,dumpmappings,initdb,refresh}
 
 optional arguments:
   -h, --help            show this help message and exit
-  -c CONF, --conf CONF  Configuration file
-  -f, --force           Force action (default: False)
+  -c CONF, --conf CONF  configuration file
+  -f, --force           force action (default: False)
+  -p PROVIDER, --provider PROVIDER
+                        provider name filter (regular expression)
