@@ -4,12 +4,15 @@ Changelog
 
 Release 1.1.0 (work in progress)
 
-- Introduce the *dumpmappings* action.
-  This allows passing URL-to-filepath mappings found in the database to utilities like `awk`.
-
 - Clean up previously downloaded files when the local path changes.
   This can happen when the user introduces or modifies a `filename_xyz` config entry.
   Suggested by Amish.
+
+- Clean up previously downloaded files when a provider section is disabled.
+  Suggested by Amish.
+
+- Introduce the *dumpmappings* action.
+  This allows passing URL-to-filepath mappings recorded in the database to utilities like `awk` without accessing the DB directly.
 
 Release 1.0.1 (2020-02-27)
 
