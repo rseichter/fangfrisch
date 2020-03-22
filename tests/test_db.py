@@ -68,11 +68,14 @@ class DbTests(FangfrischTest):
         session = DbMeta._session()
         session.query(DbMeta).delete()
         session.commit()
-        self.assertTrue(DbMeta().create_metadata())
+        self.assertTrue(DbMeta().create_metadata(False))
 
     def test_create_metadata2(self):
         with self.assertRaises(SystemExit):
-            DbMeta().create_metadata()
+            DbMeta().create_metadata(False)
+
+    def test_create_metadata3(self):
+        self.assertTrue(DbMeta().create_metadata(True))
 
     def test_duplicate(self):
         self.s.add(RefreshLog(self.ci, DIGEST_DUMMY))

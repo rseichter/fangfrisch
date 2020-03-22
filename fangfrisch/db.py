@@ -51,10 +51,11 @@ class DbMeta(Base):
         self.db_version = DB_VERSION
 
     @classmethod
-    def init(cls, create_all=False):
+    def init(cls, create_all=False, drop_all=False):
         """Initialise database session.
 
         :param create_all: Create DB structure?
+        :param drop_all: Drop existing DB structure?
         """
         if not cls._session:
             db_url = config.db_url()
@@ -63,9 +64,10 @@ class DbMeta(Base):
                 sys.exit(1)
             cls._engine = create_engine(db_url, echo=False)
             cls._session = sessionmaker(bind=cls._engine)
-            if create_all:
-                cls.metadata.drop_all(cls._engine)
-                cls.metadata.create_all(cls._engine)
+        if drop_all:
+            cls.metadata.drop_all(cls._engine)
+        if create_all:
+            cls.metadata.create_all(cls._engine)
         return cls._session
 
     @staticmethod
@@ -82,9 +84,9 @@ class DbMeta(Base):
         log.fatal('Please try running "initdb"')
         sys.exit(1)
 
-    def create_metadata(self) -> Optional[bool]:
+    def create_metadata(self, force=False) -> Optional[bool]:
         try:
-            DbMeta.init(True)
+            DbMeta.init(create_all=True, drop_all=force)
             session = DbMeta._session()
             dm: DbMeta = session.query(DbMeta).first()
             if dm is None:

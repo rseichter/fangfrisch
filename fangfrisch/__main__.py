@@ -44,7 +44,7 @@ def main() -> int:
     elif dumpmappings == args.action:
         DumpDbEntries(args).print_url_path_mappings(sys.stdout)
     elif initdb == args.action:
-        DbMeta().create_metadata()
+        DbMeta().create_metadata(args.force)
     else:
         DbMeta.assert_version_match()
         ClamavRefresh(args).refresh_all()
