@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.1.0.dev6, {docdate}
+v1.1.0.dev7, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -176,6 +176,9 @@ The command string may contain a `{path}` placeholder, which will be substituted
 == Preparing the database
 
 After completing the configuration, make sure to create the database structure by running the `initdb` command.
+An attempt will be made to drop all existing tables.
+If that is not possible, you need to fix the underlying issue manually, depending on your database type.
+For SQLite, deleting the database file is usually the easiest method.
 
 ----
 fangfrisch --conf /etc/fangfrisch.conf initdb

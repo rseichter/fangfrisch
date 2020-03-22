@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.1.0.dev6,</span>
+<span id="revnumber">version 1.1.0.dev7,</span>
 <span id="revdate">2020-03-22</span>
 </div>
 <div id="toc" class="toc2">
@@ -766,7 +766,10 @@ The command string may contain a <code>{path}</code> placeholder, which will be 
 <h2 id="_preparing_the_database"><a class="anchor" href="#_preparing_the_database"></a>6. Preparing the database</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command.</p>
+<p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command.
+An attempt will be made to drop all existing tables.
+If that is not possible, you need to fix the underlying issue manually, depending on your database type.
+For SQLite, deleting the database file is usually the easiest method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1104,8 +1107,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.0.dev6<br>
-Last updated 2020-03-22 12:58:07 +0100
+Version 1.1.0.dev7<br>
+Last updated 2020-03-22 13:54:58 +0100
 </div>
 </div>
 </body>
