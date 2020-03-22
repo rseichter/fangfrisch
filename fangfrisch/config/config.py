@@ -21,6 +21,7 @@ from configparser import ConfigParser
 from configparser import ExtendedInterpolation
 from typing import Optional
 
+from fangfrisch.config import CLEANUP
 from fangfrisch.config import DB_URL
 from fangfrisch.config import ENABLED
 from fangfrisch.config import INTEGRITY_CHECK
@@ -35,6 +36,10 @@ from fangfrisch.util import parse_hr_bytes
 from fangfrisch.util import parse_hr_time
 
 
+def means_automatic(s: Optional[str]) -> bool:
+    return s and s.lower() in ['auto', 'automatic', 'default']
+
+
 def means_disabled(s: Optional[str]) -> bool:
     return s and s.lower() in ['disabled', 'false', 'no', 'off']
 
@@ -44,6 +49,7 @@ class Configuration:
 
     def init(self, filename: str = None) -> bool:
         defaults = {
+            CLEANUP: 'default',
             ENABLED: 'false',
             INTEGRITY_CHECK: 'sha256',
             MAX_SIZE: '10MB',
@@ -62,6 +68,9 @@ class Configuration:
 
     def get(self, section: str, option: str, fallback=None) -> Optional[str]:
         return self.parser.get(section, option, fallback=fallback)
+
+    def auto_cleanup(self, section: str) -> bool:
+        return means_automatic(self.parser.get(section, CLEANUP))
 
     def db_url(self) -> Optional[str]:
         return self.parser.get(configparser.DEFAULTSECT, DB_URL)

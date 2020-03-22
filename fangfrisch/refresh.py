@@ -31,14 +31,6 @@ from fangfrisch.util import remove_if_exists
 from fangfrisch.util import run_command
 
 
-def _disabled_sections() -> List[str]:
-    sections = []
-    for section in config.sections():
-        if not config.is_enabled(section):
-            sections.append(section)
-    return sections
-
-
 def _clamav_items() -> List[ClamavItem]:
     item_list = []
     for section in config.sections():
@@ -80,10 +72,11 @@ class ClamavRefresh:
         self.args = args
 
     @staticmethod
-    def cleanup_disabled() -> int:
+    def cleanup_providers() -> int:
         count = 0
-        for s in _disabled_sections():
-            count += RefreshLog.cleanup_provider(s)
+        for section in config.sections():
+            if config.auto_cleanup(section) and not config.is_enabled(section):
+                count += RefreshLog.cleanup_provider(section)
         return count
 
     @staticmethod
@@ -128,7 +121,7 @@ class ClamavRefresh:
         return True
 
     def refresh_all(self) -> int:
-        count = self.cleanup_disabled()
+        count = self.cleanup_providers()
         for ci in _clamav_items():
             if self.refresh(ci):
                 command = ci.on_update

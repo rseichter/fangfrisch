@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+CLEANUP = 'cleanup'
 DB_URL = 'db_url'
 ENABLED = 'enabled'
 INTEGRITY_CHECK = 'integrity_check'
