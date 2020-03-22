@@ -45,10 +45,10 @@ class DbTests(FangfrischTest):
         self.s.add(RefreshLog(self.ci, DIGEST_DUMMY))
         self.s.commit()
 
-    def test_assert_version_match1(self):
+    def test_version_match(self):
         self.assertTrue(DbMeta.assert_version_match())
 
-    def test_assert_version_match2(self):
+    def test_version_mismatch(self):
         session = DbMeta._session()
         dm: DbMeta = session.query(DbMeta).one()
         dm.db_version = -1
@@ -57,7 +57,7 @@ class DbTests(FangfrischTest):
         with self.assertRaises(SystemExit):
             DbMeta.assert_version_match()
 
-    def test_assert_version_missing(self):
+    def test_version_missing(self):
         session = DbMeta._session()
         session.query(DbMeta).delete()
         session.commit()
