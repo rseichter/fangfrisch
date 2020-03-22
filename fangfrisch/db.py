@@ -64,6 +64,7 @@ class DbMeta(Base):
             cls._engine = create_engine(db_url, echo=False)
             cls._session = sessionmaker(bind=cls._engine)
             if create_all:
+                cls.metadata.drop_all(cls._engine)
                 cls.metadata.create_all(cls._engine)
         return cls._session
 
@@ -78,7 +79,7 @@ class DbMeta(Base):
             log.fatal(f'Unexpected database version (expected {DB_VERSION}, got {dm.db_version})')
         except DatabaseError as e:
             log.exception(e)
-            log.fatal('Unexpected database version')
+        log.fatal('Please try running "initdb"')
         sys.exit(1)
 
     def create_metadata(self) -> Optional[bool]:
@@ -93,7 +94,6 @@ class DbMeta(Base):
             log.fatal(f'Database table {self.__tablename__} is not empty')
         except DatabaseError as e:  # pragma: no cover
             log.exception(e)
-            log.fatal('Cannot write metadata')
         sys.exit(1)
 
 
