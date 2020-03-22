@@ -1,6 +1,8 @@
 usage: fangfrisch [-h] [-c CONF] [-f] [-p PROVIDER]
                    {dumpconf,dumpmappings,initdb,refresh}
 
+Update and verify unofficial ClamAV signatures.
+
 positional arguments:
   {dumpconf,dumpmappings,initdb,refresh}
 
