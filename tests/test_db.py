@@ -16,7 +16,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+import tempfile
 import unittest
+import uuid
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
@@ -100,6 +102,21 @@ class DbTests(FangfrischTest):
         self.ci.url = URL2
         RefreshLog.update(self.ci, DIGEST_DUMMY)  # Must not raise an exception
         self.assertTrue(True)
+
+    def test_cleanup1(self):
+        self.assertEqual(0, RefreshLog.cleanup_provider(self.UNKNOWN))
+
+    def test_cleanup2(self):
+        file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8', delete=False)
+        file.write(self.UNITTEST)
+        file.close()
+        provider = uuid.uuid4().hex
+        self.ci.section = provider
+        self.ci.path = file.name
+        self.ci.url = URL2
+        self.s.add(RefreshLog(self.ci, DIGEST_DUMMY))
+        self.s.commit()
+        self.assertEqual(1, RefreshLog.cleanup_provider(provider))
 
 
 if __name__ == '__main__':

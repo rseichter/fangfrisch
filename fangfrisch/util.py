@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import hashlib
+import os
 import re
 from logging import Logger
 from string import Formatter
@@ -95,3 +96,9 @@ def run_command(command: str, timeout: int, log: Logger, *args, **kwargs) -> Opt
         return p.returncode
     except CalledProcessError as e:  # pragma: no cover
         log.exception(e)
+
+
+def remove_if_exists(path: str, log: Logger) -> None:
+    if path and os.path.exists(path):
+        log.debug(f'Removing file {path}')
+        os.remove(path)

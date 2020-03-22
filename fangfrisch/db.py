@@ -35,6 +35,7 @@ from sqlalchemy.orm import sessionmaker
 from fangfrisch import ClamavItem
 from fangfrisch.config.config import config
 from fangfrisch.logging import log
+from fangfrisch.util import remove_if_exists
 
 DB_VERSION = 2
 Base = declarative_base()
@@ -171,7 +172,7 @@ class RefreshLog(Base):
         :param provider_re: Provider name filter (regular expression)
         """
         RefreshLog.init()
-        return _query_provider(provider_re, RefreshLog._session())
+        return _query_provider_re(provider_re, RefreshLog._session())
 
     @staticmethod
     def update(ci: ClamavItem, digest: str) -> None:
@@ -193,9 +194,35 @@ class RefreshLog(Base):
         session.add(entry)
         session.commit()
 
+    @staticmethod
+    def cleanup_provider(provider: str) -> int:
+        """Cleanup local files associated with a given provider.
 
-def _query_provider(filter_re: str, session) -> List[RefreshLog]:
-    _re = re.compile(filter_re)
+        :param provider: Provider filter (exact match)
+        """
+        RefreshLog.init()
+        session = RefreshLog._session()
+        count = 0
+        entries = _query_provider(provider, session)
+        for entry in entries:
+            remove_if_exists(entry.path, log)
+            session.delete(entry)
+            count += 1
+        if count > 0:
+            session.commit()
+        return count
+
+
+def _query_provider(provider: str, session) -> List[RefreshLog]:
+    entries = list()
+    r: RefreshLog
+    for r in session.query(RefreshLog).filter(RefreshLog.provider == provider).all():
+        entries.append(r)
+    return entries
+
+
+def _query_provider_re(regex: str, session) -> List[RefreshLog]:
+    _re = re.compile(regex)
     entries = list()
     r: RefreshLog
     for r in session.query(RefreshLog).all():

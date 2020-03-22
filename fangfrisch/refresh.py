@@ -27,7 +27,16 @@ from fangfrisch.download import get_digest
 from fangfrisch.download import get_payload
 from fangfrisch.logging import log
 from fangfrisch.util import check_integrity
+from fangfrisch.util import remove_if_exists
 from fangfrisch.util import run_command
+
+
+def _disabled_sections() -> List[str]:
+    sections = []
+    for section in config.sections():
+        if not config.is_enabled(section):
+            sections.append(section)
+    return sections
 
 
 def _clamav_items() -> List[ClamavItem]:
@@ -71,6 +80,13 @@ class ClamavRefresh:
         self.args = args
 
     @staticmethod
+    def cleanup_disabled() -> int:
+        count = 0
+        for s in _disabled_sections():
+            count += RefreshLog.cleanup_provider(s)
+        return count
+
+    @staticmethod
     def print_url_path_mappings(output_file) -> None:
         for ci in _clamav_items():
             print(f'{ci.section}\t{ci.url}\t{ci.path}', file=output_file)
@@ -102,9 +118,7 @@ class ClamavRefresh:
                 log.warning(f'{ci.url} {integrity.data}')
                 return False
             path = RefreshLog.last_logged_path(ci.url)
-            if (path is not None) and os.path.exists(path):
-                log.debug(f'Removing file {path}')
-                os.remove(path)
+            remove_if_exists(path, log)
             with open(ci.path, 'wb') as f:
                 size = f.write(payload.data)
                 log.info(f'{ci.path} updated ({size} bytes)')
@@ -114,7 +128,7 @@ class ClamavRefresh:
         return True
 
     def refresh_all(self) -> int:
-        count = 0
+        count = self.cleanup_disabled()
         for ci in _clamav_items():
             if self.refresh(ci):
                 command = ci.on_update
