@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.1.0.dev7,</span>
+<span id="revnumber">version 1.1.0.dev8,</span>
 <span id="revdate">2020-03-22</span>
 </div>
 <div id="toc" class="toc2">
@@ -604,6 +604,12 @@ enabled = yes</pre>
 </div>
 <div class="ulist">
 <ul>
+<li>
+<p><strong>cleanup</strong>: Cleanup method used for provider sections.
+Default: <code>default</code>, alternative: <code>disabled</code>.
+In default mode, Fangfrisch will attempt to automatically delete obsolete virus definition files when you disable a provider section.
+Please think carefully before disabling this option.</p>
+</li>
 <li>
 <p><strong>db_url</strong>: Database URL in <a href="https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases">SQLAlchemy syntax</a>.
 Mandatory, no default.
@@ -767,9 +773,8 @@ The command string may contain a <code>{path}</code> placeholder, which will be 
 <div class="sectionbody">
 <div class="paragraph">
 <p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command.
-An attempt will be made to drop all existing tables.
-If that is not possible, you need to fix the underlying issue manually, depending on your database type.
-For SQLite, deleting the database file is usually the easiest method.</p>
+Running <code>--force initdb</code> will drop existing database tables.
+For SQLite, deleting the database file is also a common method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -831,11 +836,12 @@ See <a href="#dbstructure">Appendix C</a> for details.</p>
 </li>
 <li>
 <p><strong>initdb</strong>: Create the database structure.
-This needs to be run only once, before the first refresh.</p>
+This needs to be run only once, before the first refresh.
+Using the <code>--force</code> option will drop existing tables from the database.</p>
 </li>
 <li>
 <p><strong>refresh</strong>: Refresh the configured URLs.
-The <code>force</code> switch can be set to force downloads regardless of local file age.</p>
+The <code>--force</code> option can be used to override download interval settings.</p>
 </li>
 </ul>
 </div>
@@ -877,6 +883,7 @@ Enabling a section will not enable these specially prefixed entries.</p>
 <div class="listingblock">
 <div class="content">
 <pre>[DEFAULT]
+cleanup = default
 enabled = false
 integrity_check = sha256
 max_size = 10MB
@@ -974,6 +981,7 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 <div class="listingblock">
 <div class="content">
 <pre>[DEFAULT]
+cleanup = default
 enabled = false
 integrity_check = sha256
 max_size = 5MB
@@ -1109,8 +1117,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.0.dev7<br>
-Last updated 2020-03-22 13:54:58 +0100
+Version 1.1.0.dev8<br>
+Last updated 2020-03-22 21:16:18 +0100
 </div>
 </div>
 </body>

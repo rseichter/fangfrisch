@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.1.0.dev7, {docdate}
+v1.1.0.dev8, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -92,6 +92,10 @@ local_directory = /var/lib/clamav
 enabled = yes
 ----
 
+* *cleanup*: Cleanup method used for provider sections.
+Default: `default`, alternative: `disabled`.
+In default mode, Fangfrisch will attempt to automatically delete obsolete virus definition files when you disable a provider section.
+Please think carefully before disabling this option.
 * *db_url*: Database URL in https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases[SQLAlchemy syntax].
 Mandatory, no default.
 Typically, a local https://www.sqlite.org[SQLite] database will suffice.
@@ -176,9 +180,8 @@ The command string may contain a `{path}` placeholder, which will be substituted
 == Preparing the database
 
 After completing the configuration, make sure to create the database structure by running the `initdb` command.
-An attempt will be made to drop all existing tables.
-If that is not possible, you need to fix the underlying issue manually, depending on your database type.
-For SQLite, deleting the database file is usually the easiest method.
+Running `--force initdb` will drop existing database tables.
+For SQLite, deleting the database file is also a common method.
 
 ----
 fangfrisch --conf /etc/fangfrisch.conf initdb
@@ -206,9 +209,10 @@ See <<dbstructure>> for details.
 
 * *initdb*: Create the database structure.
 This needs to be run only once, before the first refresh.
+Using the `--force` option will drop existing tables from the database.
 
 * *refresh*: Refresh the configured URLs.
-The `force` switch can be set to force downloads regardless of local file age.
+The `--force` option can be used to override download interval settings.
 
 As stated before, Fangfrisch is typically run using cron.
 An example crontab looks like this:
