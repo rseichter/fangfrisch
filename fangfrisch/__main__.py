@@ -27,11 +27,11 @@ from fangfrisch.refresh import ClamavRefresh
 
 
 def main() -> int:
-    _dumpconf = 'dumpconf'
-    _initdb = 'initdb'
-    _dumpmappings = 'dumpmappings'
-    parser = argparse.ArgumentParser()
-    parser.add_argument('action', choices=[_dumpconf, _dumpmappings, _initdb, 'refresh'])
+    dumpconf = 'dumpconf'
+    dumpmappings = 'dumpmappings'
+    initdb = 'initdb'
+    parser = argparse.ArgumentParser(description='Update and verify unofficial ClamAV signatures.')
+    parser.add_argument('action', choices=[dumpconf, dumpmappings, initdb, 'refresh'])
     parser.add_argument('-c', '--conf', default=None, help='configuration file')
     parser.add_argument('-f', '--force', default=False, action='store_true', help='force action (default: False)')
     parser.add_argument('-p', '--provider', default='.', help='provider name filter (regular expression)')
@@ -39,11 +39,11 @@ def main() -> int:
     if not config.init(args.conf):
         log.error(f'Cannot parse configuration file: {args.conf}')
         sys.exit(1)
-    if _dumpconf == args.action:
+    if dumpconf == args.action:
         config.write(sys.stdout)
-    elif _dumpmappings == args.action:
+    elif dumpmappings == args.action:
         DumpDbEntries(args).print_url_path_mappings(sys.stdout)
-    elif _initdb == args.action:
+    elif initdb == args.action:
         DbMeta().create_metadata()
     else:
         DbMeta.assert_version_match()
