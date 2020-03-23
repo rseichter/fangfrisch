@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.1.0.dev8, {docdate}
+v1.1.0, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -93,9 +93,9 @@ enabled = yes
 ----
 
 * *cleanup*: Cleanup method used for provider sections.
-Default: `default`, alternative: `disabled`.
-In default mode, Fangfrisch will attempt to automatically delete obsolete virus definition files when you disable a provider section.
-Please think carefully before disabling this option.
+Default: `automatic`, alternative: `disabled`.
+In automatic mode, Fangfrisch will attempt to delete obsolete virus definition files whenever you disable a provider section.
+Should you disable this option, orphaned files will be left behind, and you need to ensure cleanup by different means.
 * *db_url*: Database URL in https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases[SQLAlchemy syntax].
 Mandatory, no default.
 Typically, a local https://www.sqlite.org[SQLite] database will suffice.

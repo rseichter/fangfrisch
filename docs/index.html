@@ -445,8 +445,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.1.0.dev8,</span>
-<span id="revdate">2020-03-22</span>
+<span id="revnumber">version 1.1.0,</span>
+<span id="revdate">2020-03-23</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -606,9 +606,9 @@ enabled = yes</pre>
 <ul>
 <li>
 <p><strong>cleanup</strong>: Cleanup method used for provider sections.
-Default: <code>default</code>, alternative: <code>disabled</code>.
-In default mode, Fangfrisch will attempt to automatically delete obsolete virus definition files when you disable a provider section.
-Please think carefully before disabling this option.</p>
+Default: <code>automatic</code>, alternative: <code>disabled</code>.
+In automatic mode, Fangfrisch will attempt to delete obsolete virus definition files whenever you disable a provider section.
+Should you disable this option, orphaned files will be left behind, and you need to ensure cleanup by different means.</p>
 </li>
 <li>
 <p><strong>db_url</strong>: Database URL in <a href="https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases">SQLAlchemy syntax</a>.
@@ -883,7 +883,7 @@ Enabling a section will not enable these specially prefixed entries.</p>
 <div class="listingblock">
 <div class="content">
 <pre>[DEFAULT]
-cleanup = default
+cleanup = automatic
 enabled = false
 integrity_check = sha256
 max_size = 10MB
@@ -981,7 +981,7 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 <div class="listingblock">
 <div class="content">
 <pre>[DEFAULT]
-cleanup = default
+cleanup = automatic
 enabled = false
 integrity_check = sha256
 max_size = 5MB
@@ -1117,8 +1117,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.0.dev8<br>
-Last updated 2020-03-22 21:16:18 +0100
+Version 1.1.0<br>
+Last updated 2020-03-23 15:18:15 +0100
 </div>
 </div>
 </body>

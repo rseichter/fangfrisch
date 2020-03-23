@@ -49,7 +49,7 @@ class Configuration:
 
     def init(self, filename: str = None) -> bool:
         defaults = {
-            CLEANUP: 'default',
+            CLEANUP: 'automatic',
             ENABLED: 'false',
             INTEGRITY_CHECK: 'sha256',
             MAX_SIZE: '10MB',
