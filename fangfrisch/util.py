@@ -19,7 +19,6 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import hashlib
 import os
 import re
-from logging import Logger
 from string import Formatter
 from subprocess import CalledProcessError
 from subprocess import CompletedProcess
@@ -85,20 +84,22 @@ def parse_hr_time(s: str) -> int:
     return -1
 
 
-def run_command(command: str, timeout: int, log: Logger, *args, **kwargs) -> Optional[int]:
+def run_command(command: str, timeout: int,
+                callback_stdout, callback_stderr, callback_exception,
+                *args, **kwargs) -> Optional[int]:
     try:
         command = Formatter().vformat(command, args, kwargs)
         p: CompletedProcess = run(command, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
         if p.stdout:
-            log.info(p.stdout)
+            callback_stdout(p.stdout)
         if p.stderr:
-            log.error(p.stderr)
+            callback_stderr(p.stderr)
         return p.returncode
     except CalledProcessError as e:  # pragma: no cover
-        log.exception(e)
+        callback_exception(e)
 
 
-def remove_if_exists(path: str, log: Logger) -> None:
+def remove_if_exists(path: str, log_callback) -> None:
     if path and os.path.exists(path):
-        log.debug(f'Removing file {path}')
+        log_callback(f'Removing file {path}')
         os.remove(path)

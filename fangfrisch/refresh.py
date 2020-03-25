@@ -25,7 +25,11 @@ from fangfrisch.config.config import config
 from fangfrisch.db import RefreshLog
 from fangfrisch.download import get_digest
 from fangfrisch.download import get_payload
-from fangfrisch.logging import log
+from fangfrisch.log import log_debug
+from fangfrisch.log import log_error
+from fangfrisch.log import log_exception
+from fangfrisch.log import log_info
+from fangfrisch.log import log_warning
 from fangfrisch.util import check_integrity
 from fangfrisch.util import remove_if_exists
 from fangfrisch.util import run_command
@@ -39,7 +43,7 @@ def _clamav_items() -> List[ClamavItem]:
         for option in config.options(section):
             max_size = config.max_size(section)
             if max_size < 1:
-                log.error(f"Cannot parse max size for section '{section}'")
+                log_error(f"Cannot parse max size for section '{section}'")
                 continue
             local_dir = config.local_dir(section)
             if local_dir:
@@ -92,15 +96,15 @@ class ClamavRefresh:
         """
         try:
             if self.args.force:
-                log.debug(f'{ci.url} refresh forced')
+                log_debug(f'{ci.url} refresh forced')
             elif not RefreshLog.is_outdated(ci.url, ci.interval):
-                log.debug(f'{ci.url} below max age')
+                log_debug(f'{ci.url} below max age')
                 return False
             digest = get_digest(ci)
             if not digest.ok:
                 return False
             if digest.data and RefreshLog.digest_matches(ci.url, digest.data):
-                log.debug(f'{ci.url} unchanged')
+                log_debug(f'{ci.url} unchanged')
                 RefreshLog.update(ci, digest.data)
                 return False
             payload = get_payload(ci)
@@ -108,16 +112,16 @@ class ClamavRefresh:
                 return False
             integrity = check_integrity(payload.data, ci.check, digest.data)
             if not integrity.ok:
-                log.warning(f'{ci.url} {integrity.data}')
+                log_warning(f'{ci.url} {integrity.data}')
                 return False
             path = RefreshLog.last_logged_path(ci.url)
-            remove_if_exists(path, log)
+            remove_if_exists(path, log_debug)
             with open(ci.path, 'wb') as f:
                 size = f.write(payload.data)
-                log.info(f'{ci.path} updated ({size} bytes)')
+                log_info(f'{ci.path} updated ({size} bytes)')
                 RefreshLog.update(ci, digest.data)
         except OSError as e:  # pragma: no cover
-            log.exception(e)
+            log_exception(e)
         return True
 
     def refresh_all(self) -> int:
@@ -126,9 +130,11 @@ class ClamavRefresh:
             if self.refresh(ci):
                 command = ci.on_update
                 if command:
-                    run_command(command, config.on_update_timeout(), log, path=ci.path)
+                    run_command(command, config.on_update_timeout(),
+                                log_info, log_error, log_exception, path=ci.path)
                 count += 1
         command = config.on_update_exec()
         if count > 0 and command:
-            run_command(command, config.on_update_timeout(), log)
+            run_command(command, config.on_update_timeout(),
+                        log_info, log_error, log_exception)
         return count

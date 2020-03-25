@@ -34,7 +34,9 @@ from sqlalchemy.orm import sessionmaker
 
 from fangfrisch import ClamavItem
 from fangfrisch.config.config import config
-from fangfrisch.logging import log
+from fangfrisch.log import log_debug
+from fangfrisch.log import log_exception
+from fangfrisch.log import log_fatal
 from fangfrisch.util import remove_if_exists
 
 DB_VERSION = 2
@@ -60,7 +62,7 @@ class DbMeta(Base):
         if not cls._session:
             db_url = config.db_url()
             if not db_url:  # pragma: no cover
-                log.fatal('Database URL is undefined, exiting.')
+                log_fatal('Database URL is undefined, exiting.')
                 sys.exit(1)
             cls._engine = create_engine(db_url, echo=False)
             cls._session = sessionmaker(bind=cls._engine)
@@ -78,10 +80,10 @@ class DbMeta(Base):
             dm: DbMeta = session.query(DbMeta).one()
             if dm.db_version == DB_VERSION:
                 return True
-            log.fatal(f'Unexpected database version (expected {DB_VERSION}, got {dm.db_version})')
+            log_fatal(f'Unexpected database version (expected {DB_VERSION}, got {dm.db_version})')
         except DatabaseError as e:
-            log.exception(e)
-        log.fatal('Please try running "initdb"')
+            log_exception(e)
+        log_fatal('Please try running "initdb"')
         sys.exit(1)
 
     def create_metadata(self, force=False) -> Optional[bool]:
@@ -93,9 +95,9 @@ class DbMeta(Base):
                 session.add(self)
                 session.commit()
                 return True
-            log.fatal(f'Database table {self.__tablename__} is not empty')
+            log_fatal(f'Database table {self.__tablename__} is not empty')
         except DatabaseError as e:  # pragma: no cover
-            log.exception(e)
+            log_exception(e)
         sys.exit(1)
 
 
@@ -123,7 +125,7 @@ class RefreshLog(Base):
         if not cls._session:
             db_url = config.db_url()
             if not db_url:  # pragma: no cover
-                log.fatal('Database URL is undefined, exiting.')
+                log_fatal('Database URL is undefined, exiting.')
                 sys.exit(1)
             engine = create_engine(db_url, echo=False)
             cls._session = sessionmaker(bind=engine)
@@ -207,7 +209,7 @@ class RefreshLog(Base):
         count = 0
         entries = _query_provider(provider, session)
         for entry in entries:
-            remove_if_exists(entry.path, log)
+            remove_if_exists(entry.path, log_debug)
             session.delete(entry)
             count += 1
         if count > 0:

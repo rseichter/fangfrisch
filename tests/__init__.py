@@ -21,10 +21,12 @@ import os
 import unittest
 import uuid
 
+import fangfrisch.log
 from fangfrisch import ClamavItem
 from fangfrisch.config.config import config
 from fangfrisch.db import DbMeta
-from fangfrisch.logging import log
+from fangfrisch.log import LogHandlerType
+from fangfrisch.log import init_logger
 
 DIGEST_DUMMY = 'digest_dummy'
 DIGEST_MD5 = '6087a61850f22a132f8522f35779c04d'
@@ -52,5 +54,8 @@ class FangfrischTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         config.init(FangfrischTest.CONF)
         os.makedirs(FangfrischTest.TMPDIR, exist_ok=True)
-        log.setLevel(logging.FATAL)
+        if fangfrisch.log._handler is not None:
+            fangfrisch.log._handler.close()
+            fangfrisch.log._handler = None
+        init_logger(LogHandlerType.CONSOLE, level=logging.FATAL)
         DbMeta.init(True)

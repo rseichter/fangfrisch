@@ -19,12 +19,14 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import os
 import unittest
 
+from fangfrisch.log import log_error
+from fangfrisch.log import log_exception
+from fangfrisch.log import log_info
 from fangfrisch.util import check_integrity
 from fangfrisch.util import parse_hr_bytes
 from fangfrisch.util import parse_hr_time
 from fangfrisch.util import run_command
 from tests import FangfrischTest
-from tests import log
 
 SAMPLE_DATA = 'fangfrisch'.encode('utf-8')
 SAMPLE_MD5 = '5e46abab8a827e1534af3a64a3d91f00'
@@ -81,10 +83,10 @@ class UtilTests(FangfrischTest):
         self.assertEqual(48 * 60, parse_hr_time('48h'))
 
     def test_run_echo(self):
-        self.assertEqual(0, run_command('echo > {path}', 3, log, path=os.devnull))
+        self.assertEqual(0, run_command('echo > {path}', 3, log_info, log_error, log_exception, path=os.devnull))
 
     def test_run_unknown(self):
-        self.assertTrue(0 < run_command(self.UNKNOWN, 3, log))
+        self.assertTrue(0 < run_command(self.UNKNOWN, 3, log_info, log_error, log_exception))
 
 
 if __name__ == '__main__':

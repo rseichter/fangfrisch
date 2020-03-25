@@ -21,11 +21,11 @@ from requests import Response
 
 from fangfrisch import ClamavItem
 from fangfrisch import __version__
-from fangfrisch.logging import log
+from fangfrisch.log import log_error
+from fangfrisch.log import log_warning
 from fangfrisch.util import StatusDataPair
 
 CONTENT_LENGTH = 'Content-Length'
-
 _session = requests.Session()
 _session.headers['User-Agent'] = f'fangfrisch/{__version__}'
 
@@ -38,11 +38,11 @@ def _has_valid_length(response: Response, max_length: int) -> StatusDataPair:
     :return: True if length is permitted, False otherwise.
     """
     if CONTENT_LENGTH not in response.headers:  # pragma: no cover
-        log.warning(f'{response.url} content length unknown')
+        log_warning(f'{response.url} content length unknown')
         return StatusDataPair(True, -1)
     length = int(response.headers[CONTENT_LENGTH])
     if length > max_length:
-        log.error(f'{response.url} size exceeds defined limit ({length}/{max_length} bytes)')
+        log_error(f'{response.url} size exceeds defined limit ({length}/{max_length} bytes)')
         return StatusDataPair(False, length)
     return StatusDataPair(True, length)
 
@@ -56,7 +56,7 @@ def _download(url, max_length: int) -> StatusDataPair:
     """
     response = _session.get(url, stream=True, timeout=30)
     if response.status_code != requests.codes.ok:
-        log.error(f'{url} download failed: {response.status_code} {response.reason}')
+        log_error(f'{url} download failed: {response.status_code} {response.reason}')
         return StatusDataPair(False)
     check = _has_valid_length(response, max_length)
     if not check.ok:
