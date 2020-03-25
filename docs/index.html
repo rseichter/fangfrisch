@@ -445,8 +445,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.1.0,</span>
-<span id="revdate">2020-03-23</span>
+<span id="revnumber">version 1.2.0.dev1,</span>
+<span id="revdate">2020-03-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -470,7 +470,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_preparing_the_database">6. Preparing the database</a></li>
 <li><a href="#_usage">7. Usage</a></li>
-<li><a href="#_contact">8. Contact</a></li>
+<li><a href="#_logging">8. Logging</a></li>
+<li><a href="#_support">9. Support</a>
+<ul class="sectlevel2">
+<li><a href="#_reporting_problems">9.1. Reporting problems</a></li>
+<li><a href="#_submitting_suggestions">9.2. Submitting suggestions</a></li>
+</ul>
+</li>
 <li><a href="#internalconf">Appendix A: Default configuration</a></li>
 <li><a href="#sampleeff">Appendix B: Effective configuration</a></li>
 <li><a href="#dbstructure">Appendix C: Database structure</a>
@@ -805,7 +811,7 @@ Fangfrisch should never be run as <code>root</code>, but as an unprivileged user
 <div class="content">
 <pre>$ fangfrisch --help
 
-usage: fangfrisch [-h] [-c CONF] [-f] [-p PROVIDER]
+usage: fangfrisch [-h] [-c CONF] [-f] [-s SYSLOG] [-p PROVIDER]
                    {dumpconf,dumpmappings,initdb,refresh}
 
 Update and verify unofficial ClamAV signatures.
@@ -817,6 +823,8 @@ optional arguments:
   -h, --help            show this help message and exit
   -c CONF, --conf CONF  configuration file
   -f, --force           force action (default: False)
+  -s SYSLOG, --syslog SYSLOG
+                        syslog target (default: None)
   -p PROVIDER, --provider PROVIDER
                         provider name filter (regular expression)</pre>
 </div>
@@ -854,20 +862,118 @@ An example crontab looks like this:</p>
 <pre>HOME=/var/lib/fangfrisch
 LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
-*/15 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh</pre>
+*/15 * * * * clamav venv/bin/fangfrisch -c /etc/fangfrisch.conf -s /dev/log refresh</pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_contact"><a class="anchor" href="#_contact"></a>8. Contact</h2>
+<h2 id="_logging"><a class="anchor" href="#_logging"></a>8. Logging</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fangfrisch uses console logging via stdout/stderr streams as a default.
+You can use the <code>--syslog TARGET</code> option to log to <a href="https://tools.ietf.org/html/rfc5424">syslog</a> instead.
+Possible targets are absolute file paths, hostname, and hostname:udpport, as shown in the following examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/dev/log</code> - Unix domain socket on local machine.</p>
+</li>
+<li>
+<p><code>localhost</code> - Local syslog, listening on default UDP port 514.</p>
+</li>
+<li>
+<p><code>host.example.com:4321</code> - Remote syslog, listening on custom UDP port 4321.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Two environment variables can be used to influence what messages are being logged:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>LOG_LEVEL: Select one of DEBUG, INFO, WARNING, ERROR or FATAL. Default: WARNING.</p>
+</li>
+<li>
+<p>LOG_FORMAT: See <a href="https://docs.python.org/3/library/logging.html#logging.Formatter">Formatter class</a> documentation for details.
+Default: Sensible choices depending on the selected log target.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_support"><a class="anchor" href="#_support"></a>9. Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The project is hosted on <a href="https://github.com/rseichter/fangfrisch">GitHub</a>.
-If you experience problems or have suggestions, you should <a href="https://github.com/rseichter/fangfrisch/issues">file an issue</a>.
-When doing so, please always check existing issues first, including closed ones.
-This saves time and effort for all involved.
-To contact the author Ralph Seichter directly you can send email to <a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a>.</p>
+Before opening tickets or contacting the author, <em>always</em> check <a href="https://github.com/rseichter/fangfrisch/issues">existing issues</a> first, including closed ones.
+This is not meant to discourage you; it just saves time and effort for all involved.
+Please contact the author <a href="mailto:fangfrisch@seichter.de">Ralph Seichter</a> only after having done your "research".
+Thank you.</p>
+</div>
+<div class="sect2">
+<h3 id="_reporting_problems"><a class="anchor" href="#_reporting_problems"></a>9.1. Reporting problems</h3>
+<div class="paragraph">
+<p>If you experience problems, please start by trying to figure out underlying issues on your own.
+Running with DEBUG level logging helps with that.
+Should your efforts fail, consider filing a GitHub issue.
+Each issue needs to answer the questions listed below.</p>
+</div>
+<div class="paragraph">
+<p>If you answer question number 1, 2 or 3 with "no", do not file an issue.
+Please answer all other questions as detailed as you can, within reason.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Have you checked the documentation?</p>
+</li>
+<li>
+<p>Have you checked all existing issues, including closed ones?</p>
+</li>
+<li>
+<p>Have you done your personal best to resolve the issue on your own?</p>
+</li>
+<li>
+<p>What exactly did you do?</p>
+</li>
+<li>
+<p>What did you expect to happen?</p>
+</li>
+<li>
+<p>What happened instead?</p>
+</li>
+<li>
+<p>What was your exact setup (operating system, Python core version, Python module versions)?</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_submitting_suggestions"><a class="anchor" href="#_submitting_suggestions"></a>9.2. Submitting suggestions</h3>
+<div class="paragraph">
+<p>The list of questions is shorter, but important nonetheless:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Have you checked the documentation?</p>
+</li>
+<li>
+<p>Have you checked all existing issues, including closed ones?</p>
+</li>
+<li>
+<p>Is the feature I am suggesting helpful for more people than just myself?</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>If you answered "yes" for all questions, please explain your idea as detailed as possible.
+Use examples, graphics, and whatever else you think would help others to understand your suggestion.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1117,8 +1223,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.0<br>
-Last updated 2020-03-23 15:18:15 +0100
+Version 1.2.0.dev1<br>
+Last updated 2020-03-25 20:17:33 +0100
 </div>
 </div>
 </body>

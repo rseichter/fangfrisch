@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.1.0, {docdate}
+v1.2.0.dev1, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -221,16 +221,61 @@ An example crontab looks like this:
 HOME=/var/lib/fangfrisch
 LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
-*/15 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh
+*/15 * * * * clamav venv/bin/fangfrisch -c /etc/fangfrisch.conf -s /dev/log refresh
 ----
 
-== Contact
+== Logging
+
+Fangfrisch uses console logging via stdout/stderr streams as a default.
+You can use the `--syslog TARGET` option to log to https://tools.ietf.org/html/rfc5424[syslog] instead.
+Possible targets are absolute file paths, hostname, and hostname:udpport, as shown in the following examples:
+
+* `/dev/log` - Unix domain socket on local machine.
+* `localhost` - Local syslog, listening on default UDP port 514.
+* `host.example.com:4321` - Remote syslog, listening on custom UDP port 4321.
+
+Two environment variables can be used to influence what messages are being logged:
+
+* LOG_LEVEL: Select one of DEBUG, INFO, WARNING, ERROR or FATAL. Default: WARNING.
+* LOG_FORMAT: See https://docs.python.org/3/library/logging.html#logging.Formatter[Formatter class] documentation for details.
+Default: Sensible choices depending on the selected log target.
+
+== Support
 
 The project is hosted on https://github.com/rseichter/fangfrisch[GitHub].
-If you experience problems or have suggestions, you should https://github.com/rseichter/fangfrisch/issues[file an issue].
-When doing so, please always check existing issues first, including closed ones.
-This saves time and effort for all involved.
-To contact the author {author} directly you can send email to {email}.
+Before opening tickets or contacting the author, _always_ check https://github.com/rseichter/fangfrisch/issues[existing issues] first, including closed ones.
+This is not meant to discourage you; it just saves time and effort for all involved.
+Please contact the author mailto:{email}[{author}] only after having done your "research".
+Thank you.
+
+=== Reporting problems
+
+If you experience problems, please start by trying to figure out underlying issues on your own.
+Running with DEBUG level logging helps with that.
+Should your efforts fail, consider filing a GitHub issue.
+Each issue needs to answer the questions listed below.
+
+If you answer question number 1, 2 or 3 with "no", do not file an issue.
+Please answer all other questions as detailed as you can, within reason.
+
+1. Have you checked the documentation?
+2. Have you checked all existing issues, including closed ones?
+3. Have you done your personal best to resolve the issue on your own?
+4. What exactly did you do?
+5. What did you expect to happen?
+6. What happened instead?
+7. What was your exact setup (operating system, Python core version, Python module versions)?
+
+=== Submitting suggestions
+
+The list of questions is shorter, but important nonetheless:
+
+1. Have you checked the documentation?
+2. Have you checked all existing issues, including closed ones?
+3. Is the feature I am suggesting helpful for more people than just myself?
+
+If you answered "yes" for all questions, please explain your idea as detailed as possible.
+Use examples, graphics, and whatever else you think would help others to understand your suggestion.
 
 [[internalconf]]
 [appendix]
