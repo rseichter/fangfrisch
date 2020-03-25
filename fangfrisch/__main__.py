@@ -23,8 +23,8 @@ from fangfrisch.config.config import config
 from fangfrisch.db import DbMeta
 from fangfrisch.dump import DumpDbEntries
 from fangfrisch.log import LogHandlerType
+from fangfrisch.log import eprint
 from fangfrisch.log import init_logger
-from fangfrisch.log import log_error
 from fangfrisch.refresh import ClamavRefresh
 
 
@@ -40,13 +40,12 @@ def main() -> int:
     parser.add_argument('-p', '--provider', default='.', help='provider name filter (regular expression)')
     args = parser.parse_args()
     if args.syslog:
-        init_logger(LogHandlerType.SYSLOG, args.syslog)
+        init_logger(LogHandlerType.SYSLOG, address=args.syslog)
     else:
         init_logger(LogHandlerType.CONSOLE)
     if not config.init(args.conf):
-        log_error(f'Cannot parse configuration file: {args.conf}')
+        eprint(f'Cannot parse configuration file: {args.conf}')
         sys.exit(1)
-    log_error('Just testing')
     if dumpconf == args.action:
         config.write(sys.stdout)
     elif dumpmappings == args.action:

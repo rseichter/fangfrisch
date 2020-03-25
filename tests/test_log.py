@@ -24,6 +24,7 @@ from fangfrisch.log import LogHandlerType
 # noinspection PyProtectedMember
 from fangfrisch.log import _create_handler
 from fangfrisch.log import init_logger
+from fangfrisch.log import parse_syslog_target
 
 
 class LogTests(unittest.TestCase):
@@ -36,22 +37,33 @@ class LogTests(unittest.TestCase):
         fangfrisch.log._logger = None
 
     def test_init_console_handler(self):
-        x = _create_handler(LogHandlerType.CONSOLE, self.level, self.fmt, '')
+        x = _create_handler(LogHandlerType.CONSOLE, '')
         self.assertTrue(isinstance(x, logging.Handler))
 
     def test_init_syslog_handler(self):
-        x = _create_handler(LogHandlerType.SYSLOG, self.level, self.fmt, 'localhost')
+        x = _create_handler(LogHandlerType.SYSLOG, 'localhost')
         self.assertTrue(isinstance(x, logging.Handler))
         x.close()
 
     def test_init_syslog_handler_port(self):
-        x = _create_handler(LogHandlerType.SYSLOG, self.level, self.fmt, '127.0.0.1:514')
+        x = _create_handler(LogHandlerType.SYSLOG, '127.0.0.1:514')
         self.assertTrue(isinstance(x, logging.Handler))
         x.close()
 
     def test_init_logger(self):
         x = init_logger(LogHandlerType.CONSOLE)
         self.assertTrue(isinstance(x, logging.Logger))
+
+    def test_parse_dgram(self):
+        a = '/dev/log'
+        self.assertEqual(a, parse_syslog_target(a))
+
+    def test_parse_inet(self):
+        h = '127.0.0.1'
+        p = 101
+        a, b = parse_syslog_target(f'{h}:{p}')
+        self.assertEqual(h, a)
+        self.assertEqual(p, b)
 
 
 if __name__ == '__main__':

@@ -19,6 +19,7 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import logging
 import logging.handlers
 import os
+import sys
 from enum import Enum
 from enum import unique
 from logging import Handler
@@ -39,33 +40,47 @@ _handler: Handler = None
 _logger: Logger = None
 
 
-def _create_handler(type_: LogHandlerType, level: int, fmt: str, address: str):
+def parse_syslog_target(address: str):
+    if address.find('/') >= 0:
+        return address
+    s = address.split(':')
+    host = s[0]
+    if len(s) > 1:
+        port = int(s[1])
+    else:
+        port = logging.handlers.SYSLOG_UDP_PORT
+    tuple_ = (host, port)
+    return tuple_
+
+
+def _create_handler(type_: LogHandlerType, syslog_target: str):
     if type_ == LogHandlerType.SYSLOG:
-        s = address.split(':')
-        host = s[0]
-        if len(s) > 1:
-            port = int(s[1])
-        else:
-            port = logging.handlers.SYSLOG_UDP_PORT
-        addr = (host, port)
-        handler = logging.handlers.SysLogHandler(address=addr)
+        a = parse_syslog_target(syslog_target)
+        handler = logging.handlers.SysLogHandler(address=a)
+        default = r'fangfrisch: %(message)s'
     else:
         handler = logging.StreamHandler()
+        default = r'%(levelname)s: %(message)s'
+    fmt = os.getenv('LOG_FORMAT', default)
     handler.setFormatter(logging.Formatter(fmt))
-    handler.setLevel(level)
     return handler
 
 
 def init_logger(type_: LogHandlerType, level=NOTSET, address: str = 'localhost') -> Logger:
     global _handler, _logger
     if _handler is None:
-        format_ = os.getenv('LOG_FORMAT', r'%(levelname)s: %(message)s')
         if level == NOTSET:
             level = os.getenv('LOG_LEVEL', WARNING)
-        _handler = _create_handler(type_, level, format_, address)
+        _handler = _create_handler(type_, address)
         _logger = logging.getLogger('fangfrisch')
         _logger.addHandler(_handler)
+        _handler.setLevel(level)
+        _logger.setLevel(level)
     return _logger
+
+
+def eprint(*args, **kwargs) -> None:  # pragma: no cover
+    print(*args, file=sys.stderr, **kwargs)
 
 
 def log_debug(*args, **kwargs) -> None:
