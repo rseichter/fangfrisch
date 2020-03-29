@@ -61,8 +61,8 @@ class Configuration:
             MAX_SIZE: '10MB',
         }
         self.parser = ConfigParser(defaults=defaults, interpolation=ExtendedInterpolation())
-        for c in [malwarepatrol, sanesecurity, securiteinfo, urlhaus]:
-            self.parser.read_dict(c)
+        for dict_ in [malwarepatrol, sanesecurity, securiteinfo, urlhaus]:
+            self.parser.read_dict(dict_)
         if filename:
             parsed = self.parser.read([filename])
             return len(parsed) == 1
@@ -76,9 +76,11 @@ class Configuration:
         return self.parser.get(section, option, fallback=fallback)
 
     def auto_cleanup(self, section: str) -> bool:
+        # Default: see init() method
         return means_automatic(self.parser.get(section, CLEANUP))
 
     def db_url(self) -> Optional[str]:
+        # No default
         return self.parser.get(configparser.DEFAULTSECT, DB_URL)
 
     def on_update_exec(self, fallback='') -> str:
@@ -88,6 +90,7 @@ class Configuration:
         return self.parser.getint(configparser.DEFAULTSECT, 'on_update_timeout', fallback=fallback)
 
     def is_enabled(self, section: str, fallback=False) -> bool:
+        # Default: see init() method
         return self.parser.getboolean(section, ENABLED, fallback=fallback)
 
     def interval(self, section: str, fallback='') -> int:
@@ -95,10 +98,11 @@ class Configuration:
         return parse_hr_time(age)
 
     def max_size(self, section: str) -> int:
-        size = self.parser.get(section, MAX_SIZE)
-        return parse_hr_bytes(size)
+        # Default: see init() method
+        return parse_hr_bytes(self.parser.get(section, MAX_SIZE))
 
     def integrity_check(self, section: str) -> Optional[str]:
+        # Default: see init() method
         check: str = self.parser.get(section, INTEGRITY_CHECK)
         if means_disabled(check):
             return None
@@ -111,9 +115,11 @@ class Configuration:
         return self.parser.get(configparser.DEFAULTSECT, LOG_FORMAT, fallback=fallback)
 
     def log_level(self) -> str:
-        return self.parser.get(configparser.DEFAULTSECT, LOG_LEVEL)
+        # Default: see init() method
+        return self.parser.get(configparser.DEFAULTSECT, LOG_LEVEL).upper()
 
     def log_method(self) -> str:
+        # Default: see init() method
         return self.parser.get(configparser.DEFAULTSECT, LOG_METHOD)
 
     def log_target(self, fallback='localhost') -> str:
