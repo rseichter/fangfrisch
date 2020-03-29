@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Release 1.2.0 (2020-03-29)
+
+- In addition to console (i.e. stdout/stderr) logging, Fangfrisch now supports syslog.
+  See the documentation for configuration options `log_method` et al for details.
+
 Release 1.1.0 (2020-03-23)
 
 If you are upgrading from a previous release, you need to either delete all existing database tables or create a new
