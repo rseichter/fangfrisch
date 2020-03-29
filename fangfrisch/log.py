@@ -54,7 +54,7 @@ def _create_handler(type_: LogHandlerType, log_format: str, syslog_target: str):
     if type_ == LogHandlerType.SYSLOG:
         a = parse_syslog_target(syslog_target)
         handler = logging.handlers.SysLogHandler(address=a)
-        default_format = r'fangfrisch: %(message)s'
+        default_format = r'fangfrisch[%(process)d]: %(message)s'
     else:
         handler = logging.StreamHandler()
         default_format = r'%(levelname)s: %(message)s'
