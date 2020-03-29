@@ -18,14 +18,11 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import logging
 import logging.handlers
-import os
 import sys
 from enum import Enum
 from enum import unique
 from logging import Handler
 from logging import Logger
-from logging import NOTSET
-from logging import WARNING
 
 
 @unique
@@ -53,25 +50,26 @@ def parse_syslog_target(address: str):
     return tuple_
 
 
-def _create_handler(type_: LogHandlerType, syslog_target: str):
+def _create_handler(type_: LogHandlerType, log_format: str, syslog_target: str):
     if type_ == LogHandlerType.SYSLOG:
         a = parse_syslog_target(syslog_target)
         handler = logging.handlers.SysLogHandler(address=a)
-        default = r'fangfrisch: %(message)s'
+        default_format = r'fangfrisch: %(message)s'
     else:
         handler = logging.StreamHandler()
-        default = r'%(levelname)s: %(message)s'
-    fmt = os.getenv('LOG_FORMAT', default)
-    handler.setFormatter(logging.Formatter(fmt))
+        default_format = r'%(levelname)s: %(message)s'
+    if log_format:
+        f = log_format
+    else:
+        f = default_format
+    handler.setFormatter(logging.Formatter(f))
     return handler
 
 
-def init_logger(type_: LogHandlerType, level=NOTSET, address: str = 'localhost') -> Logger:
+def init_logger(type_: LogHandlerType, level: str, format_: str, address: str = 'localhost') -> Logger:
     global _handler, _logger
     if _handler is None:
-        if level == NOTSET:
-            level = os.getenv('LOG_LEVEL', WARNING)
-        _handler = _create_handler(type_, address)
+        _handler = _create_handler(type_, format_, address)
         _logger = logging.getLogger('fangfrisch')
         _logger.addHandler(_handler)
         _handler.setLevel(level)

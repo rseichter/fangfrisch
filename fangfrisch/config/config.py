@@ -27,6 +27,10 @@ from fangfrisch.config import ENABLED
 from fangfrisch.config import INTEGRITY_CHECK
 from fangfrisch.config import INTERVAL
 from fangfrisch.config import LOCAL_DIR
+from fangfrisch.config import LOG_FORMAT
+from fangfrisch.config import LOG_LEVEL
+from fangfrisch.config import LOG_METHOD
+from fangfrisch.config import LOG_TARGET
 from fangfrisch.config import MAX_SIZE
 from fangfrisch.config.malwarepatrol import malwarepatrol
 from fangfrisch.config.sanesecurity import sanesecurity
@@ -52,6 +56,8 @@ class Configuration:
             CLEANUP: 'automatic',
             ENABLED: 'false',
             INTEGRITY_CHECK: 'sha256',
+            LOG_LEVEL: 'WARNING',
+            LOG_METHOD: 'console',
             MAX_SIZE: '10MB',
         }
         self.parser = ConfigParser(defaults=defaults, interpolation=ExtendedInterpolation())
@@ -100,6 +106,18 @@ class Configuration:
 
     def local_dir(self, section: str, fallback='') -> str:
         return self.parser.get(section, LOCAL_DIR, fallback=fallback)
+
+    def log_format(self, fallback=None) -> Optional[str]:
+        return self.parser.get(configparser.DEFAULTSECT, LOG_FORMAT, fallback=fallback)
+
+    def log_level(self) -> str:
+        return self.parser.get(configparser.DEFAULTSECT, LOG_LEVEL)
+
+    def log_method(self) -> str:
+        return self.parser.get(configparser.DEFAULTSECT, LOG_METHOD)
+
+    def log_target(self, fallback='localhost') -> str:
+        return self.parser.get(configparser.DEFAULTSECT, LOG_TARGET, fallback=fallback)
 
     def options(self, section: str):
         return self.parser.options(section)

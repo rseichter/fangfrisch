@@ -19,6 +19,8 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import argparse
 import sys
 
+from fangfrisch.config import LOG_METHOD_CONSOLE
+from fangfrisch.config import LOG_METHOD_SYSLOG
 from fangfrisch.config.config import config
 from fangfrisch.db import DbMeta
 from fangfrisch.dump import DumpDbEntries
@@ -36,15 +38,20 @@ def main() -> int:
     parser.add_argument('action', choices=[dumpconf, dumpmappings, initdb, 'refresh'])
     parser.add_argument('-c', '--conf', default=None, help='configuration file')
     parser.add_argument('-f', '--force', default=False, action='store_true', help='force action (default: False)')
-    parser.add_argument('-s', '--syslog', default=None, help='syslog target (default: None)')
     parser.add_argument('-p', '--provider', default='.', help='provider name filter (regular expression)')
     args = parser.parse_args()
-    if args.syslog:
-        init_logger(LogHandlerType.SYSLOG, address=args.syslog)
-    else:
-        init_logger(LogHandlerType.CONSOLE)
     if not config.init(args.conf):
         eprint(f'Cannot parse configuration file: {args.conf}')
+        sys.exit(1)
+    format_ = config.log_format()
+    level = config.log_level()
+    method = config.log_method()
+    if method == LOG_METHOD_CONSOLE:
+        init_logger(LogHandlerType.CONSOLE, level, format_)
+    elif method == LOG_METHOD_SYSLOG:
+        init_logger(LogHandlerType.SYSLOG, level, format_, address=config.log_target())
+    else:
+        eprint(f'Unsupported log method: {method}')
         sys.exit(1)
     if dumpconf == args.action:
         config.write(sys.stdout)

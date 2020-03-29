@@ -26,32 +26,32 @@ from fangfrisch.log import _create_handler
 from fangfrisch.log import init_logger
 from fangfrisch.log import parse_syslog_target
 
+FORMAT = r'%(message)s'
+LEVEL = 'FATAL'
+
 
 class LogTests(unittest.TestCase):
-    level = logging.FATAL
-    fmt = r'%(message)s'
-
     def setUp(self) -> None:
         super().setUp()
         fangfrisch.log._handler = None
         fangfrisch.log._logger = None
 
     def test_init_console_handler(self):
-        x = _create_handler(LogHandlerType.CONSOLE, '')
+        x = _create_handler(LogHandlerType.CONSOLE, FORMAT, '')
         self.assertTrue(isinstance(x, logging.Handler))
 
     def test_init_syslog_handler(self):
-        x = _create_handler(LogHandlerType.SYSLOG, 'localhost')
+        x = _create_handler(LogHandlerType.SYSLOG, FORMAT, 'localhost')
         self.assertTrue(isinstance(x, logging.Handler))
         x.close()
 
     def test_init_syslog_handler_port(self):
-        x = _create_handler(LogHandlerType.SYSLOG, '127.0.0.1:514')
+        x = _create_handler(LogHandlerType.SYSLOG, FORMAT, '127.0.0.1:514')
         self.assertTrue(isinstance(x, logging.Handler))
         x.close()
 
     def test_init_logger(self):
-        x = init_logger(LogHandlerType.CONSOLE)
+        x = init_logger(LogHandlerType.CONSOLE, LEVEL, FORMAT)
         self.assertTrue(isinstance(x, logging.Logger))
 
     def test_parse_dgram(self):

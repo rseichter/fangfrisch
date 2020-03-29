@@ -19,10 +19,13 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 import tempfile
 import unittest
 
+from fangfrisch.config import LOG_METHOD_CONSOLE
 from fangfrisch.config import PREFIX
 from fangfrisch.config.config import Configuration
 from fangfrisch.config.config import means_disabled
 from tests import FangfrischTest
+from tests.test_log import FORMAT
+from tests.test_log import LEVEL
 
 SECTION = 'sanesecurity'
 
@@ -83,6 +86,22 @@ class ConfigTests(FangfrischTest):
 
     def test_disabled_no(self):
         self.assertTrue(means_disabled('no'))
+
+    def test_log_format(self):
+        self.c.init(self.CONF)
+        self.assertEqual(FORMAT, self.c.log_format())
+
+    def test_log_level(self):
+        self.c.init(self.CONF)
+        self.assertEqual(LEVEL, self.c.log_level())
+
+    def test_log_method(self):
+        self.c.init(self.CONF)
+        self.assertEqual(LOG_METHOD_CONSOLE, self.c.log_method())
+
+    def test_log_target(self):
+        self.c.init(self.CONF)
+        self.assertEqual(self.UNITTEST, self.c.log_target())
 
 
 if __name__ == '__main__':
