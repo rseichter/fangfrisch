@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.2.0.dev1, {docdate}
+v1.2.0.dev2, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -112,6 +112,15 @@ Please respect the limits set by each provider.
 No default, so the current working directory of the Python process is used.
 As this can vary depending on how you launch Fangfrisch, it is highly recommended to define an absolute path like `/var/lib/clamav` instead.
 You can override this option in provider sections to separate downloads based on origin.
+* *log_format*: See https://docs.python.org/3/library/logging.html#logging.Formatter[Formatter class] documentation for details.
+Fangfrisch uses sensible defaults depending on the selected log method.
+* *log_level*: Choose one of `DEBUG`, `INFO`, `WARNING` (default), `ERROR` or `FATAL`.
+* *log_method*: Either `console` (default, meaning stdout/stderr) or `syslog`.
+For the latter, you can also specify a *log_target*.
+* *log_target*: The https://tools.ietf.org/html/rfc5424[syslog] target address.
+Typical values are `/dev/log` (local Linux domain socket), `localhost` or `host.domain.tld:udpport`.
+If no target is specified, `localhost` is assumed.
+The UDP port number defaults to 514.
 * *max_size*: Maximum expected file size.
 The default is `10MB`, but all predefined providers have individual size limits (see <<internalconf>>).
 Values are can be expressed in human-readable form (e.g. `250KB` or `3MB`).
@@ -223,22 +232,6 @@ LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
 */15 * * * * clamav venv/bin/fangfrisch -c /etc/fangfrisch.conf -s /dev/log refresh
 ----
-
-== Logging
-
-Fangfrisch uses console logging via stdout/stderr streams as a default.
-You can use the `--syslog TARGET` option to log to https://tools.ietf.org/html/rfc5424[syslog] instead.
-Possible targets are absolute file paths, hostname, and hostname:udpport, as shown in the following examples:
-
-* `/dev/log` - Unix domain socket on local machine.
-* `localhost` - Local syslog, listening on default UDP port 514.
-* `host.example.com:4321` - Remote syslog, listening on custom UDP port 4321.
-
-Two environment variables can be used to influence what messages are being logged:
-
-* LOG_LEVEL: Select one of DEBUG, INFO, WARNING, ERROR or FATAL. Default: WARNING.
-* LOG_FORMAT: See https://docs.python.org/3/library/logging.html#logging.Formatter[Formatter class] documentation for details.
-Default: Sensible choices depending on the selected log target.
 
 == Support
 

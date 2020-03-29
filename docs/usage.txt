@@ -1,4 +1,4 @@
-usage: fangfrisch [-h] [-c CONF] [-f] [-s SYSLOG] [-p PROVIDER]
+usage: fangfrisch [-h] [-c CONF] [-f] [-p PROVIDER]
                    {dumpconf,dumpmappings,initdb,refresh}
 
 Update and verify unofficial ClamAV signatures.
@@ -10,7 +10,5 @@ optional arguments:
   -h, --help            show this help message and exit
   -c CONF, --conf CONF  configuration file
   -f, --force           force action (default: False)
-  -s SYSLOG, --syslog SYSLOG
-                        syslog target (default: None)
   -p PROVIDER, --provider PROVIDER
                         provider name filter (regular expression)
