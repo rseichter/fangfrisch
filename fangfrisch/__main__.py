@@ -34,7 +34,7 @@ def main() -> int:
     dumpconf = 'dumpconf'
     dumpmappings = 'dumpmappings'
     initdb = 'initdb'
-    parser = argparse.ArgumentParser(description='Update and verify unofficial ClamAV signatures.')
+    parser = argparse.ArgumentParser(prog='fangfrisch', description='Update and verify unofficial ClamAV signatures.')
     parser.add_argument('action', choices=[dumpconf, dumpmappings, initdb, 'refresh'])
     parser.add_argument('-c', '--conf', default=None, help='configuration file')
     parser.add_argument('-f', '--force', default=False, action='store_true', help='force action (default: False)')
