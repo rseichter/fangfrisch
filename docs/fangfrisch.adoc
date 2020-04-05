@@ -41,18 +41,21 @@ Fangfrisch will attempt to download digests first (if available upstream), and o
 
 Fangfrisch requires Python 3.7 or newer.
 The recommended installation method is using the https://packaging.python.org/tutorials/installing-packages/[pip command] in a virtual Python environment.
-Here is an example listing of commands for BASH:
+Here is an example listing of commands for BASH, to be executed as `root`, assuming that you will be running Fangfrisch as an unprivileged user who is member of the `clamav` group:
 
 === Create home directory
 
 ----
-mkdir -p /var/lib/fangfrisch
-cd /var/lib/fangfrisch
+mkdir -m 0770 -p /var/lib/fangfrisch
+chgrp clamav /var/lib/fangfrisch
 ----
+
+This will grant members of the `clamav` group the necessary write access for creating the database (see <<dbsetup>>).
 
 === Prepare and activate venv
 
 ----
+cd /var/lib/fangfrisch
 python3 -m venv venv
 source venv/bin/activate
 ----
@@ -69,11 +72,11 @@ This step will also create an executable launcher script `venv/bin/fangfrisch`.
 
 As an alternative to pip-based installation, there are packages available for the following Linux distributions:
 
-* Archlinux user repository: https://aur.archlinux.org/packages/python-fangfrisch/[python-fangfrisch]
+* Archlinux user repository: https://aur.archlinux.org/packages/python-fangfrisch/[python-fangfrisch].
+Support contact: Archlinux package maintainer.
 
-* Gentoo Linux official repository: https://packages.gentoo.org/packages/app-antivirus/fangfrisch[app-antivirus/fangfrisch]
-
-Should you need support for these packages, please contact the respective Linux distribution maintainers.
+* Gentoo Linux official repository: https://packages.gentoo.org/packages/app-antivirus/fangfrisch[app-antivirus/fangfrisch].
+Support contact: Fangfrisch author.
 
 == Configuration
 
@@ -186,17 +189,18 @@ To change the file name for `url_xyz`, set `filename_xyz` to the desired value.
 * To launch a command after data was downloaded for `url_xyz`, define `on_update_xyz`.
 The command string may contain a `{path}` placeholder, which will be substituted with the full path of the downloaded file.
 
+[[dbsetup]]
 == Preparing the database
 
-After completing the configuration, make sure to create the database structure by running the `initdb` command.
+After completing the configuration, make sure to create the database structure by running the `initdb` command as shown below in a root shell.
 Running `--force initdb` will drop existing database tables.
 For SQLite, deleting the database file is also a common method.
 
 ----
-fangfrisch --conf /etc/fangfrisch.conf initdb
+sudo -u clamav -- fangfrisch --conf /etc/fangfrisch.conf initdb
 ----
 
-WARNING: Fangfrisch should never be run as `root`, but as an unprivileged user like `clamav`.
+WARNING: As shown in this example, Fangfrisch should never be run as `root`, but as an unprivileged user like `clamav`.
 
 == Usage
 

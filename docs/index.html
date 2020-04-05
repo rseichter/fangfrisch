@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
 <span id="revnumber">version 1.2.0,</span>
-<span id="revdate">2020-03-29</span>
+<span id="revdate">2020-04-05</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -468,7 +468,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_semantics">5.3. Semantics</a></li>
 </ul>
 </li>
-<li><a href="#_preparing_the_database">6. Preparing the database</a></li>
+<li><a href="#dbsetup">6. Preparing the database</a></li>
 <li><a href="#_usage">7. Usage</a></li>
 <li><a href="#_support">8. Support</a>
 <ul class="sectlevel2">
@@ -533,22 +533,26 @@ Fangfrisch will attempt to download digests first (if available upstream), and o
 <div class="paragraph">
 <p>Fangfrisch requires Python 3.7 or newer.
 The recommended installation method is using the <a href="https://packaging.python.org/tutorials/installing-packages/">pip command</a> in a virtual Python environment.
-Here is an example listing of commands for BASH:</p>
+Here is an example listing of commands for BASH, to be executed as <code>root</code>, assuming that you will be running Fangfrisch as an unprivileged user who is member of the <code>clamav</code> group:</p>
 </div>
 <div class="sect2">
 <h3 id="_create_home_directory"><a class="anchor" href="#_create_home_directory"></a>3.1. Create home directory</h3>
 <div class="listingblock">
 <div class="content">
-<pre>mkdir -p /var/lib/fangfrisch
-cd /var/lib/fangfrisch</pre>
+<pre>mkdir -m 0770 -p /var/lib/fangfrisch
+chgrp clamav /var/lib/fangfrisch</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>This will grant members of the <code>clamav</code> group the necessary write access for creating the database (see <a href="#dbsetup">Section 6</a>).</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_prepare_and_activate_venv"><a class="anchor" href="#_prepare_and_activate_venv"></a>3.2. Prepare and activate venv</h3>
 <div class="listingblock">
 <div class="content">
-<pre>python3 -m venv venv
+<pre>cd /var/lib/fangfrisch
+python3 -m venv venv
 source venv/bin/activate</pre>
 </div>
 </div>
@@ -575,15 +579,14 @@ source venv/bin/activate</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Archlinux user repository: <a href="https://aur.archlinux.org/packages/python-fangfrisch/">python-fangfrisch</a></p>
+<p>Archlinux user repository: <a href="https://aur.archlinux.org/packages/python-fangfrisch/">python-fangfrisch</a>.
+Support contact: Archlinux package maintainer.</p>
 </li>
 <li>
-<p>Gentoo Linux official repository: <a href="https://packages.gentoo.org/packages/app-antivirus/fangfrisch">app-antivirus/fangfrisch</a></p>
+<p>Gentoo Linux official repository: <a href="https://packages.gentoo.org/packages/app-antivirus/fangfrisch">app-antivirus/fangfrisch</a>.
+Support contact: Fangfrisch author.</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>Should you need support for these packages, please contact the respective Linux distribution maintainers.</p>
 </div>
 </div>
 </div>
@@ -791,16 +794,16 @@ The command string may contain a <code>{path}</code> placeholder, which will be 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_preparing_the_database"><a class="anchor" href="#_preparing_the_database"></a>6. Preparing the database</h2>
+<h2 id="dbsetup"><a class="anchor" href="#dbsetup"></a>6. Preparing the database</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command.
+<p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command as shown below in a root shell.
 Running <code>--force initdb</code> will drop existing database tables.
 For SQLite, deleting the database file is also a common method.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>fangfrisch --conf /etc/fangfrisch.conf initdb</pre>
+<pre>sudo -u clamav -- fangfrisch --conf /etc/fangfrisch.conf initdb</pre>
 </div>
 </div>
 <div class="admonitionblock warning">
@@ -810,7 +813,7 @@ For SQLite, deleting the database file is also a common method.</p>
 <div class="title">Warning</div>
 </td>
 <td class="content">
-Fangfrisch should never be run as <code>root</code>, but as an unprivileged user like <code>clamav</code>.
+As shown in this example, Fangfrisch should never be run as <code>root</code>, but as an unprivileged user like <code>clamav</code>.
 </td>
 </tr>
 </table>
@@ -828,7 +831,7 @@ Fangfrisch should never be run as <code>root</code>, but as an unprivileged user
 <pre>$ fangfrisch --help
 
 usage: fangfrisch [-h] [-c CONF] [-f] [-p PROVIDER]
-                   {dumpconf,dumpmappings,initdb,refresh}
+                  {dumpconf,dumpmappings,initdb,refresh}
 
 Update and verify unofficial ClamAV signatures.
 
@@ -1205,7 +1208,7 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 <div id="footer">
 <div id="footer-text">
 Version 1.2.0<br>
-Last updated 2020-03-29 19:08:17 +0200
+Last updated 2020-04-05 23:25:22 +0200
 </div>
 </div>
 </body>
