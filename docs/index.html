@@ -797,7 +797,7 @@ The command string may contain a <code>{path}</code> placeholder, which will be 
 <h2 id="dbsetup"><a class="anchor" href="#dbsetup"></a>6. Preparing the database</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command as shown below in a root shell.
+<p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command in a root shell as shown below.
 Running <code>--force initdb</code> will drop existing database tables.
 For SQLite, deleting the database file is also a common method.</p>
 </div>
@@ -806,14 +806,15 @@ For SQLite, deleting the database file is also a common method.</p>
 <pre>sudo -u clamav -- fangfrisch --conf /etc/fangfrisch.conf initdb</pre>
 </div>
 </div>
-<div class="admonitionblock warning">
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Warning</div>
+<div class="title">Important</div>
 </td>
 <td class="content">
-As shown in this example, Fangfrisch should never be run as <code>root</code>, but as an unprivileged user like <code>clamav</code>.
+Fangfrisch need never be run as <code>root</code>.
+Instead, choose an unprivileged user (typically <code>clamav</code>).
 </td>
 </tr>
 </table>
@@ -879,7 +880,7 @@ An example crontab looks like this:</p>
 <pre>HOME=/var/lib/fangfrisch
 LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
-*/15 * * * * clamav venv/bin/fangfrisch -c /etc/fangfrisch.conf refresh</pre>
+*/15 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh</pre>
 </div>
 </div>
 </div>
@@ -946,12 +947,12 @@ Please answer all other questions as detailed as you can, within reason.</p>
 <p>Have you checked all existing issues, including closed ones?</p>
 </li>
 <li>
-<p>Is the feature I am suggesting helpful for more people than just yourself?</p>
+<p>Do you consider the suggested feature helpful for more people than just yourself?</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>If you answered "yes" for all questions, please explain your idea as detailed as possible.
+<p>If you answered "yes" for all questions, please explain your idea in a sufficiently thorough manner.
 Use examples, graphics, and whatever else you think would help others to understand your suggestion.</p>
 </div>
 </div>
@@ -1208,7 +1209,7 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 <div id="footer">
 <div id="footer-text">
 Version 1.2.0<br>
-Last updated 2020-04-06 03:47:34 +0200
+Last updated 2020-04-06 16:13:28 +0200
 </div>
 </div>
 </body>

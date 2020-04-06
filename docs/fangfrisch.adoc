@@ -192,7 +192,7 @@ The command string may contain a `{path}` placeholder, which will be substituted
 [[dbsetup]]
 == Preparing the database
 
-After completing the configuration, make sure to create the database structure by running the `initdb` command as shown below in a root shell.
+After completing the configuration, make sure to create the database structure by running the `initdb` command in a root shell as shown below.
 Running `--force initdb` will drop existing database tables.
 For SQLite, deleting the database file is also a common method.
 
@@ -200,7 +200,8 @@ For SQLite, deleting the database file is also a common method.
 sudo -u clamav -- fangfrisch --conf /etc/fangfrisch.conf initdb
 ----
 
-WARNING: As shown in this example, Fangfrisch should never be run as `root`, but as an unprivileged user like `clamav`.
+IMPORTANT: Fangfrisch need never be run as `root`.
+Instead, choose an unprivileged user (typically `clamav`).
 
 == Usage
 
@@ -234,7 +235,7 @@ An example crontab looks like this:
 HOME=/var/lib/fangfrisch
 LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
-*/15 * * * * clamav venv/bin/fangfrisch -c /etc/fangfrisch.conf refresh
+*/15 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh
 ----
 
 == Support
@@ -269,9 +270,9 @@ The list of questions is shorter, but important nonetheless:
 
 1. Have you checked the documentation?
 2. Have you checked all existing issues, including closed ones?
-3. Is the feature I am suggesting helpful for more people than just yourself?
+3. Do you consider the suggested feature helpful for more people than just yourself?
 
-If you answered "yes" for all questions, please explain your idea as detailed as possible.
+If you answered "yes" for all questions, please explain your idea in a sufficiently thorough manner.
 Use examples, graphics, and whatever else you think would help others to understand your suggestion.
 
 [[internalconf]]
