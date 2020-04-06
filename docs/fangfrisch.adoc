@@ -269,7 +269,7 @@ The list of questions is shorter, but important nonetheless:
 
 1. Have you checked the documentation?
 2. Have you checked all existing issues, including closed ones?
-3. Is the feature I am suggesting helpful for more people than just myself?
+3. Is the feature I am suggesting helpful for more people than just yourself?
 
 If you answered "yes" for all questions, please explain your idea as detailed as possible.
 Use examples, graphics, and whatever else you think would help others to understand your suggestion.
@@ -303,7 +303,7 @@ include::combined.conf[]
 
 While users can technically access the Fangfrisch backend database directly, its structure and content are considered *private*.
 They may change at any time, without notice.
-Related complaints will be filed under https://en.wikipedia.org/wiki/Somebody_else%27s_problem[SEP], and possibly ridiculed.
+Related complaints will be filed under https://en.wikipedia.org/wiki/Somebody_else%27s_problem[SEP].
 
 === Accessing mappings
 
