@@ -533,7 +533,7 @@ Fangfrisch will attempt to download digests first (if available upstream), and o
 <div class="paragraph">
 <p>Fangfrisch requires Python 3.7 or newer.
 The recommended installation method is using the <a href="https://packaging.python.org/tutorials/installing-packages/">pip command</a> in a virtual Python environment.
-Here is an example listing of commands for BASH, to be executed as <code>root</code>, assuming that you will be running Fangfrisch as an unprivileged user who is member of the <code>clamav</code> group:</p>
+Here is an example listing of commands for BASH, to be executed as root, assuming that you will be running Fangfrisch as an unprivileged user who is member of the <strong>clamav</strong> group:</p>
 </div>
 <div class="sect2">
 <h3 id="_create_home_directory"><a class="anchor" href="#_create_home_directory"></a>3.1. Create home directory</h3>
@@ -544,7 +544,7 @@ chgrp clamav /var/lib/fangfrisch</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This will grant members of the <code>clamav</code> group the necessary write access for creating the database (see <a href="#dbsetup">Section 6</a>).</p>
+<p>This will grant group members the necessary write access to create the database (see <a href="#dbsetup">Section 6</a>).</p>
 </div>
 </div>
 <div class="sect2">
@@ -799,7 +799,7 @@ The command string may contain a <code>{path}</code> placeholder, which will be 
 <div class="paragraph">
 <p>After completing the configuration, make sure to create the database structure by running the <code>initdb</code> command in a root shell as shown below.
 Running <code>--force initdb</code> will drop existing database tables.
-For SQLite, deleting the database file is also a common method.</p>
+For SQLite, deleting the database file is a viable alternative.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -813,8 +813,8 @@ For SQLite, deleting the database file is also a common method.</p>
 <div class="title">Important</div>
 </td>
 <td class="content">
-Fangfrisch need never be run as <code>root</code>.
-Instead, choose an unprivileged user (typically <code>clamav</code>).
+Fangfrisch need never be run as root.
+Choose an unprivileged user instead (typically <strong>clamav</strong>).
 </td>
 </tr>
 </table>
@@ -1209,7 +1209,7 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 <div id="footer">
 <div id="footer-text">
 Version 1.2.0<br>
-Last updated 2020-04-06 16:13:28 +0200
+Last updated 2020-04-06 16:37:05 +0200
 </div>
 </div>
 </body>

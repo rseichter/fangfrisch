@@ -41,7 +41,7 @@ Fangfrisch will attempt to download digests first (if available upstream), and o
 
 Fangfrisch requires Python 3.7 or newer.
 The recommended installation method is using the https://packaging.python.org/tutorials/installing-packages/[pip command] in a virtual Python environment.
-Here is an example listing of commands for BASH, to be executed as `root`, assuming that you will be running Fangfrisch as an unprivileged user who is member of the `clamav` group:
+Here is an example listing of commands for BASH, to be executed as root, assuming that you will be running Fangfrisch as an unprivileged user who is member of the *clamav* group:
 
 === Create home directory
 
@@ -50,7 +50,7 @@ mkdir -m 0770 -p /var/lib/fangfrisch
 chgrp clamav /var/lib/fangfrisch
 ----
 
-This will grant members of the `clamav` group the necessary write access for creating the database (see <<dbsetup>>).
+This will grant group members the necessary write access to create the database (see <<dbsetup>>).
 
 === Prepare and activate venv
 
@@ -194,14 +194,14 @@ The command string may contain a `{path}` placeholder, which will be substituted
 
 After completing the configuration, make sure to create the database structure by running the `initdb` command in a root shell as shown below.
 Running `--force initdb` will drop existing database tables.
-For SQLite, deleting the database file is also a common method.
+For SQLite, deleting the database file is a viable alternative.
 
 ----
 sudo -u clamav -- fangfrisch --conf /etc/fangfrisch.conf initdb
 ----
 
-IMPORTANT: Fangfrisch need never be run as `root`.
-Instead, choose an unprivileged user (typically `clamav`).
+IMPORTANT: Fangfrisch need never be run as root.
+Choose an unprivileged user instead (typically *clamav*).
 
 == Usage
 
