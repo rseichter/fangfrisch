@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
 <span id="revnumber">version 1.2.0,</span>
-<span id="revdate">2020-05-27</span>
+<span id="revdate">2020-09-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -469,7 +469,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#dbsetup">6. Preparing the database</a></li>
-<li><a href="#_usage">7. Usage</a></li>
+<li><a href="#usage">7. Usage</a></li>
 <li><a href="#_support">8. Support</a>
 <ul class="sectlevel2">
 <li><a href="#_reporting_problems">8.1. Reporting problems</a></li>
@@ -601,6 +601,10 @@ Support contact: Fangfrisch author.</p>
 <p>A configuration file is mandatory, uses an INI-File-like structure and must contain a <code>db_url</code> entry.
 All other settings are optional.
 However, unless you enable one signature file provider section, Fangfrisch naturally won&#8217;t do much.</p>
+</div>
+<div class="paragraph">
+<p>Use the <code>--conf</code> command line argument (see <a href="#usage">Section 7</a>) to specify the path to your configuration file.
+Note that there is no default location.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -826,7 +830,7 @@ Choose an unprivileged user instead (typically <strong>clamav</strong>).
 </div>
 </div>
 <div class="sect1">
-<h2 id="_usage"><a class="anchor" href="#_usage"></a>7. Usage</h2>
+<h2 id="usage"><a class="anchor" href="#usage"></a>7. Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>You can display command line arguments as follows:</p>
@@ -1213,7 +1217,7 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 <div id="footer">
 <div id="footer-text">
 Version 1.2.0<br>
-Last updated 2020-05-27 23:01:45 +0200
+Last updated 2020-09-29 17:32:06 +0200
 </div>
 </div>
 </body>

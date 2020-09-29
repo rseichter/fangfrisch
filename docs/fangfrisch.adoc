@@ -87,6 +87,9 @@ A configuration file is mandatory, uses an INI-File-like structure and must cont
 All other settings are optional.
 However, unless you enable one signature file provider section, Fangfrisch naturally won't do much.
 
+Use the `--conf` command line argument (see <<usage>>) to specify the path to your configuration file.
+Note that there is no default location.
+
 ----
 # Minimal example configuration, meant for testing.
 
@@ -206,6 +209,7 @@ sudo -u clamav -- fangfrisch --conf /etc/fangfrisch.conf initdb
 IMPORTANT: Fangfrisch need never be run as root.
 Choose an unprivileged user instead (typically *clamav*).
 
+[[usage]]
 == Usage
 
 You can display command line arguments as follows:
