@@ -1,6 +1,6 @@
 *.egg-info/
 .coverage
+.venv/
 build/
 dist/
 htmlcov/
-venv/
