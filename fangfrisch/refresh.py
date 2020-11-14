@@ -96,7 +96,7 @@ class ClamavRefresh:
         """
         try:
             if not ci.url:
-                log_error('Empty URL')
+                log_debug('Empty URL')
                 return False
             if self.args.force:
                 log_debug(f'{ci.url} refresh forced')
