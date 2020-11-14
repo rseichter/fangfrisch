@@ -6,7 +6,7 @@
 # Ruby Gems 'asciidoctor' and 'asciidoctor-pdf' to generate HTML/PDF
 # documentation.
 
-set -e
+set -euo pipefail
 
 function usage() {
 	local bn
@@ -50,11 +50,11 @@ arg="$1"
 shift
 case "$arg" in
 	clean)
-		do_$arg
+		do_${arg}
 		;;
 	dist | setver | upload)
-		source venv/bin/activate
-		do_$arg "$@"
+		source .venv/bin/activate
+		do_${arg} "$@"
 		;;
 	*)
 		usage
