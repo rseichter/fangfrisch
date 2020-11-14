@@ -98,6 +98,13 @@ class RefreshTests(FangfrischTest):
         n = self.ref.refresh_all()
         self.assertEqual(3, n)
 
+    def test_url_disabled(self):
+        ci = _ClamavTestItem('unittest4', 'url_blank', '', 'md5', f'{self.TMPDIR}/blank')
+        self.s.add(RefreshLog(ci, DIGEST_DUMMY))
+        self.s.commit()
+        n = self.ref.refresh_all()
+        self.assertEqual(3, n)
+
     def test_print_mappings(self):
         file = tempfile.TemporaryFile(mode='w+t')
         ClamavRefresh.print_url_path_mappings(file)

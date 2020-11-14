@@ -95,6 +95,9 @@ class ClamavRefresh:
         :return: True if new payload data was written, False otherwise.
         """
         try:
+            if not ci.url:
+                log_error('Empty URL')
+                return False
             if self.args.force:
                 log_debug(f'{ci.url} refresh forced')
             elif not RefreshLog.is_outdated(ci.url, ci.interval):
