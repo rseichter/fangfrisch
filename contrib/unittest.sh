@@ -10,8 +10,8 @@
 # Run all unittests and collect coverage data. This will also
 # generate a HTML-based coverage report.
 
-set -e
-source venv/bin/activate
+set -euo pipefail
+source .venv/bin/activate
 
 DIR='/tmp/fangfrisch/unittest'
 DB="$DIR/db.sqlite"
@@ -32,7 +32,7 @@ function usage() {
 function run_tests() {
 	local cmd="$1"
 	shift
-	PYTHONPATH=".:${PYTHONPATH}" $cmd -m unittest discover tests/ -v "$@"
+	PYTHONPATH=. ${cmd} -m unittest discover tests/ -v "$@"
 }
 
 function run_coverage() {
