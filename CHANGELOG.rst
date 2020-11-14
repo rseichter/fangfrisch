@@ -2,6 +2,12 @@
 Changelog
 =========
 
+Release 1.3.0 (2020-11-14)
+
+- URL configuration entries can be individually disabled by setting them to an empty value.
+
+- Disable discontinued "scamnailer" URL (see http://www.scamnailer.info for more information).
+
 Release 1.2.0 (2020-03-29)
 
 - In addition to console (i.e. stdout/stderr) logging, Fangfrisch now supports syslog.

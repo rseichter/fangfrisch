@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.2.0, {docdate}
+v1.3.0, {docdate}
 :copyright: © 2020 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -194,6 +194,9 @@ Fangfrisch will scan enabled sections for lines prefixed with `url_` to determin
 To change the file name for `url_xyz`, set `filename_xyz` to the desired value.
 * To launch a command after data was downloaded for `url_xyz`, define `on_update_xyz`.
 The command string may contain a `{path}` placeholder, which will be substituted with the full path of the downloaded file.
+
+You can temporarily disable selected URLs by assigning an empty value (e.g. `url_xyz =`).
+However, disabling URLs in this manner does not delete any previously downloaded files.
 
 [[dbsetup]]
 == Preparing the database
