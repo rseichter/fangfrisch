@@ -1,7 +1,7 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
 v1.3.0, {docdate}
-:copyright: © 2020 Ralph Seichter
+:copyright: © 2020-2021 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
 :lang: en
@@ -197,6 +197,11 @@ The command string may contain a `{path}` placeholder, which will be substituted
 
 You can temporarily disable selected URLs by assigning an empty value (e.g. `url_xyz =`).
 However, disabling URLs in this manner does not delete any previously downloaded files.
+
+=== Proxy support
+
+Fangfrisch relies on the _requests_ library to download files, which supports environment variables like `HTTPS_PROXY`.
+Please refer to https://requests.readthedocs.io/en/latest/user/advanced/#proxies[section Advanced Usage, subsection Proxies] in the _requests_ online documentation for details.
 
 [[dbsetup]]
 == Preparing the database
