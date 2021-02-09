@@ -23,6 +23,7 @@ from datetime import timedelta
 
 from fangfrisch.db import RefreshLog
 from fangfrisch.refresh import ClamavRefresh
+from fangfrisch.refresh import _is_url_disabled
 from tests import DIGEST_DUMMY
 from tests import DIGEST_MD5
 from tests import FangfrischTest
@@ -98,12 +99,17 @@ class RefreshTests(FangfrischTest):
         n = self.ref.refresh_all()
         self.assertEqual(3, n)
 
-    def test_url_disabled(self):
+    def test_url_blank(self):
         ci = _ClamavTestItem('unittest4', 'url_blank', '', 'md5', f'{self.TMPDIR}/blank')
         self.s.add(RefreshLog(ci, DIGEST_DUMMY))
         self.s.commit()
         n = self.ref.refresh_all()
         self.assertEqual(3, n)
+
+    def test_url_disabled(self):
+        self.assertTrue(_is_url_disabled(None))
+        self.assertTrue(_is_url_disabled(' '))
+        self.assertTrue(_is_url_disabled('Disabled'))
 
     def test_print_mappings(self):
         file = tempfile.TemporaryFile(mode='w+t')
