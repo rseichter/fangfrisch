@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.3.0, {docdate}
+v1.4.0.dev1, {docdate}
 :copyright: © 2020-2021 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -195,8 +195,8 @@ To change the file name for `url_xyz`, set `filename_xyz` to the desired value.
 * To launch a command after data was downloaded for `url_xyz`, define `on_update_xyz`.
 The command string may contain a `{path}` placeholder, which will be substituted with the full path of the downloaded file.
 
-You can temporarily disable selected URLs by assigning an empty value (e.g. `url_xyz =`).
-However, disabling URLs in this manner does not delete any previously downloaded files.
+You can disable refresh operations for selected URLs by assigning either an empty value or setting it to `url_xyz = disabled`.
+Note that disabling URLs in this manner does _not_ delete any previously downloaded files.
 
 === Proxy support
 
