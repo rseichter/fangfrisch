@@ -35,6 +35,13 @@ from fangfrisch.util import remove_if_exists
 from fangfrisch.util import run_command
 
 
+def _is_url_disabled(url: str) -> bool:
+    if not url:
+        return True
+    u = url.strip().lower()
+    return u == '' or u.startswith('disabled')
+
+
 def _clamav_items() -> List[ClamavItem]:
     item_list = []
     for section in config.sections():
@@ -50,6 +57,8 @@ def _clamav_items() -> List[ClamavItem]:
                 os.makedirs(local_dir, exist_ok=True)
             if option.startswith('url_'):
                 url = config.get(section, option)
+                if _is_url_disabled(url):
+                    continue
                 stem = option[4:]
                 filename = config.get(section, f'filename_{stem}')
                 if not filename:
@@ -95,7 +104,7 @@ class ClamavRefresh:
         :return: True if new payload data was written, False otherwise.
         """
         try:
-            if not ci.url:
+            if not ci.url:  # pragma: no cover
                 log_debug('Empty URL')
                 return False
             if self.args.force:
