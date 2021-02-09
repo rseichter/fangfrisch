@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Release 1.4.0.dev1 (2021-02-09)
+
+- Allow the use of `url_xyz = disabled` in addition to empty values to disable URLs.
+
 Release 1.3.0 (2020-11-14)
 
 - URL configuration entries can be individually disabled by setting them to an empty value.
