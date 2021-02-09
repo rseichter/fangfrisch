@@ -35,7 +35,6 @@ sanesecurity = {
         'url_bofhland_malware_attach': f'${{{PREFIX}}}bofhland_malware_attach.hdb',
         'url_bofhland_malware_url': f'${{{PREFIX}}}bofhland_malware_URL.ndb',
         'url_bofhland_phishing_url': f'${{{PREFIX}}}bofhland_phishing_URL.ndb',
-        'url_crdfam_clamav': f'${{{PREFIX}}}crdfam.clamav.hdb',
         'url_foxhole_filename': f'${{{PREFIX}}}foxhole_filename.cdb',
         'url_foxhole_generic': f'${{{PREFIX}}}foxhole_generic.cdb',
         'url_foxhole_js_cdb': f'${{{PREFIX}}}foxhole_js.cdb',
