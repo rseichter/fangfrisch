@@ -2,9 +2,11 @@
 Changelog
 =========
 
-Release 1.4.0.dev1 (2021-02-09)
+Release 1.4.0.dev2 (2021-02-09)
 
 - Allow the use of `url_xyz = disabled` in addition to empty values to disable URLs.
+
+- Remove `url_doppelstern*` from Sanasecurity's provider section because these signatures are no longer maintained.
 
 Release 1.3.0 (2020-11-14)
 
