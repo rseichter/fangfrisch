@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Release 1.4.0.dev3 (2021-02-09)
+Release 1.4.0 (2021-02-12)
 
 - Allow the use of `url_xyz = disabled` in addition to empty values to disable URLs.
 
