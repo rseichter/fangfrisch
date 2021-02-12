@@ -41,8 +41,8 @@ function do_upload() {
 
 function do_setver() {
 	[ $# -gt 0 ] || usage
-	sed -i '' -E -e "s/^v[^,]+, {docdate.+/v$1, {docdate}/" docs/fangfrisch.adoc
-	sed -i '' -E -e "s/^__version.+/__version__ = '$1'/" fangfrisch/__init__.py
+	/usr/bin/sed -i '' -E -e "s/^v[^,]+, {docdate.+/v${1}, {docdate}/" docs/fangfrisch.adoc
+	/usr/bin/sed -i '' -E -e "s/^__version.+/__version__ = '${1}'/" fangfrisch/__init__.py
 }
 
 [ $# -gt 0 ] || usage
