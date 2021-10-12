@@ -2,6 +2,12 @@
 Changelog
 =========
 
+Release 1.5.0 (2021-10-12)
+
+- When running external commands, automx2 now catches all types of exceptions, not only those in the
+  subprocess exception hierarchy. This allows refresh operations to continue if one of them raised
+  an exception. Previous versions exited whenever one of the external commands failed.
+
 Release 1.4.0 (2021-02-12)
 
 - Allow the use of `url_xyz = disabled` in addition to empty values to disable URLs.
