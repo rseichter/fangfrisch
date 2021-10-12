@@ -22,7 +22,7 @@ mkdir -p $DIR
 sqlite3 $DB < tests/tests.sql
 
 CONF='tests/tests.conf'
-sed -i '' -e "s,^db_url.*,db_url = sqlite:///${DB}," $CONF
+sed -i'' -e "s,^db_url.*,db_url = sqlite:///${DB}," $CONF
 
 function usage() {
 	echo "Usage: $(basename $0) [coverage]" >&2
