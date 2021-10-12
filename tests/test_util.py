@@ -88,6 +88,9 @@ class UtilTests(FangfrischTest):
     def test_run_unknown(self):
         self.assertTrue(0 < run_command(self.UNKNOWN, 3, log_info, log_error, log_exception))
 
+    def test_run_timeout(self):
+        self.assertNotEqual(0, run_command('sleep 3', 1, log_info, log_error, log_exception))
+
 
 if __name__ == '__main__':
     unittest.main()

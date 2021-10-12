@@ -20,7 +20,6 @@ import hashlib
 import os
 import re
 from string import Formatter
-from subprocess import CalledProcessError
 from subprocess import CompletedProcess
 from subprocess import run
 from typing import Optional
@@ -87,16 +86,27 @@ def parse_hr_time(s: str) -> int:
 def run_command(command: str, timeout: int,
                 callback_stdout, callback_stderr, callback_exception,
                 *args, **kwargs) -> Optional[int]:
+    """Execute a command in a subprocess.
+
+    :param command: Command string.
+    :param timeout: Command timeout in seconds.
+    :param callback_stdout: Callback to process subcommand stdout.
+    :param callback_stderr: Callback to process subcommand stderr.
+    :param callback_exception: Call if the subcommand raises an exception.
+    """
+    # noinspection PyTypeChecker
+    p: CompletedProcess = None
     try:
         command = Formatter().vformat(command, args, kwargs)
-        p: CompletedProcess = run(command, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
+        p = run(command, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
         if p.stdout:
             callback_stdout(p.stdout)
         if p.stderr:
             callback_stderr(p.stderr)
-        return p.returncode
-    except CalledProcessError as e:  # pragma: no cover
+    except Exception as e:
         callback_exception(e)
+    if p is not None:
+        return p.returncode
 
 
 def remove_if_exists(path: str, log_callback) -> None:
