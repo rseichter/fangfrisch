@@ -4,7 +4,7 @@ Changelog
 
 Release 1.5.0 (2021-10-12)
 
-- When running external commands, automx2 now catches all types of exceptions, not only those in the
+- When running external commands, Fangfrisch now catches all types of exceptions, not only those in the
   subprocess exception hierarchy. This allows refresh operations to continue if one of them raised
   an exception. Previous versions exited whenever one of the external commands failed.
 
