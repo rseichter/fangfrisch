@@ -5,10 +5,10 @@
 /Author (Ralph Seichter)
 /Subject (Update and verify unofficial Clam Anti-Virus signatures)
 /Keywords (antivirus, clamav, fangfrisch, freshclam, refresh, update)
-/Creator (Asciidoctor PDF 1.6.0, based on Prawn 2.4.0)
+/Creator (Asciidoctor PDF 1.6.1, based on Prawn 2.4.0)
 /Producer (Ralph Seichter)
-/ModDate (D:20211012151337+02'00')
-/CreationDate (D:20211012151941+02'00')
+/ModDate (D:20220101203606+01'00')
+/CreationDate (D:20220101203616+01'00')
 >>
 endobj
 2 0 obj
@@ -229,7 +229,7 @@ ET
 BT
 48.24 165.1374 Td
 /F1.0 10.5 Tf
-[<436f70> 20.0195 <79726967687420a920323032302d323032312052616c7068205365696368746572>] TJ
+[<436f70> 20.0195 <79726967687420a920323032302d323032322052616c7068205365696368746572>] TJ
 ET
 
 0.0 0.0 0.0 SCN

@@ -2,7 +2,7 @@
 Fangfrisch
 ==========
 
-Copyright © 2020-2021 Ralph Seichter
+Copyright © 2020-2022 Ralph Seichter
 
 Fangfrisch (German for "freshly caught") is a sibling of the `Clam Anti-Virus`_ freshclam utility.
 It allows downloading virus definition files that are not official ClamAV canon, e.g. from Sanesecurity_, URLhaus_ and others.
