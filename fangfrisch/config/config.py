@@ -36,6 +36,7 @@ from fangfrisch.config.malwarepatrol import malwarepatrol
 from fangfrisch.config.sanesecurity import sanesecurity
 from fangfrisch.config.securiteinfo import securiteinfo
 from fangfrisch.config.urlhaus import urlhaus
+from fangfrisch.config.interserver import interserver
 from fangfrisch.util import parse_hr_bytes
 from fangfrisch.util import parse_hr_time
 
