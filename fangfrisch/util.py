@@ -21,7 +21,7 @@ import os
 import re
 from string import Formatter
 from subprocess import CompletedProcess
-from subprocess import run
+from subprocess import run, PIPE
 from typing import Optional
 
 _byte_multipliers = {'K': 10 ** 3, 'KB': 2 ** 10, 'M': 10 ** 6, 'MB': 2 ** 20}
@@ -98,7 +98,7 @@ def run_command(command: str, timeout: int,
     p: CompletedProcess = None
     try:
         command = Formatter().vformat(command, args, kwargs)
-        p = run(command, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
+        p = run(command, stdout=PIPE, stderr=PIPE, encoding='utf-8', shell=True, timeout=timeout)
         if p.stdout:
             callback_stdout(p.stdout)
         if p.stderr:

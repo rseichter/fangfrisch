@@ -56,5 +56,5 @@ setuptools.setup(
         'requests >= 2.22.0',
         'SQLAlchemy >= 1.3.13',
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.6.10',
 )
