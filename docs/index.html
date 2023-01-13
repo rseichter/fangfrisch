@@ -993,7 +993,90 @@ Enabling a section will not enable these specially prefixed entries.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre></pre>
+<pre>[DEFAULT]
+cleanup = automatic
+enabled = false
+integrity_check = sha256
+log_level = WARNING
+log_method = console
+max_size = 10MB
+
+[malwarepatrol]
+interval = 1d
+integrity_check = disabled
+product = 8
+receipt = you_forgot_to_configure_receipt
+prefix = https://lists.malwarepatrol.net/cgi/getfile?product=${product}&amp;receipt=${receipt}&amp;list=
+url_clamav_basic = ${prefix}clamav_basic
+filename_clamav_basic = malwarepatrol.db
+
+[sanesecurity]
+interval = 2h
+prefix = http://ftp.swin.edu.au/sanesecurity/
+!url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
+!url_foxhole_all_ndb = ${prefix}foxhole_all.ndb
+!url_foxhole_mail = ${prefix}foxhole_mail.cdb
+!url_scamnailer = ${prefix}scamnailer.ndb
+!url_winnow_phish_complete = ${prefix}winnow_phish_complete.ndb
+url_badmacro = ${prefix}badmacro.ndb
+url_blurl = ${prefix}blurl.ndb
+url_bofhland_cracked_url = ${prefix}bofhland_cracked_URL.ndb
+url_bofhland_malware_attach = ${prefix}bofhland_malware_attach.hdb
+url_bofhland_malware_url = ${prefix}bofhland_malware_URL.ndb
+url_bofhland_phishing_url = ${prefix}bofhland_phishing_URL.ndb
+url_foxhole_filename = ${prefix}foxhole_filename.cdb
+url_foxhole_generic = ${prefix}foxhole_generic.cdb
+url_foxhole_js_cdb = ${prefix}foxhole_js.cdb
+url_foxhole_js_ndb = ${prefix}foxhole_js.ndb
+url_hackingteam = ${prefix}hackingteam.hsb
+url_junk = ${prefix}junk.ndb
+url_jurlbl = ${prefix}jurlbl.ndb
+url_jurlbla = ${prefix}jurlbla.ndb
+url_lott = ${prefix}lott.ndb
+url_malwareexpert_fp = ${prefix}malware.expert.fp
+url_malwareexpert_hdb = ${prefix}malware.expert.hdb
+url_malwareexpert_ldb = ${prefix}malware.expert.ldb
+url_malwareexpert_ndb = ${prefix}malware.expert.ndb
+url_malwarehash = ${prefix}malwarehash.hsb
+url_phish = ${prefix}phish.ndb
+url_phishtank = ${prefix}phishtank.ndb
+url_porcupine = ${prefix}porcupine.ndb
+url_rogue = ${prefix}rogue.hdb
+url_scam = ${prefix}scam.ndb
+url_shelter = ${prefix}shelter.ldb
+url_spamattach = ${prefix}spamattach.hdb
+url_spamimg = ${prefix}spamimg.hdb
+url_spear = ${prefix}spear.ndb
+url_spearl = ${prefix}spearl.ndb
+url_winnow_attachments = ${prefix}winnow.attachments.hdb
+url_winnow_bad_cw = ${prefix}winnow_bad_cw.hdb
+url_winnow_extended_malware = ${prefix}winnow_extended_malware.hdb
+url_winnow_extended_malware_links = ${prefix}winnow_extended_malware_links.ndb
+url_winnow_malware = ${prefix}winnow_malware.hdb
+url_winnow_malware_links = ${prefix}winnow_malware_links.ndb
+url_winnow_phish_complete_url = ${prefix}winnow_phish_complete_url.ndb
+url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb
+
+[securiteinfo]
+customer_id = you_forgot_to_configure_customer_id
+interval = 1h
+max_size = 20MB
+prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
+!url_0hour = ${prefix}securiteinfo0hour.hdb
+!url_old = ${prefix}securiteinfoold.hdb
+!url_securiteinfo_mdb = ${prefix}securiteinfo.mdb
+!url_spam_marketing = ${prefix}spam_marketing.ndb
+url_android = ${prefix}securiteinfoandroid.hdb
+url_ascii = ${prefix}securiteinfoascii.hdb
+url_html = ${prefix}securiteinfohtml.hdb
+url_javascript = ${prefix}javascript.ndb
+url_pdf = ${prefix}securiteinfopdf.hdb
+url_securiteinfo = ${prefix}securiteinfo.hdb
+url_securiteinfo_ign2 = ${prefix}securiteinfo.ign2
+
+[urlhaus]
+interval = 10m
+url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 </div>
 </div>
 </div>
@@ -1006,7 +1089,99 @@ Enabling a section will not enable these specially prefixed entries.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre></pre>
+<pre>[DEFAULT]
+cleanup = automatic
+enabled = false
+integrity_check = sha256
+log_level = WARNING
+log_method = console
+max_size = 5MB
+db_url = sqlite:////var/lib/fangfrisch/db.sqlite
+local_directory = /var/lib/clamav
+on_update_exec = clamdscan --reload
+on_update_timeout = 42
+
+[malwarepatrol]
+interval = 1d
+integrity_check = disabled
+product = 8
+receipt = abcd1234
+prefix = https://lists.malwarepatrol.net/cgi/getfile?product=${product}&amp;receipt=${receipt}&amp;list=
+url_clamav_basic = ${prefix}clamav_basic
+filename_clamav_basic = malwarepatrol.db
+enabled = yes
+
+[sanesecurity]
+interval = 2h
+prefix = http://ftp.swin.edu.au/sanesecurity/
+!url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
+!url_foxhole_all_ndb = ${prefix}foxhole_all.ndb
+!url_foxhole_mail = ${prefix}foxhole_mail.cdb
+!url_scamnailer = ${prefix}scamnailer.ndb
+!url_winnow_phish_complete = ${prefix}winnow_phish_complete.ndb
+url_badmacro = ${prefix}badmacro.ndb
+url_blurl = ${prefix}blurl.ndb
+url_bofhland_cracked_url = ${prefix}bofhland_cracked_URL.ndb
+url_bofhland_malware_attach = ${prefix}bofhland_malware_attach.hdb
+url_bofhland_malware_url = ${prefix}bofhland_malware_URL.ndb
+url_bofhland_phishing_url = ${prefix}bofhland_phishing_URL.ndb
+url_foxhole_filename = ${prefix}foxhole_filename.cdb
+url_foxhole_generic = ${prefix}foxhole_generic.cdb
+url_foxhole_js_cdb = ${prefix}foxhole_js.cdb
+url_foxhole_js_ndb = ${prefix}foxhole_js.ndb
+url_hackingteam = ${prefix}hackingteam.hsb
+url_junk = ${prefix}junk.ndb
+url_jurlbl = ${prefix}jurlbl.ndb
+url_jurlbla = ${prefix}jurlbla.ndb
+url_lott = ${prefix}lott.ndb
+url_malwareexpert_fp = ${prefix}malware.expert.fp
+url_malwareexpert_hdb = ${prefix}malware.expert.hdb
+url_malwareexpert_ldb = ${prefix}malware.expert.ldb
+url_malwareexpert_ndb = ${prefix}malware.expert.ndb
+url_malwarehash = ${prefix}malwarehash.hsb
+url_phish = ${prefix}phish.ndb
+url_phishtank = ${prefix}phishtank.ndb
+url_porcupine = ${prefix}porcupine.ndb
+url_rogue = ${prefix}rogue.hdb
+url_scam = ${prefix}scam.ndb
+url_shelter = ${prefix}shelter.ldb
+url_spamattach = ${prefix}spamattach.hdb
+url_spamimg = ${prefix}spamimg.hdb
+url_spear = ${prefix}spear.ndb
+url_spearl = ${prefix}spearl.ndb
+url_winnow_attachments = ${prefix}winnow.attachments.hdb
+url_winnow_bad_cw = ${prefix}winnow_bad_cw.hdb
+url_winnow_extended_malware = ${prefix}winnow_extended_malware.hdb
+url_winnow_extended_malware_links = ${prefix}winnow_extended_malware_links.ndb
+url_winnow_malware = ${prefix}winnow_malware.hdb
+url_winnow_malware_links = ${prefix}winnow_malware_links.ndb
+url_winnow_phish_complete_url = ${prefix}winnow_phish_complete_url.ndb
+url_winnow_spam_complete = ${prefix}winnow_spam_complete.ndb
+enabled = yes
+
+[securiteinfo]
+customer_id = abcdef123456
+interval = 1h
+max_size = 20MB
+prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
+!url_0hour = ${prefix}securiteinfo0hour.hdb
+!url_old = ${prefix}securiteinfoold.hdb
+!url_securiteinfo_mdb = ${prefix}securiteinfo.mdb
+!url_spam_marketing = ${prefix}spam_marketing.ndb
+url_android = ${prefix}securiteinfoandroid.hdb
+url_ascii = ${prefix}securiteinfoascii.hdb
+url_html = ${prefix}securiteinfohtml.hdb
+url_javascript = ${prefix}javascript.ndb
+url_pdf = ${prefix}securiteinfopdf.hdb
+url_securiteinfo = ${prefix}securiteinfo.hdb
+url_securiteinfo_ign2 = ${prefix}securiteinfo.ign2
+enabled = yes
+
+[urlhaus]
+interval = 10m
+url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb
+enabled = yes
+max_size = 2MB</pre>
 </div>
 </div>
 </div>
