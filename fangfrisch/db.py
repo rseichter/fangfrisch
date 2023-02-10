@@ -64,7 +64,7 @@ class DbMeta(Base):
             if not db_url:  # pragma: no cover
                 log_fatal('Database URL is undefined, exiting.')
                 sys.exit(1)
-            cls._engine = create_engine(db_url, echo=False)
+            cls._engine = create_engine(db_url, echo=False, pool_size=20, max_overflow=40)
             cls._session = sessionmaker(bind=cls._engine)
         if drop_all:
             cls.metadata.drop_all(cls._engine)
