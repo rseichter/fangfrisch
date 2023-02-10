@@ -119,7 +119,7 @@ class RefreshLog(Base):
 
     @classmethod
     def init(cls):
-        """Initialise database session.
+        """Initialise database session.aga
 
         """
         if not cls._session:
@@ -127,7 +127,7 @@ class RefreshLog(Base):
             if not db_url:  # pragma: no cover
                 log_fatal('Database URL is undefined, exiting.')
                 sys.exit(1)
-            engine = create_engine(db_url, echo=False)
+            engine = create_engine(db_url, echo=False, pool_size=20, max_overflow=40)
             cls._session = sessionmaker(bind=engine)
         return cls._session
 
