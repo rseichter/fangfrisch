@@ -119,7 +119,7 @@ class RefreshLog(Base):
 
     @classmethod
     def init(cls):
-        """Initialise database session.aga
+        """Initialise database session.
 
         """
         if not cls._session:
