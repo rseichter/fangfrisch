@@ -82,7 +82,7 @@ Support contact: Archlinux package maintainer.
 Support contact: Clear Linux package maintainers.
 
 * Gentoo Linux: https://packages.gentoo.org/packages/app-antivirus/fangfrisch[app-antivirus/fangfrisch].
-Support contact: Gentoo packages maintainers.
+Support contact: Gentoo package maintainers.
 
 == Configuration
 
