@@ -89,13 +89,14 @@ class DbMeta(Base):
     def create_metadata(self, force=False) -> Optional[bool]:
         try:
             DbMeta.init(create_all=True, drop_all=force)
-            session = DbMeta._session()
-            dm: DbMeta = session.query(DbMeta).first()
-            if dm is None:
-                session.add(self)
-                session.commit()
-                return True
-            log_fatal(f'Database table {self.__tablename__} is not empty')
+            with DbMeta._session() as session, session.begin():
+                # Unless exceptions occur, the inner context calls session.commit()
+                # and the outer context calls session.close().
+                dm: DbMeta = session.query(DbMeta).first()
+                if dm is None:
+                    session.add(self)
+                    return True
+                log_fatal(f'Database table {self.__tablename__} is not empty')
         except DatabaseError as e:  # pragma: no cover
             log_exception(e)
         sys.exit(1)
@@ -141,8 +142,9 @@ class RefreshLog(Base):
         """
         threshold = datetime.utcnow() - timedelta(minutes=interval)
         RefreshLog.init()
-        entry: RefreshLog = _query_url(url, RefreshLog._session())
-        return (entry is None) or entry.updated < threshold
+        with RefreshLog._session() as session:
+            entry: RefreshLog = _query_url(url, session)
+            return (entry is None) or entry.updated < threshold
 
     @staticmethod
     def digest_matches(url: str, digest: str) -> bool:
@@ -153,8 +155,9 @@ class RefreshLog(Base):
         :return: True if digests match, False otherwise.
         """
         RefreshLog.init()
-        entry: RefreshLog = _query_url(url, RefreshLog._session())
-        return (entry is not None) and entry.digest == digest
+        with RefreshLog._session() as session:
+            entry: RefreshLog = _query_url(url, session)
+            return (entry is not None) and entry.digest == digest
 
     @staticmethod
     def last_logged_path(url: str) -> Optional[str]:
@@ -164,10 +167,11 @@ class RefreshLog(Base):
         :return: Recorded file path if available, None otherwise.
         """
         RefreshLog.init()
-        entry: RefreshLog = _query_url(url, RefreshLog._session())
-        if entry is None:
-            return None
-        return entry.path
+        with RefreshLog._session() as session:
+            entry: RefreshLog = _query_url(url, session)
+            if entry is None:
+                return None
+            return entry.path
 
     @staticmethod
     def url_path_mappings(provider_re: str):
@@ -176,7 +180,8 @@ class RefreshLog(Base):
         :param provider_re: Provider name filter (regular expression)
         """
         RefreshLog.init()
-        return _query_provider_re(provider_re, RefreshLog._session())
+        with RefreshLog._session() as session:
+            return _query_provider_re(provider_re, session)
 
     @staticmethod
     def update(ci: ClamavItem, digest: str) -> None:
@@ -186,17 +191,16 @@ class RefreshLog(Base):
         :param digest: New digest.
         """
         RefreshLog.init()
-        session = RefreshLog._session()
-        entry: RefreshLog = _query_url(ci.url, session)
-        if entry:
-            entry.digest = digest
-            entry.path = ci.path
-            entry.provider = ci.section
-            entry.updated = datetime.utcnow()
-        else:
-            entry = RefreshLog(ci, digest)
-        session.add(entry)
-        session.commit()
+        with RefreshLog._session() as session, session.begin():
+            entry: RefreshLog = _query_url(ci.url, session)
+            if entry:
+                entry.digest = digest
+                entry.path = ci.path
+                entry.provider = ci.section
+                entry.updated = datetime.utcnow()
+            else:
+                entry = RefreshLog(ci, digest)
+                session.add(entry)
 
     @staticmethod
     def cleanup_provider(provider: str) -> int:
@@ -204,16 +208,14 @@ class RefreshLog(Base):
 
         :param provider: Provider filter (exact match)
         """
-        RefreshLog.init()
-        session = RefreshLog._session()
         count = 0
-        entries = _query_provider(provider, session)
-        for entry in entries:
-            remove_if_exists(entry.path, log_debug)
-            session.delete(entry)
-            count += 1
-        if count > 0:
-            session.commit()
+        RefreshLog.init()
+        with RefreshLog._session() as session, session.begin():
+            entries = _query_provider(provider, session)
+            for entry in entries:
+                remove_if_exists(entry.path, log_debug)
+                session.delete(entry)
+                count += 1
         return count
 
 
