@@ -3,12 +3,26 @@
 package = contrib/package.sh
 subdirs = docs
 
-.PHONY:	subdirs $(subdirs) clean dist upload
+define usage
+The following make targets are available:
+
+  clean       Cleanup build directories.
+  dist        Build distribution files.
+  help        Show this text.
+  uploadprod  Upload distribution files to PyPI production server.
+  uploadtest  Upload distribution files to PyPI test server.
+
+endef
+
+.PHONY:	subdirs $(subdirs) clean dist help uploadprod uploadtest
 
 subdirs: $(subdirs)
 
 $(subdirs):
 	make -C $@
+
+help:
+	$(info $(usage))
 
 clean:
 	find tmp -type f -delete
@@ -17,7 +31,8 @@ clean:
 dist:
 	$(package) dist
 
-upload:
-	@echo -e '\nExecute one of the following commands:\n'
-	@echo -e '# a) Test release\n$(package) upload testpypi\n'
-	@echo -e '# b) Production release\n$(package) upload pypi\n'
+uploadtest:
+	@echo "$(package) upload testpypi"
+
+uploadprod:
+	@echo "$(package) upload pypi"
