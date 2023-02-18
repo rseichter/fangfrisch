@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Release 1.6.0 (2023-02-18)
+
+- Use Python context management protocol to improve SQLAlchemy session handling, in particular to more reliably
+  release resources like database connections.
+
 Release 1.5.0 (2021-10-12)
 
 - When running external commands, Fangfrisch now catches all types of exceptions, not only those in the

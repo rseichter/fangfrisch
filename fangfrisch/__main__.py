@@ -18,6 +18,7 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import argparse
 import sys
+
 from fangfrisch import __version__
 from fangfrisch.config import LOG_METHOD_CONSOLE
 from fangfrisch.config import LOG_METHOD_SYSLOG
