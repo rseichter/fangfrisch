@@ -18,7 +18,7 @@ along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import argparse
 import sys
-
+from fangfrisch import __version__
 from fangfrisch.config import LOG_METHOD_CONSOLE
 from fangfrisch.config import LOG_METHOD_SYSLOG
 from fangfrisch.config.config import config
@@ -34,7 +34,8 @@ def main() -> int:
     dumpconf = 'dumpconf'
     dumpmappings = 'dumpmappings'
     initdb = 'initdb'
-    parser = argparse.ArgumentParser(prog='fangfrisch', description='Update and verify unofficial ClamAV signatures.')
+    parser = argparse.ArgumentParser(prog='fangfrisch', description='Update and verify unofficial ClamAV signatures.',
+                                     epilog=f'Fangfrisch version {__version__}. Copyright © 2020-2023 Ralph Seichter.')
     parser.add_argument('action', choices=[dumpconf, dumpmappings, initdb, 'refresh'])
     parser.add_argument('-c', '--conf', default=None, help='configuration file')
     parser.add_argument('-f', '--force', default=False, action='store_true', help='force action (default: False)')
