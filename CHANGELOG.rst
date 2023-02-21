@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Release 1.6.1 (2023-02-21)
+
+- Require SQLAlchemy version 1.4 or higher. Version 1.3 is no longer maintained by the SQLAlchemy developers.
+
 Release 1.6.0 (2023-02-18)
 
 - Use Python context management protocol to improve SQLAlchemy session handling, in particular to more reliably
