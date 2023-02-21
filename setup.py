@@ -54,7 +54,7 @@ setuptools.setup(
     ],
     install_requires=[
         'requests >= 2.22.0',
-        'SQLAlchemy >= 1.3.13',
+        'SQLAlchemy >= 1.4.0',
     ],
     python_requires='>=3.7',
 )
