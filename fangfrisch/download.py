@@ -54,7 +54,7 @@ def _download(url, max_length: int) -> StatusDataPair:
     :param max_length: Maximum permitted content length.
     :return: True/Data for successfull downloads, False/None otherwise.
     """
-    response = _session.get(url, stream=True, timeout=30)
+    response = _session.get(url, stream=True, timeout=120)
     if response.status_code != requests.codes.ok:
         log_error(f'{url} download failed: {response.status_code} {response.reason}')
         return StatusDataPair(False)
