@@ -1,5 +1,5 @@
 """
-Copyright © 2020-2023 Ralph Seichter
+Copyright © 2020-2024 Ralph Seichter
 
 This file is part of "Fangfrisch".
 
@@ -16,7 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-__version__ = '1.6.1'
+__version__ = '1.7.0.dev1'
 
 
 class ClamavItem:
