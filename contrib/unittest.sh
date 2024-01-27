@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # vim:ts=4:noet
 #
-# Runs unittests for automx2. Example usage:
+# Runs unittests for Fangfrisch. Example usage:
 #
 # (1) unittest.sh
 # Run all unittests without collecting coverage data.
