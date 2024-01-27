@@ -4,6 +4,7 @@ package = contrib/package.sh
 subdirs = docs
 
 define usage
+
 The following make targets are available:
 
   clean       Cleanup build directories.
@@ -11,7 +12,6 @@ The following make targets are available:
   help        Show this text.
   uploadprod  Upload distribution files to PyPI production server.
   uploadtest  Upload distribution files to PyPI test server.
-
 endef
 
 .PHONY:	subdirs $(subdirs) clean dist help uploadprod uploadtest
@@ -23,6 +23,7 @@ $(subdirs):
 
 help:
 	$(info $(usage))
+	@exit 0
 
 clean:
 	find tmp -type f -delete
