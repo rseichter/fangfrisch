@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Release 1.7.0 (TBA)
+
+- Support user-defined connection timeouts.
+
 Release 1.6.1 (2023-02-21)
 
 - Require SQLAlchemy version 1.4 or higher. Version 1.3 is no longer maintained by the SQLAlchemy developers.
