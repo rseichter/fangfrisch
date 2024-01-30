@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="generator" content="Asciidoctor 2.0.20">
 <meta name="keywords" content="antivirus, clamav, fangfrisch, freshclam, refresh, update">
 <meta name="author" content="Ralph Seichter">
-<meta name="copyright" content="© 2020-2023 Ralph Seichter">
+<meta name="copyright" content="© 2020-2024 Ralph Seichter">
 <title>Fangfrisch</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -211,13 +211,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -396,7 +393,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -445,8 +442,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.6.1,</span>
-<span id="revdate">2023-02-21</span>
+<span id="revnumber">version 1.7.0.dev1,</span>
+<span id="revdate">2024-01-30</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -501,7 +498,7 @@ Fangfrisch was designed with security in mind, to be run by an unprivileged user
 <h2 id="_license"><a class="anchor" href="#_license"></a>1. License</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Copyright © 2020-2023 Ralph Seichter</p>
+<p>Copyright © 2020-2024 Ralph Seichter</p>
 </div>
 <div class="paragraph">
 <p>This file is part of "Fangfrisch".</p>
@@ -630,6 +627,13 @@ enabled = yes</pre>
 Default: <code>automatic</code>, alternative: <code>disabled</code>.
 In automatic mode, Fangfrisch will attempt to delete obsolete virus definition files whenever you disable a provider section.
 Should you disable this option, orphaned files will be left behind, and you need to ensure cleanup by different means.</p>
+</li>
+<li>
+<p><strong>connection_timeout</strong>: Timeout in seconds, used when establishing network connections to download signature files.
+Default: <code>30</code>.
+Be aware that longer timeouts increase the risk of multiple Fangfrisch instances running concurrently.
+This could, in turn, cause database access problems, and network socket congestion.
+If your Internet connection is fast, I even suggest testing timeout values lower than the default 30 seconds.</p>
 </li>
 <li>
 <p><strong>db_url</strong>: Database URL in <a href="https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases">SQLAlchemy syntax</a>.
@@ -1224,8 +1228,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.6.1<br>
-Last updated 2023-02-21 14:51:41 +0100
+Version 1.7.0.dev1<br>
+Last updated 2024-01-30 22:27:04 +0100
 </div>
 </div>
 </body>

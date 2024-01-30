@@ -108,6 +108,11 @@ enabled = yes
 Default: `automatic`, alternative: `disabled`.
 In automatic mode, Fangfrisch will attempt to delete obsolete virus definition files whenever you disable a provider section.
 Should you disable this option, orphaned files will be left behind, and you need to ensure cleanup by different means.
+* *connection_timeout*: Timeout in seconds, used when establishing network connections to download signature files.
+Default: `30`.
+Be aware that longer timeouts increase the risk of multiple Fangfrisch instances running concurrently.
+This could, in turn, cause database access problems, and network socket congestion.
+If your Internet connection is fast, I even suggest testing timeout values lower than the default 30 seconds.
 * *db_url*: Database URL in https://docs.sqlalchemy.org/en/13/core/engines.html#supported-databases[SQLAlchemy syntax].
 Mandatory, no default.
 Typically, a local https://www.sqlite.org[SQLite] database will suffice.
