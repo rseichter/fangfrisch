@@ -47,18 +47,19 @@ def _has_valid_length(response: Response, max_length: int) -> StatusDataPair:
     return StatusDataPair(True, length)
 
 
-def _download(url, max_length: int) -> StatusDataPair:
+def _download(url, max_size: int, timeout: int) -> StatusDataPair:
     """Download from specified URL if content length is below a given limit.
 
     :param url: Source URL.
-    :param max_length: Maximum permitted content length.
+    :param max_size: Maximum permitted content length.
+    :param timeout: Connection timeout in seconds.
     :return: True/Data for successfull downloads, False/None otherwise.
     """
-    response = _session.get(url, stream=True, timeout=30)
+    response = _session.get(url, stream=True, timeout=timeout)
     if response.status_code != requests.codes.ok:
         log_error(f'{url} download failed: {response.status_code} {response.reason}')
         return StatusDataPair(False)
-    check = _has_valid_length(response, max_length)
+    check = _has_valid_length(response, max_size)
     if not check.ok:
         return StatusDataPair(False)
     return StatusDataPair(True, response)
@@ -67,7 +68,7 @@ def _download(url, max_length: int) -> StatusDataPair:
 def get_digest(ci: ClamavItem, max_size: int = 1024) -> StatusDataPair:
     if not ci.check:
         return StatusDataPair(True)
-    download = _download(f'{ci.url}.{ci.check}', max_size)
+    download = _download(f'{ci.url}.{ci.check}', max_size, ci.connection_timeout)
     if not download.ok:
         return StatusDataPair(False)
     digest = download.data.text.split(' ')[0]  # Returns original text if no space is found
@@ -75,7 +76,7 @@ def get_digest(ci: ClamavItem, max_size: int = 1024) -> StatusDataPair:
 
 
 def get_payload(ci: ClamavItem) -> StatusDataPair:
-    download = _download(ci.url, ci.max_size)
+    download = _download(ci.url, ci.max_size, ci.connection_timeout)
     if not download.ok:
         return StatusDataPair(False)
     return StatusDataPair(True, download.data.content)

@@ -79,6 +79,9 @@ class Configuration:
         # Default: see init() method
         return means_automatic(self.parser.get(section, CLEANUP))
 
+    def connection_timeout(self, fallback=30) -> int:
+        return self.parser.getint(configparser.DEFAULTSECT, 'connection_timeout', fallback=fallback)
+
     def db_url(self) -> Optional[str]:
         # No default
         return self.parser.get(configparser.DEFAULTSECT, DB_URL)

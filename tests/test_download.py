@@ -27,11 +27,11 @@ from tests import URL_SHA256
 
 class DownloadTests(FangfrischTest):
     def test_get_ok(self):
-        d = _download(URL_SHA256, MAX_SIZE)
+        d = _download(URL_SHA256, MAX_SIZE, 10)
         self.assertTrue(d.ok)
 
     def test_get_oversized(self):
-        d = _download(URL_SHA256, 1)
+        d = _download(URL_SHA256, 1, 10)
         self.assertFalse(d.ok)
 
 

@@ -39,8 +39,8 @@ URL_SHA256 = 'https://seichter.de/favicon-16x16.png'
 
 class _ClamavTestItem(ClamavItem):
     def __init__(self, section, option, url, check=None, path=None,
-                 interval=0, max_size=MAX_SIZE, on_update=None) -> None:
-        super().__init__(section, option, url, check, path, interval, max_size, on_update)
+                 interval=0, max_size=MAX_SIZE, on_update=None, connection_timeout=10) -> None:
+        super().__init__(section, option, url, check, path, interval, max_size, on_update, connection_timeout)
 
 
 class FangfrischTest(unittest.TestCase):

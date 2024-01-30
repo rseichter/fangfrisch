@@ -75,7 +75,8 @@ def _clamav_items() -> List[ClamavItem]:
                     path=filename,
                     interval=config.interval(section),
                     max_size=max_size,
-                    on_update=config.get(section, f'on_update_{stem}')
+                    on_update=config.get(section, f'on_update_{stem}'),
+                    connection_timeout=config.connection_timeout()
                 ))
     return item_list
 

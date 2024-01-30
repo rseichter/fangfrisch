@@ -103,6 +103,10 @@ class ConfigTests(FangfrischTest):
         self.c.init(self.CONF)
         self.assertEqual(self.UNITTEST, self.c.log_target())
 
+    def test_conn_timeout1(self):
+        self.c.init(self.CONF)
+        self.assertEqual(9, self.c.connection_timeout())
+
 
 if __name__ == '__main__':
     unittest.main()
