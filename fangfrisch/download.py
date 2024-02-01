@@ -55,6 +55,8 @@ def _download(url, max_size: int, timeout: int) -> StatusDataPair:
     :param timeout: Connection timeout in seconds.
     :return: True/Data for successfull downloads, False/None otherwise.
     """
+    if timeout > 30:
+        log_warning(f'{timeout} second connection timeout exceeds recommended limit')
     response = _session.get(url, stream=True, timeout=timeout)
     if response.status_code != requests.codes.ok:
         log_error(f'{url} download failed: {response.status_code} {response.reason}')
