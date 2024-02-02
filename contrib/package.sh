@@ -26,23 +26,16 @@ function do_dist() {
 }
 
 function do_upload() {
-	if [ $# -gt 0 ]; then
-		repo="$1"
-	fi
-	local opt=(
-		'-sign'
-		'-i'
-		'D3DCBBA4EFA680A1C5C85708593AAE2E98E2219D'
-		'-r'
-		"${repo:-testpypi}"
-	)
-	twine upload "${opt[@]}" dist/*
+	twine upload dist/*
 }
 
 function do_setver() {
 	[ $# -gt 0 ] || usage
-	/usr/bin/sed -i '' -E -e "s/^v[^,]+, {docdate.+/v${1}, {docdate}/" docs/fangfrisch.adoc
-	/usr/bin/sed -i '' -E -e "s/^__version.+/__version__ = '${1}'/" fangfrisch/__init__.py
+	local sed="/usr/bin/sed -E"
+	set -x
+	${sed} -i "" -e "s/^v[^ ]+ {docdate}$/v${1}, {docdate}/" docs/fangfrisch.adoc
+	${sed} -i "" -e "s/^__version.+/__version__ = '${1}'/" fangfrisch/__init__.py
+	set +x
 }
 
 [ $# -gt 0 ] || usage
