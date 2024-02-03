@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Release 1.7.0 (TBA)
+Release 1.7.0 (2024-02-03)
 
 - Support user-defined connection timeouts.
 
