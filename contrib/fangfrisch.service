@@ -1,0 +1,32 @@
+[Unit]
+Description=Updater for unofficial ClamAV signatures
+Documentation=man:fangfrisch(1)
+
+[Service]
+ExecStart=/usr/bin/fangfrisch --conf /etc/fangfrisch.conf refresh
+Type=oneshot
+User=clamav
+StateDirectory=fangfrisch
+StateDirectoryMode=0770
+ReadWritePaths=-/var/lib/clamav/
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectSystem=strict
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+SystemCallArchitectures=native
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@system-service

@@ -1,0 +1,12 @@
+[Unit]
+Description=Automatically refresh the fangfrisch signatures
+Documentation=man:fangfrisch(1)
+ConditionPathExists=/etc/fangfrisch.conf
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=15min
+RandomizedDelaySec=2m
+
+[Install]
+WantedBy=timers.target
