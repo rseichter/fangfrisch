@@ -22,7 +22,7 @@ function do_clean() {
 }
 
 function do_dist() {
-	python setup.py sdist bdist_wheel
+	python -m build --no-isolation --skip-dependency-check
 }
 
 function do_upload() {
@@ -32,10 +32,9 @@ function do_upload() {
 function do_setver() {
 	[ $# -gt 0 ] || usage
 	local sed="/usr/bin/sed -E"
-	set -x
 	${sed} -i "" -e "s/^v[^ ]+ {docdate}$/v${1}, {docdate}/" docs/fangfrisch.adoc
 	${sed} -i "" -e "s/^__version.+/__version__ = '${1}'/" fangfrisch/__init__.py
-	set +x
+	${sed} -i "" -e "s/^version.+/version = ${1}/" setup.cfg
 }
 
 [ $# -gt 0 ] || usage
