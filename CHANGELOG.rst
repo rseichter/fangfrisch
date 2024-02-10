@@ -2,6 +2,10 @@
 Changelog
 =========
 
+Release 1.7.1 (TBA)
+
+- Sanesecurity provider: Switch default mirror site, cleanup signature URLs.
+
 Release 1.7.0 (2024-02-03)
 
 - Support user-defined connection timeouts.
