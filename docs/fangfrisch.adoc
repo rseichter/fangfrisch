@@ -272,7 +272,7 @@ This is not meant to discourage you; it just saves time and effort for all invol
 Please contact the author mailto:{email}[{author}] only after having done your "research".
 Thank you.
 
-=== Reporting problems
+=== Reporting possible problems
 
 If you experience problems, please start by trying to figure out underlying issues on your own.
 Running with DEBUG level logging helps with that.
@@ -290,7 +290,7 @@ Please answer all other questions as detailed as you can, within reason.
 6. What happened instead?
 7. What was your exact setup (operating system, Python core version, Python module versions)?
 
-=== Submitting suggestions
+=== Offering suggestions
 
 The list of questions is shorter, but important nonetheless:
 
@@ -300,6 +300,20 @@ The list of questions is shorter, but important nonetheless:
 
 If you answered "yes" for all questions, please explain your idea in a sufficiently thorough manner.
 Use examples, graphics, and whatever else you think would help others to understand your suggestion.
+
+=== Discussion precedes contribution
+
+I do not accept any code or documentation contributions which have not been previously agreed upon.
+This means the order of steps is as follows:
+
+1. Open an issue or discussion topic first.
+2. Have a conversation about the matter at hand.
+3. Reach a consensus about both form and content of the contribution.
+4. Wait for a yay/nay signal from me.
+
+Please do _not_ submit any pull requests before I ask for them, as they will be closed.
+This outlined, proven practice will save time for all involved.
+See Heather McNamee's blog https://about.gitlab.com/blog/2016/03/03/start-with-an-issue/[Always start with an issue] for more information.
 
 [[internalconf]]
 [appendix]
