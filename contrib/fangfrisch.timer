@@ -1,7 +1,7 @@
 [Unit]
 Description=Automatically refresh the fangfrisch signatures
 Documentation=man:fangfrisch(1)
-ConditionPathExists=/etc/fangfrisch.conf
+ConditionPathExists=/var/lib/fangfrisch/db.sqlite
 
 [Timer]
 OnBootSec=2min
