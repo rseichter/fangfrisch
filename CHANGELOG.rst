@@ -4,9 +4,9 @@ Changelog
 
 Release 1.7.1 (TBA)
 
-- Sanesecurity provider: Switch default mirror site, cleanup signature URLs.
+- Sanesecurity (https://sanesecurity.com) provider: Switch default mirror site, cleanup signature URLs.
 
-- Modernise Python build (see PEP 517).
+- Modernise Python build re PEP 517 (https://peps.python.org/pep-0517/).
 
 Release 1.7.0 (2024-02-03)
 
