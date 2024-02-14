@@ -442,8 +442,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.7.1.dev2,</span>
-<span id="revdate">2024-02-12</span>
+<span id="revnumber">version 1.8.0,</span>
+<span id="revdate">2024-02-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -752,6 +752,8 @@ receipt = abcd1234
 
 [sanesecurity]
 enabled = yes
+# Use a non-default mirror
+prefix = https://mirror.rollernet.us/sanesecurity/
 
 [securiteinfo]
 enabled = yes
@@ -1048,10 +1050,11 @@ url_clamav_basic = ${prefix}clamav_basic
 filename_clamav_basic = malwarepatrol.db
 
 [sanesecurity]
-interval = 2h
-prefix = https://mirror.rollernet.us/sanesecurity/
+interval = 1h
+prefix = http://mirror.sentries.org/sanesecurity/
 !url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
 !url_foxhole_all_ndb = ${prefix}foxhole_all.ndb
+!url_foxhole_links = ${prefix}foxhole_links.ldb
 !url_foxhole_mail = ${prefix}foxhole_mail.cdb
 !url_winnow_phish_complete = ${prefix}winnow_phish_complete.ndb
 url_badmacro = ${prefix}badmacro.ndb
@@ -1150,10 +1153,11 @@ filename_clamav_basic = malwarepatrol.db
 enabled = yes
 
 [sanesecurity]
-interval = 2h
+interval = 1h
 prefix = https://mirror.rollernet.us/sanesecurity/
 !url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
 !url_foxhole_all_ndb = ${prefix}foxhole_all.ndb
+!url_foxhole_links = ${prefix}foxhole_links.ldb
 !url_foxhole_mail = ${prefix}foxhole_mail.cdb
 !url_winnow_phish_complete = ${prefix}winnow_phish_complete.ndb
 url_badmacro = ${prefix}badmacro.ndb
@@ -1263,8 +1267,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.7.1.dev2<br>
-Last updated 2024-02-12 00:31:32 +0100
+Version 1.8.0<br>
+Last updated 2024-02-14 22:57:42 +0100
 </div>
 </div>
 </body>

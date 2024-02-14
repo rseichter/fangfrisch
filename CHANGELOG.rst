@@ -2,9 +2,10 @@
 Changelog
 =========
 
-Release 1.7.1 (TBA)
+Release 1.8.0 (2024-02-14)
 
-- Sanesecurity (https://sanesecurity.com) provider: Switch default mirror site, cleanup signature URLs.
+- Sanesecurity (https://sanesecurity.com) provider default configuration overhaul. Switch to a less
+  congested mirror site, add/remove several signature URLs.
 
 - Modernise Python build re PEP 517 (https://peps.python.org/pep-0517/).
 
