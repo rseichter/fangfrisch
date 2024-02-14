@@ -22,10 +22,11 @@ from fangfrisch.config import PREFIX
 sanesecurity = {
     # See https://sanesecurity.com/usage/signatures/
     'sanesecurity': {
-        INTERVAL: '2h',
-        PREFIX: r'https://mirror.rollernet.us/sanesecurity/',
+        INTERVAL: '1h',
+        PREFIX: r'http://mirror.sentries.org/sanesecurity/',
         '!url_foxhole_all_cdb': f'${{{PREFIX}}}foxhole_all.cdb',
         '!url_foxhole_all_ndb': f'${{{PREFIX}}}foxhole_all.ndb',
+        '!url_foxhole_links': f'${{{PREFIX}}}foxhole_links.ldb',
         '!url_foxhole_mail': f'${{{PREFIX}}}foxhole_mail.cdb',
         '!url_winnow_phish_complete': f'${{{PREFIX}}}winnow_phish_complete.ndb',
         'url_badmacro': f'${{{PREFIX}}}badmacro.ndb',

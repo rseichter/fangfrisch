@@ -76,7 +76,7 @@ class ConfigTests(FangfrischTest):
 
     def test_interval(self):
         self.c.init(self.CONF)
-        self.assertEqual(60 * 2, self.c.interval(SECTION))
+        self.assertEqual(60, self.c.interval(SECTION))
 
     def test_disabled_none(self):
         self.assertFalse(means_disabled(None))
