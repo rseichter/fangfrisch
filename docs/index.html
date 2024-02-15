@@ -443,7 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
 <span id="revnumber">version 1.8.0,</span>
-<span id="revdate">2024-02-14</span>
+<span id="revdate">2024-02-15</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -508,7 +508,8 @@ Fangfrisch was designed with security in mind, to be run by an unprivileged user
 <p>Fangfrisch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 </div>
 <div class="paragraph">
-<p>Fangfrisch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p>Fangfrisch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.</p>
 </div>
 <div class="paragraph">
 <p>You should have received a copy of the GNU General Public License along with Fangfrisch.
@@ -521,8 +522,18 @@ If not, see <a href="https://www.gnu.org/licenses/" class="bare">https://www.gnu
 <div class="sectionbody">
 <div class="paragraph">
 <p>Fangfrisch is expected to run periodically, e.g. using <a href="https://en.wikipedia.org/wiki/Cron">cron</a>.
-Download attempts are recorded in a database and new attempts are only made after the defined age threshold is reached.
-Fangfrisch will attempt to download digests first (if available upstream), and only retrieve corresponding virus definition files when their recorded digest changes, minimising transfer volumes.</p>
+Fangfrisch will attempt to download digests first (if available upstream), and only retrieve corresponding signature files when their recorded digest changes, minimising transfer volumes.</p>
+</div>
+<div class="paragraph">
+<p>I recommend running Fangfrisch at 10 minute intervals.
+There is no need to worry about overburdening your machine, the network or remote signature providers.
+Each individual download is recorded in the database, and whenever Fangfrisch is run, it checks those recorded timestamps against the preconfigured provider intervals.
+No network connections are made for downloaded signature files which are considered "too young to update".</p>
+</div>
+<div class="paragraph">
+<p>Imagine a provider interval setting of 45 minutes.
+Even if launched every 10 minutes, Fangfrisch will not attempt to download related signature files before 45 minutes have passed since the last recorded successful download.
+Provider intervals are set to reasonable defaults internally, but you can override them if necessary.</p>
 </div>
 </div>
 </div>
@@ -908,6 +919,7 @@ The <code>--force</code> option can be used to override download interval settin
 </div>
 <div class="paragraph">
 <p>As stated before, Fangfrisch is typically run using cron.
+Depending on your host OS, you may use a systemd timer as an alternative.
 An example crontab looks like this:</p>
 </div>
 <div class="listingblock">
@@ -915,7 +927,7 @@ An example crontab looks like this:</p>
 <pre>HOME=/var/lib/fangfrisch
 LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
-*/15 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh</pre>
+*/10 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh</pre>
 </div>
 </div>
 </div>
@@ -1268,7 +1280,7 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 <div id="footer">
 <div id="footer-text">
 Version 1.8.0<br>
-Last updated 2024-02-14 22:57:42 +0100
+Last updated 2024-02-15 05:42:18 +0100
 </div>
 </div>
 </body>
