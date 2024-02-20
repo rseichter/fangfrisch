@@ -1,5 +1,5 @@
 """
-Copyright © 2020-2023 Ralph Seichter
+Copyright © 2020-2024 Ralph Seichter
 
 This file is part of "Fangfrisch".
 
@@ -35,6 +35,15 @@ URL_BAD_SHA256 = 'https://seichter.de/favicon.ico'
 URL_MD5 = 'https://seichter.de/favicon-32x32.png'
 URL_MISSING = 'https://seichter.de/index.html'
 URL_SHA256 = 'https://seichter.de/favicon-16x16.png'
+
+
+def env_var(name: str, default: object = None):
+    if name in os.environ:
+        return os.environ[name]
+    return default
+
+
+NETWORK_TESTS = env_var('NETWORK_TESTS') == '1'
 
 
 class _ClamavTestItem(ClamavItem):

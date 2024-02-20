@@ -22,9 +22,11 @@ import unittest
 from fangfrisch.download import _download
 from tests import FangfrischTest
 from tests import MAX_SIZE
+from tests import NETWORK_TESTS
 from tests import URL_SHA256
 
 
+@unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
 class DownloadTests(FangfrischTest):
     def test_get_ok(self):
         d = _download(URL_SHA256, MAX_SIZE, 10)
