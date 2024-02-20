@@ -1,20 +1,23 @@
 # vim:ts=4:noet
 
 package = contrib/package.sh
+unittest = contrib/unittest.sh
 subdirs = docs
 
 define usage
 
 The following make targets are available:
 
-  clean       Cleanup build directories.
-  dist        Build distribution files.
-  help        Show this text.
-  uploadprod  Upload distribution files to PyPI production server.
-  uploadtest  Upload distribution files to PyPI test server.
+  clean  Cleanup build directories.
+  dist   Build distribution files.
+  help   Show this text.
+  pypi   Upload distribution files to PyPI.
+  stest  Run sandboxed Python tests (disables network tests).
+  test   Run all Python tests and generate coverage report.
+
 endef
 
-.PHONY:	subdirs $(subdirs) clean dist help uploadprod uploadtest
+.PHONY:	subdirs $(subdirs) clean dist help pypi stest test
 
 subdirs: $(subdirs)
 
@@ -32,8 +35,11 @@ clean:
 dist:
 	$(package) dist
 
-uploadtest:
-	@echo "$(package) upload testpypi"
-
-uploadprod:
+pypi:
 	@echo "$(package) upload pypi"
+
+stest:
+	env NETWORK_TESTS=0 $(unittest)
+
+test:
+	env NETWORK_TESTS=1 $(unittest) coverage

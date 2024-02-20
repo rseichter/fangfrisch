@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# vim:tabstop=4:noexpandtab
+# vim: ts=4 sw=4 noet
 #
 # Script to package fangfrisch for distribution and to handle PyPI uploads.
 # You need Python modules 'wheel' and 'twine' to publish to PyPI, and
@@ -11,8 +11,7 @@ set -euo pipefail
 function usage() {
 	local bn
 	bn="$(basename $0)"
-	echo "Usage: ${bn} {clean | dist}" >&2
-	echo "       ${bn} upload [repository]" >&2
+	echo "Usage: ${bn} {clean | dist | pypi}" >&2
 	echo "       ${bn} setver {version}" >&2
 	exit 1
 }
@@ -25,7 +24,7 @@ function do_dist() {
 	python -m build --no-isolation --skip-dependency-check
 }
 
-function do_upload() {
+function do_pypi() {
 	twine upload dist/*
 }
 
@@ -38,17 +37,18 @@ function do_setver() {
 }
 
 [ $# -gt 0 ] || usage
-arg="$1"
+arg="${1}"
 shift
-case "$arg" in
+case "${arg}" in
 	clean)
 		do_${arg}
 		;;
-	dist | setver | upload)
-		source .venv/bin/activate
+	dist|setver|pypi)
+		. .venv/bin/activate
 		do_${arg} "$@"
 		;;
 	*)
 		usage
 		;;
 esac
+unset arg
