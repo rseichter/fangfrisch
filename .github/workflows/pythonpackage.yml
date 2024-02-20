@@ -34,3 +34,10 @@ jobs:
           PYTHONPATH=. python -m unittest discover tests/ -v
         env:
           NETWORK_TESTS: 0
+      - name: Build Python artifacts
+        run: python -m build --no-isolation --skip-dependency-check
+      - name: Store Python artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: fangfrisch-Python-${{ matrix.python-version }}
+          path: dist/*
