@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Release 1.8.1 (TBA)
+Release 1.8.1 (2024-02-21)
 
 - Python unit tests requiring network connections are now disabled by default to facilitate sandboxed
   testing. Set environment variable `NETWORK_TESTS=1` to enable these tests.
