@@ -10,7 +10,7 @@ set -euo pipefail
 
 function usage() {
 	local bn
-	bn="$(basename $0)"
+	bn="$(basename "$0")"
 	echo "Usage: ${bn} {clean | dist | pypi}" >&2
 	echo "       ${bn} setver {version}" >&2
 	exit 1
@@ -41,11 +41,11 @@ arg="${1}"
 shift
 case "${arg}" in
 	clean)
-		do_${arg}
+		do_"${arg}"
 		;;
 	dist|setver|pypi)
 		. .venv/bin/activate
-		do_${arg} "$@"
+		do_"${arg}" "$@"
 		;;
 	*)
 		usage

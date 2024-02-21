@@ -25,7 +25,7 @@ CONF='tests/tests.conf'
 sed -i'' -e "s,^db_url.*,db_url = sqlite:///${DB}," $CONF
 
 function usage() {
-	echo "Usage: $(basename $0) [coverage]" >&2
+	echo "Usage: $(basename "$0") [coverage]" >&2
 	exit 1
 }
 

@@ -11,7 +11,9 @@ The following make targets are available:
   clean  Cleanup build directories.
   dist   Build distribution files.
   help   Show this text.
+  push   Push to all configured Git remotes.
   pypi   Upload distribution files to PyPI.
+  schk   Shell script check.
   stest  Run sandboxed Python tests (disables network tests).
   test   Run all Python tests and generate coverage report.
 
@@ -43,3 +45,9 @@ stest:
 
 test:
 	env NETWORK_TESTS=1 $(unittest) coverage
+
+push:
+	for _r in $(shell git remote); do git push $$_r; done; unset _r
+
+schk:
+	shellcheck -x contrib/*.sh
