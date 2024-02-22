@@ -38,7 +38,7 @@ dist:
 	$(package) dist
 
 pypi:
-	@echo "$(package) upload pypi"
+	@echo "# Run this command to upload:\n$(package) pypi"
 
 stest:
 	env NETWORK_TESTS=0 $(unittest)
