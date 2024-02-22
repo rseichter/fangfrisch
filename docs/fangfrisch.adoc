@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.8.1, {docdate}
+v1.9.0.dev1, {docdate}
 :copyright: © 2020-2024 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
