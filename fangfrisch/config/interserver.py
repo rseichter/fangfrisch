@@ -25,7 +25,7 @@ interserver = {
     'interserver': {
         INTERVAL: '1h',
         INTEGRITY_CHECK: 'disabled',
-        MAX_SIZE: '10MB',
+        MAX_SIZE: '5MB',
         PREFIX: r'http://sigs.interserver.net/',
         '!url_shell_hdb': f'${{{PREFIX}}}shell.hdb',
         '!url_shellb_db': f'${{{PREFIX}}}shellb.db',

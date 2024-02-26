@@ -6,7 +6,7 @@ Update and verify unofficial ClamAV signatures.
 positional arguments:
   {dumpconf,dumpmappings,initdb,refresh}
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -c CONF, --conf CONF  configuration file
   -f, --force           force action (default: False)

@@ -442,8 +442,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.9.0.dev1,</span>
-<span id="revdate">2024-02-22</span>
+<span id="revnumber">version 1.9.0.dev2,</span>
+<span id="revdate">2024-02-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -719,10 +719,13 @@ Default: 30.</p>
 <div class="sect2">
 <h3 id="_default_providers"><a class="anchor" href="#_default_providers"></a>5.1. Default providers</h3>
 <div class="paragraph">
-<p>Fangfrisch contains internal defaults for the following providers (in alphabetical order):</p>
+<p>Fangfrisch contains internal defaults for the following providers, listed in alphabetical order:</p>
 </div>
 <div class="ulist">
 <ul>
+<li>
+<p><a href="http://sigs.interserver.net/">InterServer</a></p>
+</li>
 <li>
 <p><a href="https://www.malwarepatrol.net">Malwarepatrol</a></p>
 </li>
@@ -738,8 +741,22 @@ Default: 30.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>The internal default values for providers can be used by specifiying <code>enabled = yes</code> in the desired sections.
-Some providers require additional configuration as shown in the following example.</p>
+<p>Providers can be enabled by specifiying <code>enabled = yes</code> in the desired configuration file sections.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Please make sure to examine the respective settings for yourself before enabling providers.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The defaults may not suit your personal preferences, and some providers require additional configuration, e.g. an access token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -755,6 +772,9 @@ local_directory = /var/lib/clamav
 max_size = 5MB
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
+
+[interserver]
+enabled = yes
 
 [malwarepatrol]
 enabled = yes
@@ -885,7 +905,7 @@ Update and verify unofficial ClamAV signatures.
 positional arguments:
   {dumpconf,dumpmappings,initdb,refresh}
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -c CONF, --conf CONF  configuration file
   -f, --force           force action (default: False)
@@ -927,7 +947,7 @@ An example crontab looks like this:</p>
 <pre>HOME=/var/lib/fangfrisch
 LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
-*/10 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh</pre>
+*/10 * * * * clamav sleep $((RANDOM \% 42)); venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh</pre>
 </div>
 </div>
 </div>
@@ -1038,8 +1058,10 @@ See Heather McNamee&#8217;s blog <a href="https://about.gitlab.com/blog/2016/03/
 <div class="sectionbody">
 <div class="paragraph">
 <p>Fangfrisch contains the following internal configuration settings as defaults.
-All sections are disabled, and entries with the <code>!url_</code> prefix are included for reference only.
-These represent data sources which either have a high risk of false positives or are not free to use.
+As a safety measure, all sections are disabled by default.
+Entries with the <code>!url_</code> prefix are included for reference only.
+These represent data sources which are not recommended for general use.
+Possible reasons: Some sources have an elevated risk of false positives, are not free to use, or contain legacy data.
 Enabling a section will not enable these specially prefixed entries.</p>
 </div>
 <div class="listingblock">
@@ -1051,6 +1073,20 @@ integrity_check = sha256
 log_level = WARNING
 log_method = console
 max_size = 10MB
+
+[interserver]
+interval = 1h
+integrity_check = disabled
+max_size = 5MB
+prefix = http://sigs.interserver.net/
+!url_shell_hdb = ${prefix}shell.hdb
+!url_shellb_db = ${prefix}shellb.db
+url_interserver256 = ${prefix}interserver256.hdb
+url_shell_ldb = ${prefix}shell.ldb
+filename_shell_ldb = interservershell.ldb
+url_topline = ${prefix}interservertopline.db
+url_whitelist_fp = ${prefix}whitelist.fp
+filename_whitelist_fp = interserverwhitelist.fp
 
 [malwarepatrol]
 interval = 1d
@@ -1118,7 +1154,8 @@ prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
 !url_0hour = ${prefix}securiteinfo0hour.hdb
 !url_old = ${prefix}securiteinfoold.hdb
 !url_securiteinfo_mdb = ${prefix}securiteinfo.mdb
-!url_spam_marketing = ${prefix}spam_marketing.ndb
+!url_securiteinfo_pdb = ${prefix}securiteinfo.pdb
+!url_securiteinfo_yara = ${prefix}securiteinfo.yara
 url_android = ${prefix}securiteinfoandroid.hdb
 url_ascii = ${prefix}securiteinfoascii.hdb
 url_html = ${prefix}securiteinfohtml.hdb
@@ -1126,6 +1163,7 @@ url_javascript = ${prefix}javascript.ndb
 url_pdf = ${prefix}securiteinfopdf.hdb
 url_securiteinfo = ${prefix}securiteinfo.hdb
 url_securiteinfo_ign2 = ${prefix}securiteinfo.ign2
+url_spam_marketing = ${prefix}spam_marketing.ndb
 
 [urlhaus]
 interval = 10m
@@ -1153,6 +1191,21 @@ db_url = sqlite:////var/lib/fangfrisch/db.sqlite
 local_directory = /var/lib/clamav
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
+
+[interserver]
+interval = 1h
+integrity_check = disabled
+max_size = 5MB
+prefix = http://sigs.interserver.net/
+!url_shell_hdb = ${prefix}shell.hdb
+!url_shellb_db = ${prefix}shellb.db
+url_interserver256 = ${prefix}interserver256.hdb
+url_shell_ldb = ${prefix}shell.ldb
+filename_shell_ldb = interservershell.ldb
+url_topline = ${prefix}interservertopline.db
+url_whitelist_fp = ${prefix}whitelist.fp
+filename_whitelist_fp = interserverwhitelist.fp
+enabled = yes
 
 [malwarepatrol]
 interval = 1d
@@ -1222,7 +1275,8 @@ prefix = https://www.securiteinfo.com/get/signatures/${customer_id}/
 !url_0hour = ${prefix}securiteinfo0hour.hdb
 !url_old = ${prefix}securiteinfoold.hdb
 !url_securiteinfo_mdb = ${prefix}securiteinfo.mdb
-!url_spam_marketing = ${prefix}spam_marketing.ndb
+!url_securiteinfo_pdb = ${prefix}securiteinfo.pdb
+!url_securiteinfo_yara = ${prefix}securiteinfo.yara
 url_android = ${prefix}securiteinfoandroid.hdb
 url_ascii = ${prefix}securiteinfoascii.hdb
 url_html = ${prefix}securiteinfohtml.hdb
@@ -1230,6 +1284,7 @@ url_javascript = ${prefix}javascript.ndb
 url_pdf = ${prefix}securiteinfopdf.hdb
 url_securiteinfo = ${prefix}securiteinfo.hdb
 url_securiteinfo_ign2 = ${prefix}securiteinfo.ign2
+url_spam_marketing = ${prefix}spam_marketing.ndb
 enabled = yes
 
 [urlhaus]
@@ -1246,8 +1301,7 @@ max_size = 2MB</pre>
 <div class="sectionbody">
 <div class="paragraph">
 <p>While users can technically access the Fangfrisch backend database directly, its structure and content are considered <strong>private</strong>.
-They may change at any time, without notice.
-Related complaints will be filed under <a href="https://en.wikipedia.org/wiki/Somebody_else%27s_problem">SEP</a>.</p>
+They may change at any time, without notice.</p>
 </div>
 <div class="sect2">
 <h3 id="_accessing_mappings"><a class="anchor" href="#_accessing_mappings"></a>C.1. Accessing mappings</h3>
@@ -1279,8 +1333,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.9.0.dev1<br>
-Last updated 2024-02-22 10:49:56 +0100
+Version 1.9.0.dev2<br>
+Last updated 2024-02-26 14:00:54 +0100
 </div>
 </div>
 </body>

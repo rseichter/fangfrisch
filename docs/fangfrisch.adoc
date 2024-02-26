@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.9.0.dev1, {docdate}
+v1.9.0.dev2, {docdate}
 :copyright: © 2020-2024 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -166,15 +166,19 @@ See https://docs.python.org/3.7/library/configparser.html[here] for details abou
 
 === Default providers
 
-Fangfrisch contains internal defaults for the following providers (in alphabetical order):
+Fangfrisch contains internal defaults for the following providers, listed in alphabetical order:
 
+* http://sigs.interserver.net/[InterServer]
 * https://www.malwarepatrol.net[Malwarepatrol]
 * https://sanesecurity.com[Sanesecurity]
 * https://www.securiteinfo.com/services/anti-spam-anti-virus/improve-detection-rate-of-zero-day-malwares-for-clamav.shtml[SecuriteInfo]
 * https://urlhaus.abuse.ch[URLhaus]
 
-The internal default values for providers can be used by specifiying `enabled = yes` in the desired sections.
-Some providers require additional configuration as shown in the following example.
+Providers can be enabled by specifiying `enabled = yes` in the desired configuration file sections.
+
+IMPORTANT: Please make sure to examine the respective settings for yourself before enabling providers.
+
+The defaults may not suit your personal preferences, and some providers require additional configuration, e.g. an access token.
 
 ----
 include::example.conf[]
@@ -271,7 +275,7 @@ An example crontab looks like this:
 HOME=/var/lib/fangfrisch
 LOG_LEVEL=INFO
 # minute hour day-of-month month day-of-week user command
-*/10 * * * * clamav venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh
+*/10 * * * * clamav sleep $((RANDOM \% 42)); venv/bin/fangfrisch --conf /etc/fangfrisch.conf refresh
 ----
 
 == Support
@@ -330,8 +334,10 @@ See Heather McNamee's blog https://about.gitlab.com/blog/2016/03/03/start-with-a
 == Default configuration
 
 Fangfrisch contains the following internal configuration settings as defaults.
-All sections are disabled, and entries with the `!url_` prefix are included for reference only.
-These represent data sources which either have a high risk of false positives or are not free to use.
+As a safety measure, all sections are disabled by default.
+Entries with the `!url_` prefix are included for reference only.
+These represent data sources which are not recommended for general use.
+Possible reasons: Some sources have an elevated risk of false positives, are not free to use, or contain legacy data.
 Enabling a section will not enable these specially prefixed entries.
 
 ----
@@ -354,7 +360,6 @@ include::combined.conf[]
 
 While users can technically access the Fangfrisch backend database directly, its structure and content are considered *private*.
 They may change at any time, without notice.
-Related complaints will be filed under https://en.wikipedia.org/wiki/Somebody_else%27s_problem[SEP].
 
 === Accessing mappings
 
