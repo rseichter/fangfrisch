@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Release 1.9.0 (TBA)
+
+- Add internal default configuration for provider InterServer (https://www.interserver.net/).
+  As per usual, this new provider is disabled by default.
+
 Release 1.8.1 (2024-02-21)
 
 - Python unit tests requiring network connections are now disabled by default to facilitate sandboxed

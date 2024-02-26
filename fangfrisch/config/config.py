@@ -32,6 +32,7 @@ from fangfrisch.config import LOG_LEVEL
 from fangfrisch.config import LOG_METHOD
 from fangfrisch.config import LOG_TARGET
 from fangfrisch.config import MAX_SIZE
+from fangfrisch.config.interserver import interserver
 from fangfrisch.config.malwarepatrol import malwarepatrol
 from fangfrisch.config.sanesecurity import sanesecurity
 from fangfrisch.config.securiteinfo import securiteinfo
@@ -61,7 +62,13 @@ class Configuration:
             MAX_SIZE: '10MB',
         }
         self.parser = ConfigParser(defaults=defaults, interpolation=ExtendedInterpolation())
-        for dict_ in [malwarepatrol, sanesecurity, securiteinfo, urlhaus]:
+        for dict_ in [
+            interserver,
+            malwarepatrol,
+            sanesecurity,
+            securiteinfo,
+            urlhaus,
+        ]:
             self.parser.read_dict(dict_)
         if filename:
             parsed = self.parser.read([filename])
