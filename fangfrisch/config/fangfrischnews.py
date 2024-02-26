@@ -27,9 +27,10 @@ fangfrischnews = {
         INTERVAL: '12h',
         LOCAL_DIR: '/tmp',
         MAX_SIZE: '50KB',
-        ON_UPDATE_EXEC: f'/etc/fangfrisch-has-news.sh ${{{LOCAL_DIR}}}',
+        'script': '/etc/fangfrisch-has-news.sh',
+        ON_UPDATE_EXEC: f'sh -c "[ ! -r ${{script}} ] || ${{script}} ${{{LOCAL_DIR}}}"',
         PREFIX: r'http://mirror.sentries.org/fangfrisch/',
-        'url_alert': f'${{{PREFIX}}}fangfrisch_alert.txt',
+        'url_alerts': f'${{{PREFIX}}}fangfrisch_alerts.txt',
         'url_news': f'${{{PREFIX}}}fangfrisch_news.txt',
     }
 }
