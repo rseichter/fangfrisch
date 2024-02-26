@@ -16,18 +16,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-CLEANUP = 'cleanup'
-DB_URL = 'db_url'
-ENABLED = 'enabled'
-INTEGRITY_CHECK = 'integrity_check'
-INTERVAL = 'interval'
-LOCAL_DIR = 'local_directory'
-LOG_FORMAT = 'log_format'
-LOG_LEVEL = 'log_level'
-LOG_METHOD = 'log_method'
-LOG_METHOD_CONSOLE = 'console'
-LOG_METHOD_SYSLOG = 'syslog'
-LOG_TARGET = 'log_target'
-MAX_SIZE = 'max_size'
-ON_UPDATE_EXEC = 'on_update_exec'
-PREFIX = 'prefix'
+from fangfrisch.config import INTERVAL
+from fangfrisch.config import LOCAL_DIR
+from fangfrisch.config import MAX_SIZE
+from fangfrisch.config import ON_UPDATE_EXEC
+from fangfrisch.config import PREFIX
+
+fangfrischnews = {
+    'fangfrischnews': {
+        INTERVAL: '12h',
+        LOCAL_DIR: '/tmp',
+        MAX_SIZE: '50KB',
+        ON_UPDATE_EXEC: f'/etc/fangfrisch-has-news.sh ${{{LOCAL_DIR}}}',
+        PREFIX: r'http://mirror.sentries.org/fangfrisch/',
+        'url_alert': f'${{{PREFIX}}}fangfrisch_alert.txt',
+        'url_news': f'${{{PREFIX}}}fangfrisch_news.txt',
+    }
+}

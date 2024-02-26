@@ -32,6 +32,7 @@ from fangfrisch.config import LOG_LEVEL
 from fangfrisch.config import LOG_METHOD
 from fangfrisch.config import LOG_TARGET
 from fangfrisch.config import MAX_SIZE
+from fangfrisch.config.fangfrischnews import fangfrischnews
 from fangfrisch.config.interserver import interserver
 from fangfrisch.config.malwarepatrol import malwarepatrol
 from fangfrisch.config.sanesecurity import sanesecurity
@@ -63,6 +64,7 @@ class Configuration:
         }
         self.parser = ConfigParser(defaults=defaults, interpolation=ExtendedInterpolation())
         for dict_ in [
+            fangfrischnews,
             interserver,
             malwarepatrol,
             sanesecurity,
