@@ -99,6 +99,14 @@ class ConfigTests(FangfrischTest):
         self.c.init(self.CONF)
         self.assertEqual(LOG_METHOD_CONSOLE, self.c.log_method())
 
+    def test_on_update_exec(self):
+        self.c.init(self.CONF)
+        self.assertEqual('echo on_update_exec', self.c.on_update_exec())
+
+    def test_on_update_exec2(self):
+        self.c.init(self.CONF)
+        self.assertEqual('echo overridden', self.c.on_update_exec(section='unittest2'))
+
     def test_log_target(self):
         self.c.init(self.CONF)
         self.assertEqual(self.UNITTEST, self.c.log_target())
