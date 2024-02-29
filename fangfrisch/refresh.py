@@ -17,7 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import os
+from collections import namedtuple
 from typing import List
+from typing import Set
 from urllib.parse import urlparse
 
 from fangfrisch import ClamavItem
@@ -139,15 +141,29 @@ class ClamavRefresh:
 
     def refresh_all(self) -> int:
         count = self.cleanup_providers()
+        sections_with_updates: Set[str] = set()
         for ci in _clamav_items():
             if self.refresh(ci):
-                command = ci.on_update
-                if command:
-                    run_command(command, config.on_update_timeout(),
+                if ci.on_update:
+                    # Run individual command for the item, if defined.
+                    run_command(ci.on_update, config.on_update_timeout(section=ci.section),
                                 log_info, log_error, log_exception, path=ci.path)
-                count += 1
-        command = config.on_update_exec(section=ci.section)
-        if count > 0 and command:
-            run_command(command, config.on_update_timeout(section=ci.section),
-                        log_info, log_error, log_exception)
+                else:
+                    # If no individual command is defined, remember the section name instead.
+                    sections_with_updates.add(ci.section)
+            count += 1
+
+        # Compose a task list
+        Task = namedtuple('Task', ['command', 'timeout'])
+        tasks: List[Task] = list()
+        commands: Set[str] = set()
+        for section in sections_with_updates:
+            command = config.on_update_exec(section)
+            if command not in commands:
+                commands.add(command)
+                tasks.append(Task(command=command, timeout=config.on_update_timeout(section)))
+        # Process tasks
+        for task in tasks:
+            run_command(task.command, task.timeout, log_info, log_error, log_exception)
+
         return count
