@@ -107,6 +107,14 @@ class ConfigTests(FangfrischTest):
         self.c.init(self.CONF)
         self.assertEqual('echo overridden', self.c.on_update_exec(section='unittest2'))
 
+    def test_on_update_timeout(self):
+        self.c.init(self.CONF)
+        self.assertEqual(5, self.c.on_update_timeout())
+
+    def test_on_update_timeout2(self):
+        self.c.init(self.CONF)
+        self.assertEqual(6, self.c.on_update_timeout(section='unittest2'))
+
     def test_log_target(self):
         self.c.init(self.CONF)
         self.assertEqual(self.UNITTEST, self.c.log_target())

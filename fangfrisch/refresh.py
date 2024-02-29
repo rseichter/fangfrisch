@@ -146,7 +146,7 @@ class ClamavRefresh:
                     run_command(command, config.on_update_timeout(),
                                 log_info, log_error, log_exception, path=ci.path)
                 count += 1
-        command = config.on_update_exec()
+        command = config.on_update_exec(section=ci.section)
         if count > 0 and command:
             run_command(command, config.on_update_timeout(),
                         log_info, log_error, log_exception)

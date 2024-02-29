@@ -95,11 +95,11 @@ class Configuration:
         # No default
         return self.parser.get(configparser.DEFAULTSECT, DB_URL)
 
-    def on_update_exec(self, fallback='') -> str:
-        return self.parser.get(configparser.DEFAULTSECT, 'on_update_exec', fallback=fallback)
+    def on_update_exec(self, section: str = configparser.DEFAULTSECT, fallback='') -> str:
+        return self.parser.get(section, 'on_update_exec', fallback=fallback)
 
-    def on_update_timeout(self, fallback=30) -> int:
-        return self.parser.getint(configparser.DEFAULTSECT, 'on_update_timeout', fallback=fallback)
+    def on_update_timeout(self, section: str = configparser.DEFAULTSECT, fallback=30) -> int:
+        return self.parser.getint(section, 'on_update_timeout', fallback=fallback)
 
     def is_enabled(self, section: str, fallback=False) -> bool:
         # Default: see init() method
