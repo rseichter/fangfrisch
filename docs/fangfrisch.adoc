@@ -177,6 +177,7 @@ Fangfrisch contains internal defaults for the following providers, listed in alp
 * https://www.securiteinfo.com/services/anti-spam-anti-virus/improve-detection-rate-of-zero-day-malwares-for-clamav.shtml[SecuriteInfo]
 * https://urlhaus.abuse.ch[URLhaus]
 
+I have also included "Fangfrisch News" (see <<ffnews>>).
 Providers can be enabled by specifiying `enabled = yes` in the desired configuration file sections.
 
 IMPORTANT: Please make sure to examine the respective settings for yourself before enabling providers.
@@ -355,6 +356,30 @@ The following effective configuration is the result of combining internal defaul
 
 ----
 include::combined.conf[]
+----
+
+[[ffnews]]
+[appendix]
+== Fangfrisch News
+
+This pseudo provider does not offer antivirus signature files.
+It is only meant for me to pass news about Fangfrisch to you, the user, in lieu of a mailing list.
+Don't expect this to happen on a regular basis.
+I am only thinking about release notifications at this point in time.
+Still, I kindly ask you to please enable this service as you would enable any other provider, by adding the following to your configuration file:
+----
+[fangfrischnews]
+enabled = yes
+# Uncomment/adapt the following to trigger a script in case of news.
+# script = /path/to/script/fangfrisch-has-news.sh
+----
+This will only enable Fangfrisch to occasionally download small text files, nothing more.
+You will not need to read the content, nor will anything else happen, unless you modify the `script` option.
+Here is an example script which you could use to have downloaded news items mailed to you.
+It needs to be readable for the user account running Fangfrisch, and the sender/recipient addresses obviously have to be adapted.
+For your convenience, the latest version of the script can be downloaded https://github.com/rseichter/fangfrisch/blob/master/contrib/process-news.sh[here].
+----
+include::../contrib/process-news.sh[]
 ----
 
 [[dbstructure]]
