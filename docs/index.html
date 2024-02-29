@@ -442,8 +442,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.9.0.dev2,</span>
-<span id="revdate">2024-02-26</span>
+<span id="revnumber">version 1.9.0.dev3,</span>
+<span id="revdate">2024-02-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -491,7 +491,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>Fangfrisch (German for "freshly caught") is a sibling of the <a href="https://www.clamav.net">Clam Anti-Virus</a> freshclam utility.
 It allows downloading virus definition files that are not official ClamAV canon, e.g. from <a href="https://sanesecurity.com">Sanesecurity</a> and <a href="https://urlhaus.abuse.ch">URLhaus</a>.
-Fangfrisch was designed with security in mind, to be run by an unprivileged user only.</p>
+Fangfrisch was designed with security in mind, to be run by an unprivileged user only.
+For those curious about the development history, a <a href="https://github.com/rseichter/fangfrisch/blob/master/CHANGELOG.rst">changelog</a> is available online.</p>
 </div>
 </div>
 </div>
@@ -704,11 +705,13 @@ If providers don&#8217;t respond with content length information, Fangfrisch wil
 <li>
 <p><strong>on_update_exec</strong>: If any files were downloaded during a pass, a command can be executed in after the pass finishes.
 No default.
-A typical value is <code>clamdscan --reload</code>.</p>
+A typical value is <code>clamdscan --reload</code>.
+Starting with Fangfrisch 1.9.0, this option may be overridden in individual sections, permitting per-provider actions.</p>
 </li>
 <li>
 <p><strong>on_update_timeout</strong>: Timeout for the <code>on_update_exec</code> command, in seconds.
-Default: 30.</p>
+Default: 30.
+This option may also be overridden in individual sections.</p>
 </li>
 </ul>
 </div>
@@ -1074,6 +1077,16 @@ log_level = WARNING
 log_method = console
 max_size = 10MB
 
+[fangfrischnews]
+interval = 12h
+local_directory = /tmp
+max_size = 50KB
+script = /path/to/script/fangfrisch-has-news.sh
+on_update_exec = sh -c "[ ! -r ${script} ] || ${script} ${local_directory}"
+prefix = http://mirror.sentries.org/fangfrisch/
+url_alerts = ${prefix}fangfrisch_alerts.txt
+url_news = ${prefix}fangfrisch_news.txt
+
 [interserver]
 interval = 1h
 integrity_check = disabled
@@ -1191,6 +1204,16 @@ db_url = sqlite:////var/lib/fangfrisch/db.sqlite
 local_directory = /var/lib/clamav
 on_update_exec = clamdscan --reload
 on_update_timeout = 42
+
+[fangfrischnews]
+interval = 12h
+local_directory = /tmp
+max_size = 50KB
+script = /path/to/script/fangfrisch-has-news.sh
+on_update_exec = sh -c "[ ! -r ${script} ] || ${script} ${local_directory}"
+prefix = http://mirror.sentries.org/fangfrisch/
+url_alerts = ${prefix}fangfrisch_alerts.txt
+url_news = ${prefix}fangfrisch_news.txt
 
 [interserver]
 interval = 1h
@@ -1333,8 +1356,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.9.0.dev2<br>
-Last updated 2024-02-26 14:00:54 +0100
+Version 1.9.0.dev3<br>
+Last updated 2024-02-29 14:43:28 +0100
 </div>
 </div>
 </body>

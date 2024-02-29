@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.9.0.dev2, {docdate}
+v1.9.0.dev3, {docdate}
 :copyright: © 2020-2024 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -17,6 +17,7 @@ v1.9.0.dev2, {docdate}
 Fangfrisch (German for "freshly caught") is a sibling of the https://www.clamav.net[Clam Anti-Virus] freshclam utility.
 It allows downloading virus definition files that are not official ClamAV canon, e.g. from https://sanesecurity.com[Sanesecurity] and https://urlhaus.abuse.ch[URLhaus].
 Fangfrisch was designed with security in mind, to be run by an unprivileged user only.
+For those curious about the development history, a https://github.com/rseichter/fangfrisch/blob/master/CHANGELOG.rst[changelog] is available online.
 
 == License
 
@@ -158,8 +159,10 @@ If providers don't respond with content length information, Fangfrisch will log 
 * *on_update_exec*: If any files were downloaded during a pass, a command can be executed in after the pass finishes.
 No default.
 A typical value is `clamdscan --reload`.
+Starting with Fangfrisch 1.9.0, this option may be overridden in individual sections, permitting per-provider actions.
 * *on_update_timeout*: Timeout for the `on_update_exec` command, in seconds.
 Default: 30.
+This option may also be overridden in individual sections.
 
 See https://docs.python.org/3.7/library/configparser.html[here] for details about the configuration parser and extended interpolation.
 <<Semantics>> provides additional information on how configuration options are interpreted.

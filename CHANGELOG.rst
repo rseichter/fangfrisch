@@ -4,8 +4,8 @@ Changelog
 
 Release 1.9.0 (TBA)
 
-- Configuration sections may now override 'on_update_exec'. Eearlier Fangfrisch versions only
-  examined the DEFAULTS configuration section for 'on_update_exec', which limited flexibility.
+- For improved flexibility, configuration sections may now override global 'on_update_exec' and
+  'on_update_timeout'. Eearlier Fangfrisch versions only examined the DEFAULTS section.
 
 - Add internal default configuration for provider InterServer (https://www.interserver.net/).
   As per usual, this new provider is disabled by default.
