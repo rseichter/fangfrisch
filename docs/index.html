@@ -477,9 +477,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#internalconf">Appendix A: Default configuration</a></li>
 <li><a href="#sampleeff">Appendix B: Effective configuration</a></li>
-<li><a href="#dbstructure">Appendix C: Database structure</a>
+<li><a href="#ffnews">Appendix C: Fangfrisch News</a></li>
+<li><a href="#dbstructure">Appendix D: Database structure</a>
 <ul class="sectlevel2">
-<li><a href="#_accessing_mappings">C.1. Accessing mappings</a></li>
+<li><a href="#_accessing_mappings">D.1. Accessing mappings</a></li>
 </ul>
 </li>
 </ul>
@@ -744,7 +745,8 @@ This option may also be overridden in individual sections.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Providers can be enabled by specifiying <code>enabled = yes</code> in the desired configuration file sections.</p>
+<p>I have also included "Fangfrisch News" (see <a href="#ffnews">Appendix C</a>).
+Providers can be enabled by specifiying <code>enabled = yes</code> in the desired configuration file sections.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -927,7 +929,7 @@ The effective configuration for the example shown in <a href="#_configuration">S
 </li>
 <li>
 <p><strong>dumpmappings</strong>: Dump URL-to-filepath mappings, as recorded in the database refresh log, to stdout.
-See <a href="#dbstructure">Appendix C</a> for details.</p>
+See <a href="#dbstructure">Appendix D</a> for details.</p>
 </li>
 <li>
 <p><strong>initdb</strong>: Create the database structure.
@@ -1320,14 +1322,106 @@ max_size = 2MB</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="dbstructure"><a class="anchor" href="#dbstructure"></a>Appendix C: Database structure</h2>
+<h2 id="ffnews"><a class="anchor" href="#ffnews"></a>Appendix C: Fangfrisch News</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This pseudo provider does not offer antivirus signature files.
+It is only meant for me to pass news about Fangfrisch to you, the user, in lieu of a mailing list.
+Don&#8217;t expect this to happen on a regular basis.
+I am only thinking about release notifications at this point in time.
+Still, I kindly ask you to please enable this service as you would enable any other provider, by adding the following to your configuration file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[fangfrischnews]
+enabled = yes
+# Uncomment/adapt the following to trigger a script in case of news.
+# script = /path/to/script/fangfrisch-has-news.sh</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will only enable Fangfrisch to occasionally download small text files, nothing more.
+You will not need to read the content, nor will anything else happen, unless you modify the <code>script</code> option.
+Here is an example script which you could use to have downloaded news items mailed to you.
+It needs to be readable for the user account running Fangfrisch, and the sender/recipient addresses obviously have to be adapted.
+For your convenience, the latest version of the script can be downloaded <a href="https://github.com/rseichter/fangfrisch/blob/master/contrib/process-news.sh">here</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>#!/usr/bin/env bash
+# vim: ts=4 sw=4 noet ft=sh
+#
+# Example script to process Fangfrisch News.
+#
+# The caller is required to pass 1..n directories
+# to be scanned for news items.
+
+set -euo pipefail
+
+declare -r MAILFROM="noreply@example.net"
+declare -r MAILTO="alice@example.org"
+declare -r SUBJECT="I have news for you"
+
+die() {
+	echo &gt;&amp;2 "$@"
+	exit 1
+}
+
+usage() {
+	die "Usage: $(basename "$0") {directory} [[directory] ...]"
+}
+
+print_header() {
+	# Mail header must end with an empty line
+	cat &lt;&lt;EOT
+From: Fangfrisch News &lt;$MAILFROM&gt;
+To: $MAILTO
+Subject: $SUBJECT
+
+EOT
+}
+
+report_news() {
+	[ $# -ge 1 ] || usage
+	local body counter dir fn
+	body=$(mktemp)
+	# shellcheck disable=SC2064
+	trap "rm $body" EXIT
+	counter=0
+	for dir in "$@"; do
+		[ -d "$dir" ] || die "$dir is not a directory"
+		while IFS= read -r -d '' fn; do
+			(( counter+=1 ))
+			echo -e "\n### $fn:\n" &gt;&gt;"$body"
+			cat "$fn" &gt;&gt;"$body"
+		done &lt; &lt;(find "$dir" -type f -name "fangfrisch*.txt" -print0)
+	done
+	if [ $counter -gt 0 ]; then
+		print_header
+		cat "$body"
+	fi
+}
+
+# When running in a terminal session, simply print
+# the news. Otherwise, report the news via email.
+if tty -s; then
+	report_news "$@"
+else
+	report_news "$@" 2&gt;&amp;1 | /usr/sbin/sendmail -t
+fi</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="dbstructure"><a class="anchor" href="#dbstructure"></a>Appendix D: Database structure</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>While users can technically access the Fangfrisch backend database directly, its structure and content are considered <strong>private</strong>.
 They may change at any time, without notice.</p>
 </div>
 <div class="sect2">
-<h3 id="_accessing_mappings"><a class="anchor" href="#_accessing_mappings"></a>C.1. Accessing mappings</h3>
+<h3 id="_accessing_mappings"><a class="anchor" href="#_accessing_mappings"></a>D.1. Accessing mappings</h3>
 <div class="paragraph">
 <p>In contrast to direct database access, the <strong>dumpmappings</strong> action allows accessing selected parts of database entries in a stable manner.
 Specifically, it returns 3-tuples (provider name, URL, local file path).
@@ -1357,7 +1451,7 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 <div id="footer">
 <div id="footer-text">
 Version 1.9.0.dev3<br>
-Last updated 2024-02-29 14:43:28 +0100
+Last updated 2024-02-29 17:14:36 +0100
 </div>
 </div>
 </body>
