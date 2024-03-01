@@ -377,7 +377,7 @@ This will only enable Fangfrisch to occasionally download small text files, noth
 You will not need to read the content, nor will anything else happen, unless you modify the `script` option.
 Here is an example script which you could use to have downloaded news items mailed to you.
 It needs to be readable for the user account running Fangfrisch, and the sender/recipient addresses obviously have to be adapted.
-For your convenience, the latest version of the script can be downloaded https://github.com/rseichter/fangfrisch/blob/master/contrib/process-news.sh[here].
+For your convenience, the latest version of the script can be downloaded https://raw.githubusercontent.com/rseichter/fangfrisch/master/contrib/process-news.sh[here].
 ----
 include::../contrib/process-news.sh[]
 ----
