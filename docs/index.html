@@ -442,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.9.0.dev5,</span>
+<span id="revnumber">version 1.9.0.dev6,</span>
 <span id="revdate">2024-03-01</span>
 </div>
 <div id="toc" class="toc2">
@@ -1082,10 +1082,10 @@ max_size = 10MB
 [fangfrischnews]
 interval = 12h
 local_directory = /tmp
-max_size = 50KB
-script = /path/to/script/fangfrisch-has-news.sh
-on_update_exec = sh -c "[ ! -r ${script} ] || ${script} ${local_directory}"
-prefix = http://mirror.sentries.org/fangfrisch/
+max_size = 100KB
+script = /path/to/fangfrisch-has-news.sh
+on_update_exec = [ ! -x ${script} ] || ${script} ${local_directory}
+prefix = https://www.seichter.de/fangfrisch/
 url_alerts = ${prefix}fangfrisch_alerts.txt
 url_news = ${prefix}fangfrisch_news.txt
 
@@ -1210,10 +1210,10 @@ on_update_timeout = 42
 [fangfrischnews]
 interval = 12h
 local_directory = /tmp
-max_size = 50KB
-script = /path/to/script/fangfrisch-has-news.sh
-on_update_exec = sh -c "[ ! -r ${script} ] || ${script} ${local_directory}"
-prefix = http://mirror.sentries.org/fangfrisch/
+max_size = 100KB
+script = /path/to/fangfrisch-has-news.sh
+on_update_exec = [ ! -x ${script} ] || ${script} ${local_directory}
+prefix = https://www.seichter.de/fangfrisch/
 url_alerts = ${prefix}fangfrisch_alerts.txt
 url_news = ${prefix}fangfrisch_news.txt
 
@@ -1344,7 +1344,7 @@ enabled = yes
 You will not need to read the content, nor will anything else happen, unless you modify the <code>script</code> option.
 Here is an example script which you could use to have downloaded news items mailed to you.
 It needs to be readable for the user account running Fangfrisch, and the sender/recipient addresses obviously have to be adapted.
-For your convenience, the latest version of the script can be downloaded <a href="https://raw.githubusercontent.com/rseichter/fangfrisch/master/contrib/process-news.sh">here</a>.</p>
+For your convenience, the latest version of the script can be downloaded <a href="https://raw.githubusercontent.com/rseichter/fangfrisch/master/contrib/fangfrisch-has-news.sh">here</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1394,7 +1394,7 @@ report_news() {
 			(( counter+=1 ))
 			echo -e "\n### $fn:\n" &gt;&gt;"$body"
 			cat "$fn" &gt;&gt;"$body"
-		done &lt; &lt;(find "$dir" -type f -name "fangfrisch*.txt" -print0)
+		done &lt; &lt;(find "$dir" -maxdepth 1 -type f -name "fangfrisch*.txt" -print0)
 	done
 	if [ $counter -gt 0 ]; then
 		print_header
@@ -1450,8 +1450,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.9.0.dev5<br>
-Last updated 2024-03-01 15:40:44 +0100
+Version 1.9.0.dev6<br>
+Last updated 2024-03-01 20:55:03 +0100
 </div>
 </div>
 </body>
