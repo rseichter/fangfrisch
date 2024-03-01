@@ -28,7 +28,7 @@ fangfrischnews = {
         LOCAL_DIR: '/tmp',
         MAX_SIZE: '100KB',
         'script': '/path/to/fangfrisch-has-news.sh',
-        ON_UPDATE_EXEC: f'[ ! -x ${{script}} ] || ${{script}} ${{{LOCAL_DIR}}}"',
+        ON_UPDATE_EXEC: f'[ ! -x ${{script}} ] || ${{script}} ${{{LOCAL_DIR}}}',
         PREFIX: r'https://www.seichter.de/fangfrisch/',
         'url_alerts': f'${{{PREFIX}}}fangfrisch_alerts.txt',
         'url_news': f'${{{PREFIX}}}fangfrisch_news.txt',
