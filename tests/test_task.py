@@ -26,7 +26,6 @@ from tests import FangfrischTest
 
 class TaskTests(FangfrischTest):
     FIRST_COMMAND = '/invalid/command/path'
-    FIRST_TIMEOUT = 1
 
     def setUp(self) -> None:
         super().setUpClass()
