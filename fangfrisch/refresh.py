@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
 import os
-from collections import namedtuple
 from typing import List
 from typing import Set
 from urllib.parse import urlparse
@@ -32,6 +31,8 @@ from fangfrisch.log import log_error
 from fangfrisch.log import log_exception
 from fangfrisch.log import log_info
 from fangfrisch.log import log_warning
+from fangfrisch.task import Task
+from fangfrisch.task import add_task
 from fangfrisch.util import check_integrity
 from fangfrisch.util import remove_if_exists
 from fangfrisch.util import run_command
@@ -141,7 +142,7 @@ class ClamavRefresh:
         return True
 
     def refresh_all(self) -> int:
-        processed_item_count = self.cleanup_providers()
+        steps = self.cleanup_providers()
         trigger_sections: Set[str] = set()
         for ci in _clamav_items():
             if self.refresh(ci):
@@ -154,30 +155,27 @@ class ClamavRefresh:
                         callback_stdout=log_info,
                         callback_stderr=log_error,
                         callback_exception=log_exception,
-                        path=ci.path)
+                        path=ci.path
+                    )
                 else:
                     # If no individual command is defined, remember the section name instead.
-                    log_debug(f'Update triggered in ["{ci.section}"]')
+                    log_debug(f'[{ci.section}] caused updates')
                     trigger_sections.add(ci.section)
-            processed_item_count += 1
+            steps += 1
 
         # Compose a task list
-        Task = namedtuple('Task', ['command', 'timeout', 'section'])
         tasks: List[Task] = list()
-        seen_commands: Set[str] = set()
         for section in trigger_sections:
-            command = config.on_update_exec(section)
-            if command not in seen_commands:
-                seen_commands.add(command)
-                task = Task(command=command, timeout=config.on_update_timeout(section), section=section)
-                tasks.append(task)
-                log_debug(f'New task: {task}')
-            else:
-                log_debug(f'Already tracking command "{command}"')
-        # Process tasks
-        processed_task_count = 0
-        for task in tasks:
-            run_command(task.command, task.timeout, log_info, log_error, log_exception)
-            processed_task_count += 1
+            add_task(
+                tasks=tasks,
+                command=config.on_update_exec(section),
+                timeout=config.on_update_timeout(section)
+            )
 
-        return processed_item_count, processed_task_count
+        # Process tasks
+        completed = 0
+        for task in tasks:
+            task.complete()
+            completed += 1
+
+        return steps, completed
