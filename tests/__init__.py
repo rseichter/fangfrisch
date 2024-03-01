@@ -47,9 +47,20 @@ NETWORK_TESTS = env_var('NETWORK_TESTS') == '1'
 
 
 class _ClamavTestItem(ClamavItem):
-    def __init__(self, section, option, url, check=None, path=None,
-                 interval=0, max_size=MAX_SIZE, on_update=None, connection_timeout=10) -> None:
-        super().__init__(section, option, url, check, path, interval, max_size, on_update, connection_timeout)
+    def __init__(self, section, option, url, check=None, path=None, interval=0, max_size=MAX_SIZE,
+                 on_update=None, connection_timeout=10, stem='test_item') -> None:
+        super().__init__(
+            check=check,
+            connection_timeout=connection_timeout,
+            interval=interval,
+            max_size=max_size,
+            on_update=on_update,
+            option=option,
+            path=path,
+            section=section,
+            stem=stem,
+            url=url,
+        )
 
 
 class FangfrischTest(unittest.TestCase):

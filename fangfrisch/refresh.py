@@ -70,15 +70,16 @@ def _clamav_items() -> List[ClamavItem]:
                 if local_dir:
                     filename = os.path.join(local_dir, filename)
                 item_list.append(ClamavItem(
-                    section=section,
-                    option=option,
-                    url=url,
                     check=config.integrity_check(section),
-                    path=filename,
+                    connection_timeout=config.connection_timeout(),
                     interval=config.interval(section),
                     max_size=max_size,
                     on_update=config.get(section, f'on_update_{stem}'),
-                    connection_timeout=config.connection_timeout()
+                    option=option,
+                    path=filename,
+                    section=section,
+                    stem=stem,
+                    url=url,
                 ))
     return item_list
 
@@ -140,30 +141,43 @@ class ClamavRefresh:
         return True
 
     def refresh_all(self) -> int:
-        count = self.cleanup_providers()
-        sections_with_updates: Set[str] = set()
+        processed_item_count = self.cleanup_providers()
+        trigger_sections: Set[str] = set()
         for ci in _clamav_items():
             if self.refresh(ci):
                 if ci.on_update:
                     # Run individual command for the item, if defined.
-                    run_command(ci.on_update, config.on_update_timeout(section=ci.section),
-                                log_info, log_error, log_exception, path=ci.path)
+                    log_debug(f'[{ci.section}] on_update_{ci.stem}: "{ci.on_update}"')
+                    run_command(
+                        command=ci.on_update,
+                        timeout=config.on_update_timeout(section=ci.section),
+                        callback_stdout=log_info,
+                        callback_stderr=log_error,
+                        callback_exception=log_exception,
+                        path=ci.path)
                 else:
                     # If no individual command is defined, remember the section name instead.
-                    sections_with_updates.add(ci.section)
-            count += 1
+                    log_debug(f'Update triggered in ["{ci.section}"]')
+                    trigger_sections.add(ci.section)
+            processed_item_count += 1
 
         # Compose a task list
-        Task = namedtuple('Task', ['command', 'timeout'])
+        Task = namedtuple('Task', ['command', 'timeout', 'section'])
         tasks: List[Task] = list()
-        commands: Set[str] = set()
-        for section in sections_with_updates:
+        seen_commands: Set[str] = set()
+        for section in trigger_sections:
             command = config.on_update_exec(section)
-            if command not in commands:
-                commands.add(command)
-                tasks.append(Task(command=command, timeout=config.on_update_timeout(section)))
+            if command not in seen_commands:
+                seen_commands.add(command)
+                task = Task(command=command, timeout=config.on_update_timeout(section), section=section)
+                tasks.append(task)
+                log_debug(f'New task: {task}')
+            else:
+                log_debug(f'Already tracking command "{command}"')
         # Process tasks
+        processed_task_count = 0
         for task in tasks:
             run_command(task.command, task.timeout, log_info, log_error, log_exception)
+            processed_task_count += 1
 
-        return count
+        return processed_item_count, processed_task_count

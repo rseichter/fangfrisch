@@ -20,7 +20,8 @@ __version__ = '1.9.0.dev4'
 
 
 class ClamavItem:
-    def __init__(self, section, option, url, check, path, interval, max_size, on_update, connection_timeout) -> None:
+    def __init__(self, section, option, url, check, path, interval, max_size, on_update, connection_timeout,
+                 stem) -> None:
         self.check = check
         self.connection_timeout = connection_timeout
         self.interval = interval
@@ -29,4 +30,5 @@ class ClamavItem:
         self.option = option
         self.path = path
         self.section = section
+        self.stem = stem
         self.url = url

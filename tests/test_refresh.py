@@ -84,7 +84,9 @@ class RefreshTests(FangfrischTest):
     @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
     def test_refresh_force(self):
         cr = ClamavRefresh(Namespace(force=True))
-        self.assertEqual(3, cr.refresh_all())
+        (n, t) = cr.refresh_all()
+        self.assertEqual(3, n)
+        self.assertEqual(2, t)
 
     @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
     def test_refresh_age(self):
@@ -108,15 +110,17 @@ class RefreshTests(FangfrischTest):
         ci = _ClamavTestItem(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x')
         self.s.add(RefreshLog(ci, DIGEST_DUMMY))
         self.s.commit()
-        n = self.ref.refresh_all()
+        (n, t) = self.ref.refresh_all()
         self.assertEqual(3, n)
+        self.assertEqual(2, t)
 
     @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
     def test_url_blank(self):
         ci = _ClamavTestItem('unittest4', 'url_blank', '', 'md5', f'{self.TMPDIR}/blank')
         self.s.add(RefreshLog(ci, DIGEST_DUMMY))
         self.s.commit()
-        n = self.ref.refresh_all()
+        (n, t) = self.ref.refresh_all()
+        self.assertEqual(3, n)
         self.assertEqual(3, n)
 
     def test_url_disabled(self):
