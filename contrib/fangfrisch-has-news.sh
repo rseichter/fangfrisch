@@ -44,7 +44,7 @@ report_news() {
 			(( counter+=1 ))
 			echo -e "\n### $fn:\n" >>"$body"
 			cat "$fn" >>"$body"
-		done < <(find "$dir" -type f -name "fangfrisch*.txt" -print0)
+		done < <(find "$dir" -maxdepth 1 -type f -name "fangfrisch*.txt" -print0)
 	done
 	if [ $counter -gt 0 ]; then
 		print_header
