@@ -52,6 +52,6 @@ def add_task(tasks: List[Task], command: str, timeout: int) -> Optional[Task]:
             log_debug(f"Ignoring duplicate: {command}")
             return None
     task = Task(command=command, timeout=timeout)
-    log_debug(task)
     tasks.append(task)
+    log_debug(f'{task} added')
     return task
