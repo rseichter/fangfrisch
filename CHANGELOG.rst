@@ -4,6 +4,9 @@ Changelog
 
 Release 1.9.0 (TBA)
 
+- The logic for on_update* has been largely rewritten. As a user-visible side effect, detailed
+  debugging information about 'on_update_*' tasks is now available.
+
 - For improved flexibility, configuration sections may now override global 'on_update_exec' and
   'on_update_timeout'. Eearlier Fangfrisch versions only examined the DEFAULTS section.
 
