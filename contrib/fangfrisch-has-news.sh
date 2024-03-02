@@ -2,15 +2,27 @@
 # vim: ts=4 sw=4 noet ft=sh
 #
 # Example script to process Fangfrisch News.
-#
-# The caller is required to pass 1..n directories
-# to be scanned for news items.
+
+declare -r MAILFROM="noreply"
+declare -r MAILTO="alice@example.com"
+declare -r SUBJECT="Fangfrisch News are available"
+
+# Option 1: Mutt
+#declare -r MAILAPP="mutt"
+#declare -r MAILAPP_OPT=( "-s" "$SUBJECT" "$MAILTO" )
+
+# Option 2: sendmail
+#declare -r MAILAPP="sendmail"
+#declare -r MAILAPP_OPT=( "-t" )
+#export PATH="$PATH:/usr/sbin"
+
+# Option 3: swaks
+declare -r MAILAPP="swaks"
+declare -r MAILAPP_OPT=( "-d" "-" "-f" "$MAILFROM" "-t" "$MAILTO" )
+
+### No changes required below this line ###
 
 set -euo pipefail
-
-declare -r MAILFROM="noreply@example.net"
-declare -r MAILTO="alice@example.org"
-declare -r SUBJECT="I have news for you"
 
 die() {
 	echo >&2 "$@"
@@ -18,44 +30,49 @@ die() {
 }
 
 usage() {
-	die "Usage: $(basename "$0") {directory} [[directory] ...]"
+	die "Usage: $(basename "$0") {directory}"
 }
 
-print_header() {
-	# Mail header must end with an empty line
+gen_header() {
 	cat <<EOT
 From: Fangfrisch News <$MAILFROM>
 To: $MAILTO
 Subject: $SUBJECT
 
 EOT
+# Mail header must end with an empty line!
 }
 
+declare -a NEWSITEMS=()
+
 report_news() {
-	[ $# -ge 1 ] || usage
-	local body counter dir fn
-	body=$(mktemp)
-	# shellcheck disable=SC2064
-	trap "rm $body" EXIT
-	counter=0
-	for dir in "$@"; do
-		[ -d "$dir" ] || die "$dir is not a directory"
-		while IFS= read -r -d '' fn; do
-			(( counter+=1 ))
-			echo -e "\n### $fn:\n" >>"$body"
-			cat "$fn" >>"$body"
-		done < <(find "$dir" -maxdepth 1 -type f -name "fangfrisch*.txt" -print0)
-	done
-	if [ $counter -gt 0 ]; then
-		print_header
-		cat "$body"
+	local dir=$1 ni
+	[ -d "$dir" ] || die "$dir is not a directory"
+	while IFS= read -r -d '' ni; do
+		if [ ${#NEWSITEMS[*]} -eq 0 ] && [ "$MAILAPP" != mutt ]; then
+			# Mutt does not need the header, others do.
+			gen_header
+		fi
+		NEWSITEMS+=( "$ni" )
+		echo -e "\n### $(basename "$ni"):\n"
+		cat "$ni"
+	done < <(find "$dir" -maxdepth 1 -type f -name "fangfrisch*.txt" -print0)
+}
+
+main() {
+	local t
+	if tty -s; then
+		# Running in a terminal session
+		t=$(mktemp)
+		# shellcheck disable=SC2064
+		trap "rm $t" EXIT
+		report_news "$@" | tee "$t" || exit 1
+		[ ! -s "$t" ] || "$MAILAPP" "${MAILAPP_OPT[@]}" >/dev/null <"$t"
+	else
+		report_news "$@" 2>&1 | "$MAILAPP" "${MAILAPP_OPT[@]}" >/dev/null
+		[ ${#NEWSITEMS[*]} -eq 0 ] || rm -v "${NEWSITEMS[@]}"
 	fi
 }
 
-# When running in a terminal session, simply print
-# the news. Otherwise, report the news via email.
-if tty -s; then
-	report_news "$@"
-else
-	report_news "$@" 2>&1 | /usr/sbin/sendmail -t
-fi
+[ $# -ge 1 ] || usage
+main "$@"
