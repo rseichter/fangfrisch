@@ -7,6 +7,10 @@ declare -r MAILFROM="noreply"
 declare -r MAILTO="alice@example.com"
 declare -r SUBJECT="Fangfrisch News are available"
 
+# Choose one of the options below and uncomment the 'declare'
+# statements. Until this is done, the script will fail with
+# an error message.
+
 # Option 1: Mutt
 #declare -r MAILAPP="mutt"
 #declare -r MAILAPP_OPT=( "-s" "$SUBJECT" "$MAILTO" )
@@ -17,8 +21,8 @@ declare -r SUBJECT="Fangfrisch News are available"
 #export PATH="$PATH:/usr/sbin"
 
 # Option 3: swaks
-declare -r MAILAPP="swaks"
-declare -r MAILAPP_OPT=( "-d" "-" "-f" "$MAILFROM" "-t" "$MAILTO" )
+#declare -r MAILAPP="swaks"
+#declare -r MAILAPP_OPT=( "-d" "-" "-f" "$MAILFROM" "-t" "$MAILTO" )
 
 ### No changes required below this line ###
 
@@ -61,6 +65,7 @@ report_news() {
 
 main() {
 	local t
+	[ -n "$MAILAPP" ] || die "MAILAPP is undefined, exiting."
 	if tty -s; then
 		# Running in a terminal session
 		t=$(mktemp)
