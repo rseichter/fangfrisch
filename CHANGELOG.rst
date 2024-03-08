@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Release 1.9.0 (TBA)
+Release 1.9.0 (2024-03-08)
 
 - The logic for on_update* has been largely rewritten. As a user-visible side effect, detailed
   debugging information about 'on_update_*' tasks is now available.
@@ -10,8 +10,9 @@ Release 1.9.0 (TBA)
 - For improved flexibility, configuration sections may now override global 'on_update_exec' and
   'on_update_timeout'. Eearlier Fangfrisch versions only examined the DEFAULTS section.
 
-- Add internal default configuration for provider InterServer (https://www.interserver.net/).
-  As per usual, this new provider is disabled by default.
+- Add internal default configurations for providers InterServer (https://www.interserver.net/)
+  and Fangfrisch News (https://rseichter.github.io/fangfrisch/#ffnews). As per usual, these
+  new providers are disabled by default.
 
 Release 1.8.1 (2024-02-21)
 

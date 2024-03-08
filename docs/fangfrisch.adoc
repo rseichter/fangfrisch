@@ -1,6 +1,6 @@
 # Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.9.0.dev6, {docdate}
+v1.9.0, {docdate}
 :copyright: © 2020-2024 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
@@ -366,7 +366,7 @@ This pseudo provider does not offer antivirus signature files.
 It is only meant for me to pass news about Fangfrisch to you, the user, in lieu of a mailing list.
 Don't expect this to happen on a regular basis.
 I am only thinking about release notifications at this point in time.
-Still, I kindly ask you to please enable this service as you would enable any other provider, by adding the following to your configuration file:
+Still, I kindly ask you to please enable this service by adding the following to your configuration file:
 ----
 [fangfrischnews]
 enabled = yes
@@ -377,7 +377,7 @@ This will only enable Fangfrisch to occasionally download small text files, noth
 You will not need to read the content, nor will anything else happen, unless you modify the `script` option.
 Here is an example script which you could use to have downloaded news items mailed to you.
 It needs to be readable for the user account running Fangfrisch, and the sender/recipient addresses obviously have to be adapted.
-For your convenience, the latest version of the script can be downloaded https://raw.githubusercontent.com/rseichter/fangfrisch/master/contrib/fangfrisch-has-news.sh[here].
+For your convenience, the latest version of the script can be https://raw.githubusercontent.com/rseichter/fangfrisch/master/contrib/fangfrisch-has-news.sh[downloaded here].
 ----
 include::../contrib/fangfrisch-has-news.sh[]
 ----

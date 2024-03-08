@@ -442,8 +442,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.9.0.dev6,</span>
-<span id="revdate">2024-03-01</span>
+<span id="revnumber">version 1.9.0,</span>
+<span id="revdate">2024-03-08</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1329,7 +1329,7 @@ max_size = 2MB</pre>
 It is only meant for me to pass news about Fangfrisch to you, the user, in lieu of a mailing list.
 Don&#8217;t expect this to happen on a regular basis.
 I am only thinking about release notifications at this point in time.
-Still, I kindly ask you to please enable this service as you would enable any other provider, by adding the following to your configuration file:</p>
+Still, I kindly ask you to please enable this service by adding the following to your configuration file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1344,7 +1344,7 @@ enabled = yes
 You will not need to read the content, nor will anything else happen, unless you modify the <code>script</code> option.
 Here is an example script which you could use to have downloaded news items mailed to you.
 It needs to be readable for the user account running Fangfrisch, and the sender/recipient addresses obviously have to be adapted.
-For your convenience, the latest version of the script can be downloaded <a href="https://raw.githubusercontent.com/rseichter/fangfrisch/master/contrib/fangfrisch-has-news.sh">here</a>.</p>
+For your convenience, the latest version of the script can be <a href="https://raw.githubusercontent.com/rseichter/fangfrisch/master/contrib/fangfrisch-has-news.sh">downloaded here</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1352,15 +1352,27 @@ For your convenience, the latest version of the script can be downloaded <a href
 # vim: ts=4 sw=4 noet ft=sh
 #
 # Example script to process Fangfrisch News.
-#
-# The caller is required to pass 1..n directories
-# to be scanned for news items.
+
+declare -r MAILFROM="noreply"
+declare -r MAILTO="alice@example.com"
+declare -r SUBJECT="Fangfrisch News are available"
+
+# Option 1: Mutt
+#declare -r MAILAPP="mutt"
+#declare -r MAILAPP_OPT=( "-s" "$SUBJECT" "$MAILTO" )
+
+# Option 2: sendmail
+#declare -r MAILAPP="sendmail"
+#declare -r MAILAPP_OPT=( "-t" )
+#export PATH="$PATH:/usr/sbin"
+
+# Option 3: swaks
+declare -r MAILAPP="swaks"
+declare -r MAILAPP_OPT=( "-d" "-" "-f" "$MAILFROM" "-t" "$MAILTO" )
+
+### No changes required below this line ###
 
 set -euo pipefail
-
-declare -r MAILFROM="noreply@example.net"
-declare -r MAILTO="alice@example.org"
-declare -r SUBJECT="I have news for you"
 
 die() {
 	echo &gt;&amp;2 "$@"
@@ -1368,47 +1380,52 @@ die() {
 }
 
 usage() {
-	die "Usage: $(basename "$0") {directory} [[directory] ...]"
+	die "Usage: $(basename "$0") {directory}"
 }
 
-print_header() {
-	# Mail header must end with an empty line
+gen_header() {
 	cat &lt;&lt;EOT
 From: Fangfrisch News &lt;$MAILFROM&gt;
 To: $MAILTO
 Subject: $SUBJECT
 
 EOT
+# Mail header must end with an empty line!
 }
 
+declare -a NEWSITEMS=()
+
 report_news() {
-	[ $# -ge 1 ] || usage
-	local body counter dir fn
-	body=$(mktemp)
-	# shellcheck disable=SC2064
-	trap "rm $body" EXIT
-	counter=0
-	for dir in "$@"; do
-		[ -d "$dir" ] || die "$dir is not a directory"
-		while IFS= read -r -d '' fn; do
-			(( counter+=1 ))
-			echo -e "\n### $fn:\n" &gt;&gt;"$body"
-			cat "$fn" &gt;&gt;"$body"
-		done &lt; &lt;(find "$dir" -maxdepth 1 -type f -name "fangfrisch*.txt" -print0)
-	done
-	if [ $counter -gt 0 ]; then
-		print_header
-		cat "$body"
+	local dir=$1 ni
+	[ -d "$dir" ] || die "$dir is not a directory"
+	while IFS= read -r -d '' ni; do
+		if [ ${#NEWSITEMS[*]} -eq 0 ] &amp;&amp; [ "$MAILAPP" != mutt ]; then
+			# Mutt does not need the header, others do.
+			gen_header
+		fi
+		NEWSITEMS+=( "$ni" )
+		echo -e "\n### $(basename "$ni"):\n"
+		cat "$ni"
+	done &lt; &lt;(find "$dir" -maxdepth 1 -type f -name "fangfrisch*.txt" -print0)
+}
+
+main() {
+	local t
+	if tty -s; then
+		# Running in a terminal session
+		t=$(mktemp)
+		# shellcheck disable=SC2064
+		trap "rm $t" EXIT
+		report_news "$@" | tee "$t" || exit 1
+		[ ! -s "$t" ] || "$MAILAPP" "${MAILAPP_OPT[@]}" &gt;/dev/null &lt;"$t"
+	else
+		report_news "$@" 2&gt;&amp;1 | "$MAILAPP" "${MAILAPP_OPT[@]}" &gt;/dev/null
+		[ ${#NEWSITEMS[*]} -eq 0 ] || rm -v "${NEWSITEMS[@]}"
 	fi
 }
 
-# When running in a terminal session, simply print
-# the news. Otherwise, report the news via email.
-if tty -s; then
-	report_news "$@"
-else
-	report_news "$@" 2&gt;&amp;1 | /usr/sbin/sendmail -t
-fi</pre>
+[ $# -ge 1 ] || usage
+main "$@"</pre>
 </div>
 </div>
 </div>
@@ -1450,8 +1467,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.9.0.dev6<br>
-Last updated 2024-03-01 20:55:03 +0100
+Version 1.9.0<br>
+Last updated 2024-03-08 12:14:07 +0100
 </div>
 </div>
 </body>
