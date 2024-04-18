@@ -442,8 +442,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber">version 1.9.0,</span>
-<span id="revdate">2024-03-08</span>
+<span id="revnumber">version 1.9.1.dev2,</span>
+<span id="revdate">2024-04-18</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1073,7 +1073,7 @@ Enabling a section will not enable these specially prefixed entries.</p>
 <div class="content">
 <pre>[DEFAULT]
 cleanup = automatic
-enabled = false
+enabled = no
 integrity_check = sha256
 log_level = WARNING
 log_method = console
@@ -1197,7 +1197,7 @@ url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
 <div class="content">
 <pre>[DEFAULT]
 cleanup = automatic
-enabled = false
+enabled = no
 integrity_check = sha256
 log_level = WARNING
 log_method = console
@@ -1357,6 +1357,10 @@ declare -r MAILFROM="noreply"
 declare -r MAILTO="alice@example.com"
 declare -r SUBJECT="Fangfrisch News are available"
 
+# Choose one of the options below and uncomment the 'declare'
+# statements. Until this is done, the script will fail with
+# an error message.
+
 # Option 1: Mutt
 #declare -r MAILAPP="mutt"
 #declare -r MAILAPP_OPT=( "-s" "$SUBJECT" "$MAILTO" )
@@ -1367,8 +1371,8 @@ declare -r SUBJECT="Fangfrisch News are available"
 #export PATH="$PATH:/usr/sbin"
 
 # Option 3: swaks
-declare -r MAILAPP="swaks"
-declare -r MAILAPP_OPT=( "-d" "-" "-f" "$MAILFROM" "-t" "$MAILTO" )
+#declare -r MAILAPP="swaks"
+#declare -r MAILAPP_OPT=( "-d" "-" "-f" "$MAILFROM" "-t" "$MAILTO" )
 
 ### No changes required below this line ###
 
@@ -1411,6 +1415,7 @@ report_news() {
 
 main() {
 	local t
+	[ -n "$MAILAPP" ] || die "MAILAPP is undefined, exiting."
 	if tty -s; then
 		# Running in a terminal session
 		t=$(mktemp)
@@ -1467,8 +1472,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.9.0<br>
-Last updated 2024-03-08 12:14:07 +0100
+Version 1.9.1.dev2<br>
+Last updated 2024-04-18 14:16:08 +0200
 </div>
 </div>
 </body>
