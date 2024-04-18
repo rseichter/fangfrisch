@@ -6,6 +6,8 @@ Release 1.9.1 (TBA)
 
 - Filter out Python unit tests during packaging.
 
+- Fix issue #41: Consistently use "enabled=yes/no" in the documentation.
+
 Release 1.9.0 (2024-03-08)
 
 - The logic for on_update* has been largely rewritten. As a user-visible side effect, detailed
