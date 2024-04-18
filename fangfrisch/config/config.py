@@ -56,7 +56,7 @@ class Configuration:
     def init(self, filename: str = None) -> bool:
         defaults = {
             CLEANUP: 'automatic',
-            ENABLED: 'false',
+            ENABLED: 'no',
             INTEGRITY_CHECK: 'sha256',
             LOG_LEVEL: 'WARNING',
             LOG_METHOD: 'console',
