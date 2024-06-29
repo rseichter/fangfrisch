@@ -97,7 +97,7 @@ Support contact: Debian package maintainers.
 * Gentoo Linux: https://packages.gentoo.org/packages/app-antivirus/fangfrisch[app-antivirus/fangfrisch].
 Support contact: Gentoo package maintainers.
 
-* NixOS: https://search.nixos.org/packages?&type=packages&query=fangfrisch[fangfrisch]
+* NixOS: https://search.nixos.org/packages?type=packages&query=fangfrisch[fangfrisch]
 Support contact: NixOS package maintainers.
 
 == Configuration
