@@ -8,49 +8,53 @@
 
 set -euo pipefail
 
-function usage() {
+usage() {
 	local bn
 	bn=$(basename "$0")
-	echo "Usage: ${bn} {clean | dist | pypi}" >&2
-	echo "       ${bn} setver {version}" >&2
+	cat >&2 <<EOT
+Usage: ${bn} {clean | dist | pypi}
+       ${bn} setver {version}
+EOT
 	exit 1
 }
 
-function do_clean() {
+clean() {
 	rm -fr build/* dist/* src/*egg-info
 }
 
-function do_dist() {
-	# python -m build --no-isolation --skip-dependency-check
+dist() {
 	python -m build
 }
 
-function do_pypi() {
+pypi() {
 	twine upload dist/*
 }
 
-function do_setver() {
-	[ $# -gt 0 ] || usage
+setver() {
+	[[ $# -gt 0 ]] || usage
 	local s=(/usr/bin/sed -i '' -E)
 	"${s[@]}" "s/^version.+/version = \"${1}\"/" pyproject.toml
 	"${s[@]}" "s/^__version.+/__version__ = '${1}'/" src/fangfrisch/__init__.py
-	"${s[@]}" "s/^v[^ ]+ {docdate}$/v${1}, {docdate}/" docs/fangfrisch.adoc
+	"${s[@]}" "s/^v[[^ ]]+ {docdate}$/v${1}, {docdate}/" docs/fangfrisch.adoc
 }
 
-[ $# -gt 0 ] || usage
-arg="${1}"
-shift
-case "${arg}" in
-clean)
-	do_"${arg}"
-	;;
-dist | setver | pypi)
-	# shellcheck disable=1091
-	. .venv/bin/activate
-	do_"${arg}" "$@"
-	;;
-*)
-	usage
-	;;
-esac
-unset arg
+main() {
+	[[ $# -gt 0 ]] || usage
+	local arg=$1
+	shift
+	case "${arg}" in
+	clean)
+		rm -fr build/* dist/* src/*egg-info
+		;;
+	dist | setver | pypi)
+		# shellcheck disable=1091
+		. .venv/bin/activate
+		"${arg}" "$@"
+		;;
+	*)
+		usage
+		;;
+	esac
+}
+
+main "$@"
