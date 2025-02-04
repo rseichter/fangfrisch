@@ -10,18 +10,19 @@ set -euo pipefail
 
 function usage() {
 	local bn
-	bn="$(basename "$0")"
+	bn=$(basename "$0")
 	echo "Usage: ${bn} {clean | dist | pypi}" >&2
 	echo "       ${bn} setver {version}" >&2
 	exit 1
 }
 
 function do_clean() {
-	/bin/rm -r build/* dist/* || true
+	rm -fr build/* dist/* src/*egg-info
 }
 
 function do_dist() {
-	python -m build --no-isolation --skip-dependency-check
+	# python -m build --no-isolation --skip-dependency-check
+	python -m build
 }
 
 function do_pypi() {

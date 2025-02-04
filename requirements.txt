@@ -1,6 +1,7 @@
 # Development
 build
 setuptools
+twine
 wheel
 # Runtime
 requests >= 2.22.0

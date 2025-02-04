@@ -4,9 +4,10 @@ Changelog
 
 Release 1.9.1 (TBA)
 
-- Run CI tests using Python 3.13, drop version 3.7 (upstream EOL reached).
+- Raise Python requirement from 3.7 to 3.8. Python 3.7 has reached its EOL
+  in 2023 and is no longer maintained by the Python Software Foundation.
 
-- Filter out Python unit tests during packaging.
+- Add CI tests using Python 3.13, drop tests for 3.7.
 
 - Fix issue #41: Consistently use "enabled=yes/no" in the documentation.
 
