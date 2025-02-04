@@ -9,6 +9,8 @@ Release 1.9.1 (TBA)
 
 - Add CI tests using Python 3.13, drop tests for 3.7.
 
+- Restructure Python build to ease packaging.
+
 - Fix issue #41: Consistently use "enabled=yes/no" in the documentation.
 
 Release 1.9.0 (2024-03-08)
