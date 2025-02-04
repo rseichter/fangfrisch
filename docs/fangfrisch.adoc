@@ -49,9 +49,8 @@ Provider intervals are set to reasonable defaults internally, but you can overri
 
 == Installation
 
-Fangfrisch requires Python 3.7 or newer.
-Python 3.6 security support, i.e. its final lifecycle stage, was terminated in 2021 by the Python authors.
-Please do not ask me to modify Fangfrisch in order to support ancient Python versions, which pose a potential security risk to you.
+Fangfrisch requires Python 3.8 version or newer.
+While Fangfrisch was initially written for Python 3.7, security support (the final lifecycle stage) for that version was terminated by the Python Software Foundation in 2023.
 
 The recommended installation method is using the https://packaging.python.org/tutorials/installing-packages/[pip command] in a virtual Python environment.
 Here is an example listing of commands for BASH, to be executed as root, assuming that you will be running Fangfrisch as an unprivileged user who is member of the *clamav* group:
@@ -167,7 +166,7 @@ Starting with Fangfrisch 1.9.0, this option may be overridden in individual sect
 Default: 30.
 This option may also be overridden in individual sections.
 
-See https://docs.python.org/3.7/library/configparser.html[here] for details about the configuration parser and extended interpolation.
+https://docs.python.org/3/library/configparser.html[See here] for details about the configuration parser and extended interpolation.
 <<Semantics>> provides additional information on how configuration options are interpreted.
 
 === Default providers

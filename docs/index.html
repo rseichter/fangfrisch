@@ -544,9 +544,8 @@ Provider intervals are set to reasonable defaults internally, but you can overri
 <h2 id="_installation"><a class="anchor" href="#_installation"></a>3. Installation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Fangfrisch requires Python 3.7 or newer.
-Python 3.6 security support, i.e. its final lifecycle stage, was terminated in 2021 by the Python authors.
-Please do not ask me to modify Fangfrisch in order to support ancient Python versions, which pose a potential security risk to you.</p>
+<p>Fangfrisch requires Python 3.8 version or newer.
+While Fangfrisch was initially written for Python 3.7, security support (the final lifecycle stage) for that version was terminated by the Python Software Foundation in 2023.</p>
 </div>
 <div class="paragraph">
 <p>The recommended installation method is using the <a href="https://packaging.python.org/tutorials/installing-packages/">pip command</a> in a virtual Python environment.
@@ -722,7 +721,7 @@ This option may also be overridden in individual sections.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>See <a href="https://docs.python.org/3.7/library/configparser.html">here</a> for details about the configuration parser and extended interpolation.
+<p><a href="https://docs.python.org/3/library/configparser.html">See here</a> for details about the configuration parser and extended interpolation.
 <a href="#_semantics">Section 5.3</a> provides additional information on how configuration options are interpreted.</p>
 </div>
 <div class="sect2">
@@ -1399,7 +1398,7 @@ To: $MAILTO
 Subject: $SUBJECT
 
 EOT
-# Mail header must end with an empty line!
+	# Mail header must end with an empty line!
 }
 
 declare -a NEWSITEMS=()
@@ -1412,7 +1411,7 @@ report_news() {
 			# Mutt does not need the header, others do.
 			gen_header
 		fi
-		NEWSITEMS+=( "$ni" )
+		NEWSITEMS+=("$ni")
 		echo -e "\n### $(basename "$ni"):\n"
 		cat "$ni"
 	done &lt; &lt;(find "$dir" -maxdepth 1 -type f -name "fangfrisch*.txt" -print0)
@@ -1478,7 +1477,7 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 <div id="footer">
 <div id="footer-text">
 Version 1.9.1.dev4<br>
-Last updated 2025-02-04 09:52:07 +0100
+Last updated 2025-02-04 10:25:43 +0100
 </div>
 </div>
 </body>
