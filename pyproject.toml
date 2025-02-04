@@ -21,7 +21,7 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "fangfrisch"
-version = "1.9.1.dev4"
+version = "1.9.1.dev5"
 authors = [{name= "Ralph Seichter", email="fangfrisch@seichter.de"}]
 dependencies = ["requests>=2.22.0", "SQLAlchemy>=1.4.0"]
 description = "Update and verify unofficial Clam Anti-Virus signatures"
@@ -38,11 +38,10 @@ classifiers = [
   "Topic :: Utilities",
 ]
 
+[project.scripts]
+fangfrisch = "fangfrisch.__main__:main"
+
 [project.urls]
 Documentation = "https://rseichter.github.io/fangfrisch/"
 Source = "https://github.com/rseichter/fangfrisch"
 Issues = "https://github.com/rseichter/fangfrisch/issues"
-
-# [options.entry_points]
-# console_scripts =
-#   fangfrisch = fangfrisch.__main__:main
