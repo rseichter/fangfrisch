@@ -4,6 +4,8 @@ Changelog
 
 Release 1.9.1 (TBA)
 
+- Run CI tests using Python 3.13, drop version 3.7 (upstream EOL reached).
+
 - Filter out Python unit tests during packaging.
 
 - Fix issue #41: Consistently use "enabled=yes/no" in the documentation.
