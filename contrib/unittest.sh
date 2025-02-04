@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# vim:ts=4:noet
+# vim: ts=4 sw=4 noet
 #
 # Runs unittests for Fangfrisch. Example usage:
 #
@@ -11,6 +11,7 @@
 # generate a HTML-based coverage report.
 
 set -euo pipefail
+# shellcheck disable=1091
 source .venv/bin/activate
 
 DIR='/tmp/fangfrisch/unittest'
@@ -19,10 +20,10 @@ if [ -d $DIR ]; then
 	rm -r $DIR
 fi
 mkdir -p $DIR
-sqlite3 $DB < tests/tests.sql
+sqlite3 $DB <tests/tests.sql
 
-CONF='tests/tests.conf'
-sed -i'' -e "s,^db_url.*,db_url = sqlite:///${DB}," $CONF
+CONF=tests/tests.conf
+sed -i "" "s,^db_url.*,db_url = sqlite:///${DB}," $CONF
 
 function usage() {
 	echo "Usage: $(basename "$0") [coverage]" >&2
@@ -32,7 +33,7 @@ function usage() {
 function run_tests() {
 	local cmd="$1"
 	shift
-	PYTHONPATH=. ${cmd} -m unittest discover tests/ -v "$@"
+	PYTHONPATH=.:src ${cmd} -m unittest discover tests/ -v "$@"
 }
 
 function run_coverage() {

@@ -41,15 +41,16 @@ function do_setver() {
 arg="${1}"
 shift
 case "${arg}" in
-	clean)
-		do_"${arg}"
-		;;
-	dist|setver|pypi)
-		. .venv/bin/activate
-		do_"${arg}" "$@"
-		;;
-	*)
-		usage
-		;;
+clean)
+	do_"${arg}"
+	;;
+dist | setver | pypi)
+	# shellcheck disable=1091
+	. .venv/bin/activate
+	do_"${arg}" "$@"
+	;;
+*)
+	usage
+	;;
 esac
 unset arg

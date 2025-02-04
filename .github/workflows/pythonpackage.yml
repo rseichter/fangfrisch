@@ -31,7 +31,7 @@ jobs:
         run: |
           mkdir -p /tmp/fangfrisch/unittest
           sqlite3 /tmp/fangfrisch/unittest/db.sqlite < tests/tests.sql
-          PYTHONPATH=. python -m unittest discover tests/ -v
+          PYTHONPATH=.:src python -m unittest discover tests/ -v
         env:
           NETWORK_TESTS: 0
       - name: Build Python artifacts
