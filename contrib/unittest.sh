@@ -12,41 +12,29 @@
 
 set -euo pipefail
 # shellcheck disable=1091
-source .venv/bin/activate
+. .venv/bin/activate
 
-DIR='/tmp/fangfrisch/unittest'
-DB="$DIR/db.sqlite"
-if [ -d $DIR ]; then
-	rm -r $DIR
-fi
+declare -r DIR=/tmp/fangfrisch/unittest
+declare -r DB="$DIR"/db.sqlite
+rm -fr $DIR
 mkdir -p $DIR
 sqlite3 $DB <tests/tests.sql
+sed -i "" "s,^db_url.*,db_url = sqlite:///${DB}," tests/tests.conf
 
-CONF=tests/tests.conf
-sed -i "" "s,^db_url.*,db_url = sqlite:///${DB}," $CONF
-
-function usage() {
+usage() {
 	echo "Usage: $(basename "$0") [coverage]" >&2
 	exit 1
 }
 
-function run_tests() {
-	local cmd="$1"
-	shift
-	PYTHONPATH=.:src ${cmd} -m unittest discover tests/ -v "$@"
+unittest() {
+	PYTHONPATH=.:src "$@" -m unittest discover tests/ -v
 }
 
-function run_coverage() {
-	run_tests 'coverage run --source fangfrisch --omit fangfrisch/__main__.py'
+if [[ $# -eq 0 ]]; then
+	unittest python
+elif [[ $1 == coverage ]]; then
+	unittest coverage run --source fangfrisch --omit fangfrisch/__main__.py
 	coverage html --rcfile=tests/coverage.rc
-}
-
-if [ $# -gt 0 ]; then
-	if [ "$1" = "coverage" ]; then
-		run_coverage
-	else
-		usage
-	fi
 else
-	run_tests python
+	usage
 fi
