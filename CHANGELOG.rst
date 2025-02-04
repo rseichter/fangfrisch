@@ -2,16 +2,16 @@
 Changelog
 =========
 
-Release 1.9.1 (TBA)
+Release 1.9.1 (2025-02-04)
 
-- Raise Python requirement from 3.7 to 3.8. Python 3.7 has reached its EOL
-  in 2023 and is no longer maintained by the Python Software Foundation.
+- Raise Python requirement from version 3.7 to 3.8. Python 3.7 has reached
+  EOL in 2023 and is no longer maintained by the Python Software Foundation.
 
 - Add CI tests using Python 3.13, drop tests for 3.7.
 
 - Restructure Python build to ease packaging.
 
-- Fix issue #41: Consistently use "enabled=yes/no" in the documentation.
+- Fix issue #41.
 
 Release 1.9.0 (2024-03-08)
 

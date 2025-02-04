@@ -1,13 +1,15 @@
-# Fangfrisch
+= Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
-v1.9.1.dev4, {docdate}
+:revdate: {docdate}
+:revnumber: 1.9.1
+:version-label!:
 :copyright: © 2020-2025 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
 :lang: en
 :keywords: antivirus, clamav, fangfrisch, freshclam, refresh, update
 :media: screen
-:!pagenums:
+:pagenums!:
 :pdf-version: 1.7
 :sectanchors:
 :sectnums:
