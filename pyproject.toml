@@ -21,7 +21,7 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "fangfrisch"
-version = "1.9.1.dev3"
+version = "1.9.1.dev4"
 authors = [{name= "Ralph Seichter", email="fangfrisch@seichter.de"}]
 dependencies = ["requests>=2.22.0", "SQLAlchemy>=1.4.0"]
 description = "Update and verify unofficial Clam Anti-Virus signatures"

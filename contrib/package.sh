@@ -31,10 +31,10 @@ function do_pypi() {
 
 function do_setver() {
 	[ $# -gt 0 ] || usage
-	local sed="/usr/bin/sed -E"
-	${sed} -i "" -e "s/^v[^ ]+ {docdate}$/v${1}, {docdate}/" docs/fangfrisch.adoc
-	${sed} -i "" -e "s/^__version.+/__version__ = '${1}'/" fangfrisch/__init__.py
-	${sed} -i "" -e "s/^version.+/version = ${1}/" setup.cfg
+	local s=(/usr/bin/sed -i '' -E)
+	"${s[@]}" "s/^version.+/version = \"${1}\"/" pyproject.toml
+	"${s[@]}" "s/^__version.+/__version__ = '${1}'/" src/fangfrisch/__init__.py
+	"${s[@]}" "s/^v[^ ]+ {docdate}$/v${1}, {docdate}/" docs/fangfrisch.adoc
 }
 
 [ $# -gt 0 ] || usage
