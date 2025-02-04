@@ -1,5 +1,5 @@
 """
-Copyright © 2020-2024 Ralph Seichter
+Copyright © 2020-2025 Ralph Seichter
 
 This file is part of "Fangfrisch".
 
