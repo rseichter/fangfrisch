@@ -39,6 +39,7 @@ usage() {
 
 gen_header() {
 	cat <<EOT
+Auto-Submitted: auto-generated
 From: Fangfrisch News <$MAILFROM>
 To: $MAILTO
 Subject: $SUBJECT
