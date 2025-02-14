@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 from fangfrisch.db import RefreshLog
 
 
@@ -26,4 +27,4 @@ class DumpDbEntries:
     def print_url_path_mappings(self, outfile) -> None:
         r: RefreshLog
         for r in RefreshLog.url_path_mappings(self.args.provider):
-            print(f'{r.provider}\t{r.url}\t{r.path}', file=outfile)
+            print(f"{r.provider}\t{r.url}\t{r.path}", file=outfile)

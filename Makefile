@@ -11,6 +11,7 @@ The following make targets are available:
   clean  Cleanup build directories.
   dist   Build distribution files.
   fla    Run flake8.
+  fmt    Format Python source code.
   help   Show this text.
   pypi   Upload distribution files to PyPI.
   shc    Shell script care.
@@ -49,5 +50,8 @@ test:	fla
 shc:
 	shcare contrib/*.sh
 
-fla:
+fmt:
+	black -l 120 src tests
+
+fla:	fmt
 	flake8 src tests --config=.flake8

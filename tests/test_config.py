@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import tempfile
 import unittest
 
@@ -27,7 +28,7 @@ from tests import FangfrischTest
 from tests.test_log import FORMAT
 from tests.test_log import LEVEL
 
-SECTION = 'sanesecurity'
+SECTION = "sanesecurity"
 
 
 class ConfigTests(FangfrischTest):
@@ -38,7 +39,7 @@ class ConfigTests(FangfrischTest):
 
     def test_dump(self):
         self.c.init()
-        file = tempfile.TemporaryFile(mode='w+t')
+        file = tempfile.TemporaryFile(mode="w+t")
         self.assertTrue(self.c.write(file))
         file.close()
 
@@ -63,7 +64,7 @@ class ConfigTests(FangfrischTest):
 
     def test_integrity_check(self):
         self.c.init(self.CONF)
-        self.assertEqual('sha256', self.c.integrity_check(self.UNITTEST))
+        self.assertEqual("sha256", self.c.integrity_check(self.UNITTEST))
 
     def test_sections(self):
         self.c.init(self.CONF)
@@ -82,10 +83,10 @@ class ConfigTests(FangfrischTest):
         self.assertFalse(means_disabled(None))
 
     def test_disabled_yes(self):
-        self.assertFalse(means_disabled('yes'))
+        self.assertFalse(means_disabled("yes"))
 
     def test_disabled_no(self):
-        self.assertTrue(means_disabled('no'))
+        self.assertTrue(means_disabled("no"))
 
     def test_log_format(self):
         self.c.init(self.CONF)
@@ -101,11 +102,11 @@ class ConfigTests(FangfrischTest):
 
     def test_on_update_exec(self):
         self.c.init(self.CONF)
-        self.assertEqual('echo on_update_exec', self.c.on_update_exec())
+        self.assertEqual("echo on_update_exec", self.c.on_update_exec())
 
     def test_on_update_exec2(self):
         self.c.init(self.CONF)
-        self.assertEqual('echo overridden', self.c.on_update_exec(section='unittest2'))
+        self.assertEqual("echo overridden", self.c.on_update_exec(section="unittest2"))
 
     def test_on_update_timeout(self):
         self.c.init(self.CONF)
@@ -113,7 +114,7 @@ class ConfigTests(FangfrischTest):
 
     def test_on_update_timeout2(self):
         self.c.init(self.CONF)
-        self.assertEqual(6, self.c.on_update_timeout(section='unittest2'))
+        self.assertEqual(6, self.c.on_update_timeout(section="unittest2"))
 
     def test_log_target(self):
         self.c.init(self.CONF)
@@ -124,5 +125,5 @@ class ConfigTests(FangfrischTest):
         self.assertEqual(9, self.c.connection_timeout())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import requests
 from requests import Response
 
@@ -25,9 +26,9 @@ from fangfrisch.log import log_error
 from fangfrisch.log import log_warning
 from fangfrisch.util import StatusDataPair
 
-CONTENT_LENGTH = 'Content-Length'
+CONTENT_LENGTH = "Content-Length"
 _session = requests.Session()
-_session.headers['User-Agent'] = f'fangfrisch/{__version__}'
+_session.headers["User-Agent"] = f"fangfrisch/{__version__}"
 
 
 def _has_valid_length(response: Response, max_length: int) -> StatusDataPair:
@@ -38,11 +39,11 @@ def _has_valid_length(response: Response, max_length: int) -> StatusDataPair:
     :return: True if length is permitted, False otherwise.
     """
     if CONTENT_LENGTH not in response.headers:  # pragma: no cover
-        log_warning(f'{response.url} content length unknown')
+        log_warning(f"{response.url} content length unknown")
         return StatusDataPair(True, -1)
     length = int(response.headers[CONTENT_LENGTH])
     if length > max_length:
-        log_error(f'{response.url} size exceeds defined limit ({length}/{max_length} bytes)')
+        log_error(f"{response.url} size exceeds defined limit ({length}/{max_length} bytes)")
         return StatusDataPair(False, length)
     return StatusDataPair(True, length)
 
@@ -56,10 +57,10 @@ def _download(url, max_size: int, timeout: int) -> StatusDataPair:
     :return: True/Data for successfull downloads, False/None otherwise.
     """
     if timeout > 30:
-        log_warning(f'{timeout} second connection timeout exceeds recommended limit')
+        log_warning(f"{timeout} second connection timeout exceeds recommended limit")
     response = _session.get(url, stream=True, timeout=timeout)
     if response.status_code != requests.codes.ok:
-        log_error(f'{url} download failed: {response.status_code} {response.reason}')
+        log_error(f"{url} download failed: {response.status_code} {response.reason}")
         return StatusDataPair(False)
     check = _has_valid_length(response, max_size)
     if not check.ok:
@@ -70,10 +71,10 @@ def _download(url, max_size: int, timeout: int) -> StatusDataPair:
 def get_digest(ci: ClamavItem, max_size: int = 1024) -> StatusDataPair:
     if not ci.check:
         return StatusDataPair(True)
-    download = _download(f'{ci.url}.{ci.check}', max_size, ci.connection_timeout)
+    download = _download(f"{ci.url}.{ci.check}", max_size, ci.connection_timeout)
     if not download.ok:
         return StatusDataPair(False)
-    digest = download.data.text.split(' ')[0]  # Returns original text if no space is found
+    digest = download.data.text.split(" ")[0]  # Returns original text if no space is found
     return StatusDataPair(True, digest)
 
 

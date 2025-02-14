@@ -16,11 +16,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 from fangfrisch.config import INTERVAL
 
 urlhaus = {
-    'urlhaus': {
-        INTERVAL: '10m',
-        'url_urlhaus': r'https://urlhaus.abuse.ch/downloads/urlhaus.ndb',
+    "urlhaus": {
+        INTERVAL: "10m",
+        "url_urlhaus": r"https://urlhaus.abuse.ch/downloads/urlhaus.ndb",
     }
 }

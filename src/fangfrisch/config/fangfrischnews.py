@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 from fangfrisch.config import INTERVAL
 from fangfrisch.config import LOCAL_DIR
 from fangfrisch.config import MAX_SIZE
@@ -23,14 +24,14 @@ from fangfrisch.config import ON_UPDATE_EXEC
 from fangfrisch.config import PREFIX
 
 fangfrischnews = {
-    'fangfrischnews': {
-        INTERVAL: '12h',
-        LOCAL_DIR: '/tmp',
-        MAX_SIZE: '100KB',
-        'script': '/path/to/fangfrisch-has-news.sh',
-        ON_UPDATE_EXEC: f'[ ! -x ${{script}} ] || ${{script}} ${{{LOCAL_DIR}}}',
-        PREFIX: r'https://www.seichter.de/fangfrisch/',
-        'url_alerts': f'${{{PREFIX}}}fangfrisch_alerts.txt',
-        'url_news': f'${{{PREFIX}}}fangfrisch_news.txt',
+    "fangfrischnews": {
+        INTERVAL: "12h",
+        LOCAL_DIR: "/tmp",
+        MAX_SIZE: "100KB",
+        "script": "/path/to/fangfrisch-has-news.sh",
+        ON_UPDATE_EXEC: f"[ ! -x ${{script}} ] || ${{script}} ${{{LOCAL_DIR}}}",
+        PREFIX: r"https://www.seichter.de/fangfrisch/",
+        "url_alerts": f"${{{PREFIX}}}fangfrisch_alerts.txt",
+        "url_news": f"${{{PREFIX}}}fangfrisch_news.txt",
     }
 }

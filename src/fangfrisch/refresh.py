@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import os
 from typing import List
 from typing import Set
@@ -42,7 +43,7 @@ def _is_url_disabled(url: str) -> bool:
     if not url:
         return True
     u = url.strip().lower()
-    return u == '' or u.startswith('disabled')
+    return u == "" or u.startswith("disabled")
 
 
 def _clamav_items() -> List[ClamavItem]:
@@ -58,30 +59,32 @@ def _clamav_items() -> List[ClamavItem]:
             local_dir = config.local_dir(section)
             if local_dir:
                 os.makedirs(local_dir, exist_ok=True)
-            if option.startswith('url_'):
+            if option.startswith("url_"):
                 url = config.get(section, option)
                 if _is_url_disabled(url):
                     continue
                 stem = option[4:]
-                filename = config.get(section, f'filename_{stem}')
+                filename = config.get(section, f"filename_{stem}")
                 if not filename:
                     url_path: str = urlparse(url).path
-                    slash_pos = url_path.rfind('/')  # returns -1 if not found
-                    filename = url_path[slash_pos + 1:]
+                    pos = url_path.rfind("/") + 1  # rfind() returns -1 if not found
+                    filename = url_path[pos:]
                 if local_dir:
                     filename = os.path.join(local_dir, filename)
-                item_list.append(ClamavItem(
-                    check=config.integrity_check(section),
-                    connection_timeout=config.connection_timeout(),
-                    interval=config.interval(section),
-                    max_size=max_size,
-                    on_update=config.get(section, f'on_update_{stem}'),
-                    option=option,
-                    path=filename,
-                    section=section,
-                    stem=stem,
-                    url=url,
-                ))
+                item_list.append(
+                    ClamavItem(
+                        check=config.integrity_check(section),
+                        connection_timeout=config.connection_timeout(),
+                        interval=config.interval(section),
+                        max_size=max_size,
+                        on_update=config.get(section, f"on_update_{stem}"),
+                        option=option,
+                        path=filename,
+                        section=section,
+                        stem=stem,
+                        url=url,
+                    )
+                )
     return item_list
 
 
@@ -100,7 +103,7 @@ class ClamavRefresh:
     @staticmethod
     def print_url_path_mappings(output_file) -> None:
         for ci in _clamav_items():
-            print(f'{ci.section}\t{ci.url}\t{ci.path}', file=output_file)
+            print(f"{ci.section}\t{ci.url}\t{ci.path}", file=output_file)
 
     def refresh(self, ci: ClamavItem) -> bool:
         """Refresh a single ClamAV item.
@@ -110,18 +113,18 @@ class ClamavRefresh:
         """
         try:
             if not ci.url:  # pragma: no cover
-                log_debug('Empty URL')
+                log_debug("Empty URL")
                 return False
             if self.args.force:
-                log_debug(f'{ci.url} refresh forced')
+                log_debug(f"{ci.url} refresh forced")
             elif not RefreshLog.is_outdated(ci.url, ci.interval):
-                log_debug(f'{ci.url} below max age')
+                log_debug(f"{ci.url} below max age")
                 return False
             digest = get_digest(ci)
             if not digest.ok:
                 return False
             if digest.data and RefreshLog.digest_matches(ci.url, digest.data):
-                log_debug(f'{ci.url} unchanged')
+                log_debug(f"{ci.url} unchanged")
                 RefreshLog.update(ci, digest.data)
                 return False
             payload = get_payload(ci)
@@ -129,13 +132,13 @@ class ClamavRefresh:
                 return False
             integrity = check_integrity(payload.data, ci.check, digest.data)
             if not integrity.ok:
-                log_warning(f'{ci.url} {integrity.data}')
+                log_warning(f"{ci.url} {integrity.data}")
                 return False
             path = RefreshLog.last_logged_path(ci.url)
             remove_if_exists(path, log_debug)
-            with open(ci.path, 'wb') as f:
+            with open(ci.path, "wb") as f:
                 size = f.write(payload.data)
-                log_info(f'{ci.path} updated ({size} bytes)')
+                log_info(f"{ci.path} updated ({size} bytes)")
                 RefreshLog.update(ci, digest.data)
         except OSError as e:  # pragma: no cover
             log_exception(e)
@@ -155,11 +158,11 @@ class ClamavRefresh:
                         callback_stdout=log_info,
                         callback_stderr=log_error,
                         callback_exception=log_exception,
-                        path=ci.path
+                        path=ci.path,
                     )
                 else:
                     # If no individual command is defined, remember the section name instead.
-                    log_debug(f'[{ci.section}] caused updates')
+                    log_debug(f"[{ci.section}] caused updates")
                     trigger_sections.add(ci.section)
             steps += 1
 
@@ -169,7 +172,7 @@ class ClamavRefresh:
             add_task(
                 tasks=tasks,
                 command=config.on_update_exec(section),
-                timeout=config.on_update_timeout(section)
+                timeout=config.on_update_timeout(section),
             )
 
         # Process tasks

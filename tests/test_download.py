@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import unittest
 
 # noinspection PyProtectedMember
@@ -26,7 +27,7 @@ from tests import NETWORK_TESTS
 from tests import URL_SHA256
 
 
-@unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+@unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
 class DownloadTests(FangfrischTest):
     def test_get_ok(self):
         d = _download(URL_SHA256, MAX_SIZE, 10)
@@ -37,5 +38,5 @@ class DownloadTests(FangfrischTest):
         self.assertFalse(d.ok)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

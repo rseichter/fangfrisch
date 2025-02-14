@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import re
 import sys
 from datetime import datetime
@@ -44,7 +45,7 @@ Base = declarative_base()
 
 
 class DbMeta(Base):
-    __tablename__ = 'automx2'
+    __tablename__ = "automx2"
     db_version = Column(Integer, nullable=False, primary_key=True)
     _engine = None
     _session = None
@@ -62,7 +63,7 @@ class DbMeta(Base):
         if not cls._session:
             db_url = config.db_url()
             if not db_url:  # pragma: no cover
-                log_fatal('Database URL is undefined, exiting.')
+                log_fatal("Database URL is undefined, exiting.")
                 sys.exit(1)
             cls._engine = create_engine(db_url, echo=False)
             cls._session = sessionmaker(bind=cls._engine)
@@ -80,7 +81,7 @@ class DbMeta(Base):
             dm: DbMeta = session.query(DbMeta).one()
             if dm.db_version == DB_VERSION:
                 return True
-            log_fatal(f'Unexpected database version (expected {DB_VERSION}, got {dm.db_version})')
+            log_fatal(f"Unexpected database version (expected {DB_VERSION}, got {dm.db_version})")
         except DatabaseError as e:
             log_exception(e)
         log_fatal('Please try running "initdb"')
@@ -96,14 +97,14 @@ class DbMeta(Base):
                 if dm is None:
                     session.add(self)
                     return True
-                log_fatal(f'Database table {self.__tablename__} is not empty')
+                log_fatal(f"Database table {self.__tablename__} is not empty")
         except DatabaseError as e:  # pragma: no cover
             log_exception(e)
         sys.exit(1)
 
 
 class RefreshLog(Base):
-    __tablename__ = 'refreshlog'
+    __tablename__ = "refreshlog"
     url = Column(String, nullable=False, primary_key=True)
     digest = Column(String, nullable=True)
     path = Column(String, nullable=False)
@@ -120,13 +121,11 @@ class RefreshLog(Base):
 
     @classmethod
     def init(cls):
-        """Initialise database session.
-
-        """
+        """Initialise database session."""
         if not cls._session:
             db_url = config.db_url()
             if not db_url:  # pragma: no cover
-                log_fatal('Database URL is undefined, exiting.')
+                log_fatal("Database URL is undefined, exiting.")
                 sys.exit(1)
             engine = create_engine(db_url, echo=False)
             cls._session = sessionmaker(bind=engine)

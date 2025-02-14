@@ -16,18 +16,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import logging
 import unittest
 
 import fangfrisch.log
 from fangfrisch.log import LogHandlerType
+
 # noinspection PyProtectedMember
 from fangfrisch.log import _create_handler
 from fangfrisch.log import init_logger
 from fangfrisch.log import parse_syslog_target
 
-FORMAT = r'%(message)s'
-LEVEL = 'FATAL'
+FORMAT = r"%(message)s"
+LEVEL = "FATAL"
 
 
 class LogTests(unittest.TestCase):
@@ -37,16 +39,16 @@ class LogTests(unittest.TestCase):
         fangfrisch.log._logger = None
 
     def test_init_console_handler(self):
-        x = _create_handler(LogHandlerType.CONSOLE, FORMAT, '')
+        x = _create_handler(LogHandlerType.CONSOLE, FORMAT, "")
         self.assertTrue(isinstance(x, logging.Handler))
 
     def test_init_syslog_handler(self):
-        x = _create_handler(LogHandlerType.SYSLOG, FORMAT, 'localhost')
+        x = _create_handler(LogHandlerType.SYSLOG, FORMAT, "localhost")
         self.assertTrue(isinstance(x, logging.Handler))
         x.close()
 
     def test_init_syslog_handler_port(self):
-        x = _create_handler(LogHandlerType.SYSLOG, FORMAT, '127.0.0.1:514')
+        x = _create_handler(LogHandlerType.SYSLOG, FORMAT, "127.0.0.1:514")
         self.assertTrue(isinstance(x, logging.Handler))
         x.close()
 
@@ -55,16 +57,16 @@ class LogTests(unittest.TestCase):
         self.assertTrue(isinstance(x, logging.Logger))
 
     def test_parse_dgram(self):
-        a = '/dev/log'
+        a = "/dev/log"
         self.assertEqual(a, parse_syslog_target(a))
 
     def test_parse_inet(self):
-        h = '127.0.0.1'
+        h = "127.0.0.1"
         p = 101
-        a, b = parse_syslog_target(f'{h}:{p}')
+        a, b = parse_syslog_target(f"{h}:{p}")
         self.assertEqual(h, a)
         self.assertEqual(p, b)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

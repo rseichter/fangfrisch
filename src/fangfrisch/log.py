@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import logging
 import logging.handlers
 import sys
@@ -38,9 +39,9 @@ _logger: Logger = None
 
 
 def parse_syslog_target(address: str):
-    if address.find('/') >= 0:
+    if address.find("/") >= 0:
         return address
-    s = address.split(':')
+    s = address.split(":")
     host = s[0]
     if len(s) > 1:
         port = int(s[1])
@@ -54,10 +55,10 @@ def _create_handler(type_: LogHandlerType, log_format: str, syslog_target: str):
     if type_ == LogHandlerType.SYSLOG:
         a = parse_syslog_target(syslog_target)
         handler = logging.handlers.SysLogHandler(address=a)
-        default_format = r'fangfrisch[%(process)d]: %(message)s'
+        default_format = r"fangfrisch[%(process)d]: %(message)s"
     else:
         handler = logging.StreamHandler()
-        default_format = r'%(levelname)s: %(message)s'
+        default_format = r"%(levelname)s: %(message)s"
     if log_format:
         f = log_format
     else:
@@ -66,11 +67,11 @@ def _create_handler(type_: LogHandlerType, log_format: str, syslog_target: str):
     return handler
 
 
-def init_logger(type_: LogHandlerType, level: str, format_: str, address: str = 'localhost') -> Logger:
+def init_logger(type_: LogHandlerType, level: str, format_: str, address: str = "localhost") -> Logger:
     global _handler, _logger
     if _handler is None:
         _handler = _create_handler(type_, format_, address)
-        _logger = logging.getLogger('fangfrisch')
+        _logger = logging.getLogger("fangfrisch")
         _logger.addHandler(_handler)
         _handler.setLevel(level)
         _logger.setLevel(level)

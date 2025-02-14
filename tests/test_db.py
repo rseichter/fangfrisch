@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import tempfile
 import unittest
 import uuid
@@ -29,8 +30,8 @@ from tests import DIGEST_DUMMY
 from tests import FangfrischTest
 from tests import _ClamavTestItem
 
-URL1 = 'https://u1'
-URL2 = 'https://u2'
+URL1 = "https://u1"
+URL2 = "https://u2"
 
 
 class DbTests(FangfrischTest):
@@ -38,7 +39,7 @@ class DbTests(FangfrischTest):
 
     def setUp(self) -> None:
         super().setUp()
-        self.ci = _ClamavTestItem(url=URL1, section=self.UNITTEST, option='option', path='path')
+        self.ci = _ClamavTestItem(url=URL1, section=self.UNITTEST, option="option", path="path")
         RefreshLog.init()
         self.s = RefreshLog._session()
         self.s.query(RefreshLog).delete()
@@ -110,7 +111,7 @@ class DbTests(FangfrischTest):
         self.assertEqual(0, RefreshLog.cleanup_provider(self.UNKNOWN))
 
     def test_cleanup2(self):
-        file = tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8', delete=False)
+        file = tempfile.NamedTemporaryFile(mode="w+t", encoding="utf-8", delete=False)
         file.write(self.UNITTEST)
         file.close()
         provider = uuid.uuid4().hex
@@ -122,5 +123,5 @@ class DbTests(FangfrischTest):
         self.assertEqual(1, RefreshLog.cleanup_provider(provider))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

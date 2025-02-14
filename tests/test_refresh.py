@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import tempfile
 import unittest
 from argparse import Namespace
@@ -45,78 +46,78 @@ class RefreshTests(FangfrischTest):
         self.s.query(RefreshLog).delete()
         self.s.commit()
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_404(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_BAD_SHA256 + 'BAD')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_BAD_SHA256 + "BAD")
         self.assertFalse(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_bad_sha256(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_BAD_SHA256, 'sha256')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_BAD_SHA256, "sha256")
         self.assertFalse(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_good_sha256(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_SHA256, 'sha256', f'{self.TMPDIR}/x')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_SHA256, "sha256", f"{self.TMPDIR}/x")
         self.assertTrue(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_good_md5(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_MD5, "md5", f"{self.TMPDIR}/x")
         self.assertTrue(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_missing_checksum(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_MISSING, 'sha256')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_MISSING, "sha256")
         self.assertFalse(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_missing_path(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_MD5, 'md5')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_MD5, "md5")
         with self.assertRaises(TypeError):
             self.assertTrue(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_unknown_check(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_BAD_SHA256, 'BAD')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_BAD_SHA256, "BAD")
         self.assertFalse(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_refresh_force(self):
         cr = ClamavRefresh(Namespace(force=True))
         (n, t) = cr.refresh_all()
         self.assertEqual(3, n)
         self.assertEqual(2, t)
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_refresh_age(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_SHA256, 'sha256', f'{self.TMPDIR}/x')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_SHA256, "sha256", f"{self.TMPDIR}/x")
         r = RefreshLog(ci, DIGEST_DUMMY)
         r.updated += timedelta(minutes=10)
         self.s.add(r)
         self.s.commit()
         self.assertFalse(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_refresh_digest_match(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_MD5, "md5", f"{self.TMPDIR}/x")
         r = RefreshLog(ci, DIGEST_MD5)
         self.s.add(r)
         self.s.commit()
         self.assertFalse(self.ref.refresh(ci))
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_refresh(self):
-        ci = _ClamavTestItem(self.UNITTEST, 'x', URL_MD5, 'md5', f'{self.TMPDIR}/x')
+        ci = _ClamavTestItem(self.UNITTEST, "x", URL_MD5, "md5", f"{self.TMPDIR}/x")
         self.s.add(RefreshLog(ci, DIGEST_DUMMY))
         self.s.commit()
         (n, t) = self.ref.refresh_all()
         self.assertEqual(3, n)
         self.assertEqual(2, t)
 
-    @unittest.skipUnless(NETWORK_TESTS, 'network tests disabled')
+    @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_url_blank(self):
-        ci = _ClamavTestItem('unittest4', 'url_blank', '', 'md5', f'{self.TMPDIR}/blank')
+        ci = _ClamavTestItem("unittest4", "url_blank", "", "md5", f"{self.TMPDIR}/blank")
         self.s.add(RefreshLog(ci, DIGEST_DUMMY))
         self.s.commit()
         (n, t) = self.ref.refresh_all()
@@ -125,17 +126,17 @@ class RefreshTests(FangfrischTest):
 
     def test_url_disabled(self):
         self.assertTrue(_is_url_disabled(None))
-        self.assertTrue(_is_url_disabled(' '))
-        self.assertTrue(_is_url_disabled('Disabled'))
+        self.assertTrue(_is_url_disabled(" "))
+        self.assertTrue(_is_url_disabled("Disabled"))
 
     def test_print_mappings(self):
-        file = tempfile.TemporaryFile(mode='w+t')
+        file = tempfile.TemporaryFile(mode="w+t")
         ClamavRefresh.print_url_path_mappings(file)
         file.seek(0)
         data = file.read()
-        self.assertTrue(data.startswith('unittest\t'))
+        self.assertTrue(data.startswith("unittest\t"))
         file.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

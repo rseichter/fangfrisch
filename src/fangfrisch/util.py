@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import hashlib
 import os
 import re
@@ -24,10 +25,10 @@ from subprocess import CompletedProcess
 from subprocess import run
 from typing import Optional
 
-_byte_multipliers = {'K': 10 ** 3, 'KB': 2 ** 10, 'M': 10 ** 6, 'MB': 2 ** 20}
-_byte_pattern = re.compile(r'(\d+)([KM]B?)?', re.IGNORECASE)
-_minute_multipliers = {'d': 24 * 60, 'h': 60, 'm': 1}
-_minute_pattern = re.compile(r'(\d+)([dhm])', re.IGNORECASE)
+_byte_multipliers = {"K": 10**3, "KB": 2**10, "M": 10**6, "MB": 2**20}
+_byte_pattern = re.compile(r"(\d+)([KM]B?)?", re.IGNORECASE)
+_minute_multipliers = {"d": 24 * 60, "h": 60, "m": 1}
+_minute_pattern = re.compile(r"(\d+)([dhm])", re.IGNORECASE)
 
 
 class StatusDataPair:
@@ -49,7 +50,7 @@ def check_integrity(content, algorithm: str, expected: str) -> StatusDataPair:
         _hash.update(content)
         digest = _hash.hexdigest()
         if digest != expected:
-            message = f'{algorithm} digest mismatch (expected {expected}, got {digest})'
+            message = f"{algorithm} digest mismatch (expected {expected}, got {digest})"
             return StatusDataPair(False, message)
     return StatusDataPair(True)
 
@@ -83,9 +84,9 @@ def parse_hr_time(s: str) -> int:
     return -1
 
 
-def run_command(command: str, timeout: int,
-                callback_stdout, callback_stderr, callback_exception,
-                *args, **kwargs) -> Optional[int]:
+def run_command(
+    command: str, timeout: int, callback_stdout, callback_stderr, callback_exception, *args, **kwargs
+) -> Optional[int]:
     """Execute a command in a subprocess.
 
     :param command: Command string.
@@ -98,7 +99,7 @@ def run_command(command: str, timeout: int,
     p: CompletedProcess = None
     try:
         command = Formatter().vformat(command, args, kwargs)
-        p = run(command, capture_output=True, encoding='utf-8', shell=True, timeout=timeout)
+        p = run(command, capture_output=True, encoding="utf-8", shell=True, timeout=timeout)
         if p.stdout:
             callback_stdout(p.stdout)
         if p.stderr:
@@ -111,5 +112,5 @@ def run_command(command: str, timeout: int,
 
 def remove_if_exists(path: str, log_callback) -> None:
     if path and os.path.exists(path):
-        log_callback(f'Removing file {path}')
+        log_callback(f"Removing file {path}")
         os.remove(path)

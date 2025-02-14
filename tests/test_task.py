@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import unittest
 from typing import List
 
@@ -25,7 +26,7 @@ from tests import FangfrischTest
 
 
 class TaskTests(FangfrischTest):
-    FIRST_COMMAND = '/invalid/command/path'
+    FIRST_COMMAND = "/invalid/command/path"
 
     def setUp(self) -> None:
         super().setUpClass()
@@ -33,7 +34,7 @@ class TaskTests(FangfrischTest):
         self.tasks.append(Task(command=self.FIRST_COMMAND, timeout=1))
 
     def test_add_task1(self):
-        t = add_task(self.tasks, 'c2', timeout=2)
+        t = add_task(self.tasks, "c2", timeout=2)
         self.assertTrue(isinstance(t, Task))
 
     def test_add_task2(self):
@@ -45,9 +46,9 @@ class TaskTests(FangfrischTest):
             self.assertNotEqual(0, t.complete())
 
     def test_complete2(self):
-        t = add_task(self.tasks, 'echo', timeout=3)
+        t = add_task(self.tasks, "echo", timeout=3)
         self.assertEqual(0, t.complete())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -16,24 +16,25 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 from fangfrisch.config import INTEGRITY_CHECK
 from fangfrisch.config import INTERVAL
 from fangfrisch.config import MAX_SIZE
 from fangfrisch.config import PREFIX
 
 interserver = {
-    'interserver': {
-        INTERVAL: '1h',
-        INTEGRITY_CHECK: 'disabled',
-        MAX_SIZE: '5MB',
-        PREFIX: r'http://sigs.interserver.net/',
-        '!url_shell_hdb': f'${{{PREFIX}}}shell.hdb',
-        '!url_shellb_db': f'${{{PREFIX}}}shellb.db',
-        'url_interserver256': f'${{{PREFIX}}}interserver256.hdb',
-        'url_shell_ldb': f'${{{PREFIX}}}shell.ldb',
-        'filename_shell_ldb': 'interservershell.ldb',
-        'url_topline': f'${{{PREFIX}}}interservertopline.db',
-        'url_whitelist_fp': f'${{{PREFIX}}}whitelist.fp',
-        'filename_whitelist_fp': 'interserverwhitelist.fp',
+    "interserver": {
+        INTERVAL: "1h",
+        INTEGRITY_CHECK: "disabled",
+        MAX_SIZE: "5MB",
+        PREFIX: r"http://sigs.interserver.net/",
+        "!url_shell_hdb": f"${{{PREFIX}}}shell.hdb",
+        "!url_shellb_db": f"${{{PREFIX}}}shellb.db",
+        "url_interserver256": f"${{{PREFIX}}}interserver256.hdb",
+        "url_shell_ldb": f"${{{PREFIX}}}shell.ldb",
+        "filename_shell_ldb": "interservershell.ldb",
+        "url_topline": f"${{{PREFIX}}}interservertopline.db",
+        "url_whitelist_fp": f"${{{PREFIX}}}whitelist.fp",
+        "filename_whitelist_fp": "interserverwhitelist.fp",
     }
 }

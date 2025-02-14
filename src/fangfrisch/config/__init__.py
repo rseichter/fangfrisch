@@ -16,18 +16,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
-CLEANUP = 'cleanup'
-DB_URL = 'db_url'
-ENABLED = 'enabled'
-INTEGRITY_CHECK = 'integrity_check'
-INTERVAL = 'interval'
-LOCAL_DIR = 'local_directory'
-LOG_FORMAT = 'log_format'
-LOG_LEVEL = 'log_level'
-LOG_METHOD = 'log_method'
-LOG_METHOD_CONSOLE = 'console'
-LOG_METHOD_SYSLOG = 'syslog'
-LOG_TARGET = 'log_target'
-MAX_SIZE = 'max_size'
-ON_UPDATE_EXEC = 'on_update_exec'
-PREFIX = 'prefix'
+
+CLEANUP = "cleanup"
+DB_URL = "db_url"
+ENABLED = "enabled"
+INTEGRITY_CHECK = "integrity_check"
+INTERVAL = "interval"
+LOCAL_DIR = "local_directory"
+LOG_FORMAT = "log_format"
+LOG_LEVEL = "log_level"
+LOG_METHOD = "log_method"
+LOG_METHOD_CONSOLE = "console"
+LOG_METHOD_SYSLOG = "syslog"
+LOG_TARGET = "log_target"
+MAX_SIZE = "max_size"
+ON_UPDATE_EXEC = "on_update_exec"
+PREFIX = "prefix"

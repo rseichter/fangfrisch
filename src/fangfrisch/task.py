@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 from typing import List
 from typing import Optional
 
@@ -32,7 +33,7 @@ class Task:
         self.timeout = timeout
 
     def __str__(self):  # pragma: no cover
-        return f'Task(command={{{self.command}}}, timeout={self.timeout})'
+        return f"Task(command={{{self.command}}}, timeout={self.timeout})"
 
     def complete(self) -> int:
         rc = run_command(
@@ -40,9 +41,9 @@ class Task:
             timeout=self.timeout,
             callback_stdout=log_info,
             callback_stderr=log_error,
-            callback_exception=log_exception
+            callback_exception=log_exception,
         )
-        log_debug(f'{self} returned code {rc}')
+        log_debug(f"{self} returned code {rc}")
         return rc
 
 
@@ -53,5 +54,5 @@ def add_task(tasks: List[Task], command: str, timeout: int) -> Optional[Task]:
             return None
     task = Task(command=command, timeout=timeout)
     tasks.append(task)
-    log_debug(f'{task} added')
+    log_debug(f"{task} added")
     return task

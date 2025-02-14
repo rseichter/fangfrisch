@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import argparse
 import sys
 
@@ -32,18 +33,21 @@ from fangfrisch.refresh import ClamavRefresh
 
 
 def main() -> int:
-    dumpconf = 'dumpconf'
-    dumpmappings = 'dumpmappings'
-    initdb = 'initdb'
-    parser = argparse.ArgumentParser(prog='fangfrisch', description='Update and verify unofficial ClamAV signatures.',
-                                     epilog=f'Fangfrisch version {__version__}. Copyright © 2020-2025 Ralph Seichter.')
-    parser.add_argument('action', choices=[dumpconf, dumpmappings, initdb, 'refresh'])
-    parser.add_argument('-c', '--conf', default=None, help='configuration file')
-    parser.add_argument('-f', '--force', default=False, action='store_true', help='force action (default: False)')
-    parser.add_argument('-p', '--provider', default='.', help='provider name filter (regular expression)')
+    dumpconf = "dumpconf"
+    dumpmappings = "dumpmappings"
+    initdb = "initdb"
+    parser = argparse.ArgumentParser(
+        prog="fangfrisch",
+        description="Update and verify unofficial ClamAV signatures.",
+        epilog=f"Fangfrisch version {__version__}. Copyright © 2020-2025 Ralph Seichter.",
+    )
+    parser.add_argument("action", choices=[dumpconf, dumpmappings, initdb, "refresh"])
+    parser.add_argument("-c", "--conf", default=None, help="configuration file")
+    parser.add_argument("-f", "--force", default=False, action="store_true", help="force action (default: False)")
+    parser.add_argument("-p", "--provider", default=".", help="provider name filter (regular expression)")
     args = parser.parse_args()
     if not config.init(args.conf):
-        eprint(f'Cannot parse configuration file: {args.conf}')
+        eprint(f"Cannot parse configuration file: {args.conf}")
         sys.exit(1)
     format_ = config.log_format()
     level = config.log_level()
@@ -53,7 +57,7 @@ def main() -> int:
     elif method == LOG_METHOD_SYSLOG:
         init_logger(LogHandlerType.SYSLOG, level, format_, address=config.log_target())
     else:
-        eprint(f'Unsupported log method: {method}')
+        eprint(f"Unsupported log method: {method}")
         sys.exit(1)
     if dumpconf == args.action:
         config.write(sys.stdout)
@@ -67,5 +71,5 @@ def main() -> int:
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

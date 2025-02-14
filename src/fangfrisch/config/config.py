@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 import configparser
 from configparser import ConfigParser
 from configparser import ExtendedInterpolation
@@ -43,11 +44,11 @@ from fangfrisch.util import parse_hr_time
 
 
 def means_automatic(s: Optional[str]) -> bool:
-    return s and s.lower() in ['auto', 'automatic', 'default']
+    return s and s.lower() in ["auto", "automatic", "default"]
 
 
 def means_disabled(s: Optional[str]) -> bool:
-    return s and s.lower() in ['disabled', 'false', 'no', 'off']
+    return s and s.lower() in ["disabled", "false", "no", "off"]
 
 
 class Configuration:
@@ -55,12 +56,12 @@ class Configuration:
 
     def init(self, filename: str = None) -> bool:
         defaults = {
-            CLEANUP: 'automatic',
-            ENABLED: 'no',
-            INTEGRITY_CHECK: 'sha256',
-            LOG_LEVEL: 'WARNING',
-            LOG_METHOD: 'console',
-            MAX_SIZE: '10MB',
+            CLEANUP: "automatic",
+            ENABLED: "no",
+            INTEGRITY_CHECK: "sha256",
+            LOG_LEVEL: "WARNING",
+            LOG_METHOD: "console",
+            MAX_SIZE: "10MB",
         }
         self.parser = ConfigParser(defaults=defaults, interpolation=ExtendedInterpolation())
         for dict_ in [
@@ -89,23 +90,23 @@ class Configuration:
         return means_automatic(self.parser.get(section, CLEANUP))
 
     def connection_timeout(self, fallback=30) -> int:
-        return self.parser.getint(configparser.DEFAULTSECT, 'connection_timeout', fallback=fallback)
+        return self.parser.getint(configparser.DEFAULTSECT, "connection_timeout", fallback=fallback)
 
     def db_url(self) -> Optional[str]:
         # No default
         return self.parser.get(configparser.DEFAULTSECT, DB_URL)
 
-    def on_update_exec(self, section: str = configparser.DEFAULTSECT, fallback='') -> str:
-        return self.parser.get(section, 'on_update_exec', fallback=fallback)
+    def on_update_exec(self, section: str = configparser.DEFAULTSECT, fallback="") -> str:
+        return self.parser.get(section, "on_update_exec", fallback=fallback)
 
     def on_update_timeout(self, section: str = configparser.DEFAULTSECT, fallback=30) -> int:
-        return self.parser.getint(section, 'on_update_timeout', fallback=fallback)
+        return self.parser.getint(section, "on_update_timeout", fallback=fallback)
 
     def is_enabled(self, section: str, fallback=False) -> bool:
         # Default: see init() method
         return self.parser.getboolean(section, ENABLED, fallback=fallback)
 
-    def interval(self, section: str, fallback='') -> int:
+    def interval(self, section: str, fallback="") -> int:
         age = self.parser.get(section, INTERVAL, fallback=fallback)
         return parse_hr_time(age)
 
@@ -120,7 +121,7 @@ class Configuration:
             return None
         return check
 
-    def local_dir(self, section: str, fallback='') -> str:
+    def local_dir(self, section: str, fallback="") -> str:
         return self.parser.get(section, LOCAL_DIR, fallback=fallback)
 
     def log_format(self, fallback=None) -> Optional[str]:
@@ -134,7 +135,7 @@ class Configuration:
         # Default: see init() method
         return self.parser.get(configparser.DEFAULTSECT, LOG_METHOD)
 
-    def log_target(self, fallback='localhost') -> str:
+    def log_target(self, fallback="localhost") -> str:
         return self.parser.get(configparser.DEFAULTSECT, LOG_TARGET, fallback=fallback)
 
     def options(self, section: str):

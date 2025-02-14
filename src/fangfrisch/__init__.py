@@ -16,12 +16,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Fangfrisch. If not, see <https://www.gnu.org/licenses/>.
 """
+
 __version__ = "1.9.1"
 
 
 class ClamavItem:
-    def __init__(self, section, option, url, check, path, interval, max_size, on_update, connection_timeout,
-                 stem) -> None:
+    def __init__(
+        self, section, option, url, check, path, interval, max_size, on_update, connection_timeout, stem
+    ) -> None:
         self.check = check
         self.connection_timeout = connection_timeout
         self.interval = interval
