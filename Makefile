@@ -1,4 +1,4 @@
-# vim:ts=4:noet
+# vim: ts=4: sw=4: noet
 
 package = contrib/package.sh
 unittest = contrib/unittest.sh
