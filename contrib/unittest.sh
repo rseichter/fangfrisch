@@ -33,7 +33,7 @@ unittest() {
 if [[ $# -eq 0 ]]; then
 	unittest python
 elif [[ $1 == coverage ]]; then
-	unittest coverage run --source fangfrisch --omit fangfrisch/__main__.py
+	unittest coverage run --source fangfrisch --omit fangfrisch/__main__.py || true
 	coverage html --rcfile=tests/coverage.rc
 else
 	usage

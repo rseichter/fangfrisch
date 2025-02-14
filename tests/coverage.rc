@@ -1,6 +1,12 @@
+[run]
+branch = true
+
 [report]
 exclude_lines =
 	def __repr__
 	log[_\.](debug|error|except|fatal|info|warn)
 	pragma: no cover
 	raise NotImplementedError
+
+[html]
+title = fangfrisch coverage report
