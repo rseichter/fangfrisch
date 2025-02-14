@@ -1,7 +1,7 @@
 = Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
 :revdate: {docdate}
-:revnumber: 1.9.1
+:revnumber: 1.9.2-dev1
 :version-label!:
 :copyright: © 2020-2025 Ralph Seichter
 :encoding: UTF-8
@@ -291,7 +291,7 @@ LOG_LEVEL=INFO
 The project is hosted on https://github.com/rseichter/fangfrisch[GitHub].
 Before opening tickets or contacting the author, _always_ check https://github.com/rseichter/fangfrisch/issues[existing issues] first, including closed ones.
 This is not meant to discourage you; it just saves time and effort for all involved.
-Please contact the author mailto:{email}[{author}] only after having done your "research".
+Please contact the author mailto:{email}[{author}] only after having done your own research.
 Thank you.
 
 === Reporting possible problems

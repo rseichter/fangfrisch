@@ -443,8 +443,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber"> 1.9.1,</span>
-<span id="revdate">2025-02-04</span>
+<span id="revnumber"> 1.9.2-dev1,</span>
+<span id="revdate">2025-02-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -968,7 +968,7 @@ LOG_LEVEL=INFO
 <p>The project is hosted on <a href="https://github.com/rseichter/fangfrisch">GitHub</a>.
 Before opening tickets or contacting the author, <em>always</em> check <a href="https://github.com/rseichter/fangfrisch/issues">existing issues</a> first, including closed ones.
 This is not meant to discourage you; it just saves time and effort for all involved.
-Please contact the author <a href="mailto:fangfrisch@seichter.de">Ralph Seichter</a> only after having done your "research".
+Please contact the author <a href="mailto:fangfrisch@seichter.de">Ralph Seichter</a> only after having done your own research.
 Thank you.</p>
 </div>
 <div class="sect2">
@@ -1393,6 +1393,7 @@ usage() {
 
 gen_header() {
 	cat &lt;&lt;EOT
+Auto-Submitted: auto-generated
 From: Fangfrisch News &lt;$MAILFROM&gt;
 To: $MAILTO
 Subject: $SUBJECT
@@ -1476,8 +1477,8 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
- 1.9.1<br>
-Last updated 2025-02-04 12:45:43 +0100
+ 1.9.2-dev1<br>
+Last updated 2025-02-14 17:45:49 +0100
 </div>
 </div>
 </body>

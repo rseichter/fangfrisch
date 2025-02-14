@@ -1,4 +1,5 @@
 # vim: ts=4 sw=4 noet
+adoc		= ~/.local/share/gem/ruby/3.3.0/bin/asciidoctor
 adoc_opts	= -o $@
 cf_combined	= combined.conf
 cf_example	= example.conf
@@ -19,10 +20,10 @@ $(cf_internal):
 	$(fangfrisch) -c /dev/null dumpconf > $@
 
 $(out_html): $(sources)
-	asciidoctor -a toc=right $(adoc_opts) $<
+	$(adoc) -a toc=right $(adoc_opts) $<
 
 $(out_pdf): $(sources)
-	asciidoctor-pdf -a toc=preamble $(adoc_opts) $<
+	$(adoc)-pdf -a toc=preamble $(adoc_opts) $<
 
 clean:
 	/bin/rm $(out_html) $(out_pdf) || true
