@@ -10,6 +10,7 @@ The following make targets are available:
 
   clean  Cleanup build directories.
   dist   Build distribution files.
+  fla    Run flake8.
   help   Show this text.
   pypi   Upload distribution files to PyPI.
   shc    Shell script care.
@@ -18,7 +19,7 @@ The following make targets are available:
 
 endef
 
-.PHONY:	subdirs $(subdirs) clean dist help pypi shc stest test
+.PHONY:	clean fla help pypi shc stest subdirs test
 
 subdirs: $(subdirs)
 
@@ -39,11 +40,14 @@ dist:
 pypi:
 	@echo "# Run this command to upload:\n$(package) pypi"
 
-stest:
+stest:	fla
 	env NETWORK_TESTS=0 $(unittest)
 
-test:
+test:	fla
 	env NETWORK_TESTS=1 $(unittest) coverage
 
 shc:
 	shcare contrib/*.sh
+
+fla:
+	flake8 src tests --config=.flake8

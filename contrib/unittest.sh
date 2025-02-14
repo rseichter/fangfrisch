@@ -27,7 +27,7 @@ usage() {
 }
 
 unittest() {
-	PYTHONPATH=.:src "$@" -m unittest discover tests/ -v
+	PYTHONPATH=.:src "$@" >/dev/null -m unittest discover tests/ -v
 }
 
 if [[ $# -eq 0 ]]; then

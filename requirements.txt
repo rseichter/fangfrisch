@@ -1,6 +1,7 @@
 # Development
 build
 coverage
+flake8
 setuptools
 twine
 wheel
