@@ -33,8 +33,7 @@ pypi() {
 setver() {
 	[[ $# -gt 0 ]] || usage
 	local v=$1 s=(/usr/bin/sed -i '' -E)
-	"${s[@]}" "s/^(version).+/\\1 = \"$v\"/" pyproject.toml
-	"${s[@]}" "s/^(__version__).+/\\1 = \"$v\"/" src/fangfrisch/__init__.py
+	"${s[@]}" "s/^(version|__version__).+/\\1 = \"$v\"/" pyproject.toml src/fangfrisch/__init__.py
 	"${s[@]}" "s/^(:revnumber:).+/\\1 $v/" docs/fangfrisch.adoc
 }
 
