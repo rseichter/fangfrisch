@@ -1,33 +1,32 @@
 # vim: ts=4 sw=4 noet
-adoc		= ~/.local/share/gem/ruby/3.3.0/bin/asciidoctor
-adoc_opts	= -o $@
-cf_combined	= combined.conf
-cf_example	= example.conf
-cf_internal	= internal.conf
-fangfrisch	= ../local/fangfrisch
-out_html	= index.html
-out_pdf		= fangfrisch.pdf
-sources		= fangfrisch.adoc $(cf_combined) $(cf_example) $(cf_internal) ../contrib/fangfrisch-has-news.sh usage.txt
+ad		:= ~/.local/share/gem/ruby/3.3.0/bin/asciidoctor
+adopt	?= -o $@
+ff		:= ../local/fangfrisch
+sources	:= fangfrisch.adoc combined.conf usage.txt ../contrib/fangfrisch-has-news.sh
+dest	:= index.html fangfrisch.pdf
 
 .PHONY:	all clean force
 
-all: $(out_html) $(out_pdf)
+all: $(dest)
 
-$(cf_combined): $(cf_example)
-	$(fangfrisch) -c $< dumpconf > $@
+combined.conf: example.conf internal.conf
+	$(ff) -c $< dumpconf > $@
 
-$(cf_internal):
-	$(fangfrisch) -c /dev/null dumpconf > $@
+internal.conf:
+	$(ff) -c /dev/null dumpconf > $@
 
-$(out_html): $(sources)
-	$(adoc) -a toc=right $(adoc_opts) $<
+usage.txt:
+	$(ff) -h > $@
 
-$(out_pdf): $(sources)
-	$(adoc)-pdf -a toc=preamble -a title-page $(adoc_opts) $<
+index.html: $(sources)
+	$(ad) -a toc=right $(adopt) $<
+
+fangfrisch.pdf: $(sources)
+	$(ad)-pdf -a toc=preamble -a title-page $(adopt) $<
 
 clean:
-	/bin/rm $(out_html) $(out_pdf) || true
+	/bin/rm index.html fangfrisch.pdf || true
 
 force:
-	rm -f $(cf_combined) $(cf_internal)
+	rm -f $(dest) internal.conf usage.txt
 	make
