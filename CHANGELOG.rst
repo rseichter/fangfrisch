@@ -2,6 +2,15 @@
 Changelog
 =========
 
+Release 1.9.2 (TBA)
+
+- Change preconfigured "sanesecurity" mirror URL.
+
+- Raise Python requirement from version 3.8 to 3.9. Python 3.8 has reached EOL
+  on 2024-10-07 and is no longer supported by the Python Software Foundation.
+
+- Improvements to development and testing.
+
 Release 1.9.1 (2025-02-04)
 
 - Raise Python requirement from version 3.7 to 3.8. Python 3.7 has reached
