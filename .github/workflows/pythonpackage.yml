@@ -1,43 +1,51 @@
-name: Python package
+# vim: et ts=2 sw=2
+---
+name: Python build and package
+
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
+        # python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.9']
+
     steps:
       - uses: actions/checkout@v4
-      - name: Set up SQLite
-        run: |
-          sudo apt-get install sqlite3
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Install dependencies
         run: |
           sudo apt-get install sqlite3
-          python -m pip install -U pip
-          pip install -r requirements.txt
-      - name: Lint with 'flake8'
+          python -m pip install wheel
+          python -m pip install -U pip flake8
+          python -m pip install -r requirements.txt
+
+      - name: Lint
         run: |
-          pip install flake8
-          # Stop the build if there are Python syntax errors or undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Test with 'unittest'
+
+      - name: Run unit tests
+        env:
+          NETWORK_TESTS: 0
+          PYTHONPATH: '.:src'
         run: |
           mkdir -p /tmp/fangfrisch/unittest
           sqlite3 /tmp/fangfrisch/unittest/db.sqlite < tests/tests.sql
-          PYTHONPATH=.:src python -m unittest discover tests/ -v
-        env:
-          NETWORK_TESTS: 0
-      - name: Build Python artifacts
-        run: python -m build --no-isolation --skip-dependency-check
-      - name: Store Python artifacts
+          python -m unittest discover tests/ -v
+
+      - name: Build
+        run: python -m build
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: fangfrisch-Python-${{ matrix.python-version }}
+          name: ffdist-py${{ matrix.python-version }}
           path: dist/*

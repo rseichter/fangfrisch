@@ -51,8 +51,8 @@ Provider intervals are set to reasonable defaults internally, but you can overri
 
 == Installation
 
-Fangfrisch requires Python version 3.8 or newer.
-While Fangfrisch was initially written for Python 3.7, security support (the final lifecycle stage) for that version was terminated by the Python Software Foundation in 2023.
+Fangfrisch requires Python version 3.9 or newer.
+While Fangfrisch was initially written for Python 3.7, security support (the final lifecycle stage) for that version was terminated by the Python Software Foundation in 2023. Python 3.8 reached its EOL in 2024.
 
 The recommended installation method is using the https://packaging.python.org/tutorials/installing-packages/[pip command] in a virtual Python environment.
 Here is an example listing of commands for BASH, to be executed as root, assuming that you will be running Fangfrisch as an unprivileged user who is member of the *clamav* group:
