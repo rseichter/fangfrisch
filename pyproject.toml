@@ -29,7 +29,7 @@ keywords = ["antivirus", "clamav", "freshclam", "refresh", "update"]
 readme = "README.rst"
 requires-python = ">=3.9"
 classifiers = [
-  "Development Status :: 5 - Production/Stable",
+  "Development Status :: 6 - Mature",
   "Intended Audience :: System Administrators",
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
   "Operating System :: OS Independent",
