@@ -23,7 +23,7 @@ $(out_html): $(sources)
 	$(adoc) -a toc=right $(adoc_opts) $<
 
 $(out_pdf): $(sources)
-	$(adoc)-pdf -a toc=preamble $(adoc_opts) $<
+	$(adoc)-pdf -a toc=preamble -a title-page $(adoc_opts) $<
 
 clean:
 	/bin/rm $(out_html) $(out_pdf) || true
