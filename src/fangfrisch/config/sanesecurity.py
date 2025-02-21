@@ -24,7 +24,7 @@ sanesecurity = {
     # See https://sanesecurity.com/usage/signatures/
     "sanesecurity": {
         INTERVAL: "1h",
-        PREFIX: r"http://mirror.sentries.org/sanesecurity/",
+        PREFIX: r"http://mirror.seichter.de/sanesecurity/",
         "!url_foxhole_all_cdb": f"${{{PREFIX}}}foxhole_all.cdb",
         "!url_foxhole_all_ndb": f"${{{PREFIX}}}foxhole_all.ndb",
         "!url_foxhole_links": f"${{{PREFIX}}}foxhole_links.ldb",
