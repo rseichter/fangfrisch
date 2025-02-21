@@ -444,7 +444,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
 <span id="revnumber"> 1.9.2-dev1,</span>
-<span id="revdate">2025-02-14</span>
+<span id="revdate">2025-02-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -544,8 +544,8 @@ Provider intervals are set to reasonable defaults internally, but you can overri
 <h2 id="_installation"><a class="anchor" href="#_installation"></a>3. Installation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Fangfrisch requires Python version 3.8 or newer.
-While Fangfrisch was initially written for Python 3.7, security support (the final lifecycle stage) for that version was terminated by the Python Software Foundation in 2023.</p>
+<p>Fangfrisch requires Python version 3.9 or newer.
+While Fangfrisch was initially written for Python 3.7, security support (the final lifecycle stage) for that version was terminated by the Python Software Foundation in 2023. Python 3.8 reached its EOL in 2024.</p>
 </div>
 <div class="paragraph">
 <p>The recommended installation method is using the <a href="https://packaging.python.org/tutorials/installing-packages/">pip command</a> in a virtual Python environment.
@@ -793,7 +793,7 @@ receipt = abcd1234
 [sanesecurity]
 enabled = yes
 # Use a non-default mirror
-prefix = https://mirror.rollernet.us/sanesecurity/
+prefix = http://mirror.example.com/sanesecurity/
 
 [securiteinfo]
 enabled = yes
@@ -900,13 +900,11 @@ Choose an unprivileged user instead (typically <strong>clamav</strong>).
 <h2 id="usage"><a class="anchor" href="#usage"></a>7. Usage</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can display command line arguments as follows:</p>
+<p>Command line arguments are as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ fangfrisch --help
-
-usage: fangfrisch [-h] [-c CONF] [-f] [-p PROVIDER]
+<pre>usage: fangfrisch [-h] [-c CONF] [-f] [-p PROVIDER]
                   {dumpconf,dumpmappings,initdb,refresh}
 
 Update and verify unofficial ClamAV signatures.
@@ -916,10 +914,12 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -c CONF, --conf CONF  configuration file
+  -c, --conf CONF       configuration file
   -f, --force           force action (default: False)
-  -p PROVIDER, --provider PROVIDER
-                        provider name filter (regular expression)</pre>
+  -p, --provider PROVIDER
+                        provider name filter (regular expression)
+
+Fangfrisch version 1.9.2-dev1. Copyright © 2020-2025 Ralph Seichter.</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1118,7 +1118,7 @@ filename_clamav_basic = malwarepatrol.db
 
 [sanesecurity]
 interval = 1h
-prefix = http://mirror.sentries.org/sanesecurity/
+prefix = http://mirror.seichter.de/sanesecurity/
 !url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
 !url_foxhole_all_ndb = ${prefix}foxhole_all.ndb
 !url_foxhole_links = ${prefix}foxhole_links.ldb
@@ -1248,7 +1248,7 @@ enabled = yes
 
 [sanesecurity]
 interval = 1h
-prefix = https://mirror.rollernet.us/sanesecurity/
+prefix = http://mirror.example.com/sanesecurity/
 !url_foxhole_all_cdb = ${prefix}foxhole_all.cdb
 !url_foxhole_all_ndb = ${prefix}foxhole_all.ndb
 !url_foxhole_links = ${prefix}foxhole_links.ldb
@@ -1478,7 +1478,6 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 <div id="footer">
 <div id="footer-text">
  1.9.2-dev1<br>
-Last updated 2025-02-14 17:45:49 +0100
 </div>
 </div>
 </body>

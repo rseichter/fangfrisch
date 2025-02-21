@@ -8,7 +8,9 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -c CONF, --conf CONF  configuration file
+  -c, --conf CONF       configuration file
   -f, --force           force action (default: False)
-  -p PROVIDER, --provider PROVIDER
+  -p, --provider PROVIDER
                         provider name filter (regular expression)
+
+Fangfrisch version 1.9.2-dev1. Copyright © 2020-2025 Ralph Seichter.

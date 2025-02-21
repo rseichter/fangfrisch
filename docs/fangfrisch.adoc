@@ -1,5 +1,6 @@
 = Fangfrisch
 Ralph Seichter <fangfrisch@seichter.de>
+:doctype: article
 :revdate: {docdate}
 :revnumber: 1.9.2-dev1
 :version-label!:
@@ -11,6 +12,7 @@ Ralph Seichter <fangfrisch@seichter.de>
 :media: screen
 :pagenums!:
 :pdf-version: 1.7
+:reproducible:
 :sectanchors:
 :sectnums:
 :subject: Update and verify unofficial Clam Anti-Virus signatures
@@ -252,11 +254,10 @@ Choose an unprivileged user instead (typically *clamav*).
 [[usage]]
 == Usage
 
-You can display command line arguments as follows:
+Command line arguments are as follows:
 
+[%unbreakable]
 ----
-$ fangfrisch --help
-
 include::usage.txt[]
 ----
 
