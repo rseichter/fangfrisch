@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Release 1.9.2 (TBA)
+Release 1.9.2 (2025-04-04)
 
 - Change preconfigured "sanesecurity" mirror URL.
 

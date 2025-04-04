@@ -13,4 +13,4 @@ options:
   -p, --provider PROVIDER
                         provider name filter (regular expression)
 
-Fangfrisch version 1.9.2-dev1. Copyright © 2020-2025 Ralph Seichter.
+Fangfrisch version 1.9.2. Copyright © 2020-2025 Ralph Seichter.
