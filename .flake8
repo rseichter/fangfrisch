@@ -1,5 +1,7 @@
 [flake8]
 count = true
+# F824 was introduced by flake8 7.2.0 on 2025-03-29. Ignore for now.
+ignore = F824
 max-line-length = 120
 show-source = true
 statistics = true
