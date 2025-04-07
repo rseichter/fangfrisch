@@ -20,7 +20,7 @@ The following make targets are available:
 
 endef
 
-.PHONY:	clean fla help pypi shc stest subdirs test
+.PHONY:	clean dist fla help pypi shc stest subdirs test
 
 subdirs: $(subdirs)
 
