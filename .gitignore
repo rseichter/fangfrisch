@@ -1,8 +1,9 @@
-*.egg-info/
 .coverage
 .venv*
 .vscode/
+*.egg-info/
 build/
 dist/
 gchamon/
 htmlcov/
+local/
