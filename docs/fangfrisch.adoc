@@ -110,7 +110,9 @@ All other settings are optional.
 However, unless you enable one signature file provider section, Fangfrisch naturally won't do much.
 
 Use the `--conf` command line argument (see <<usage>>) to specify the path to your configuration file.
-Note that there is no default location.
+Note that there is no default location. Depending on your platform OS, typical locations may be
+`/etc/fangfrisch.conf` (Gentoo Linux) or `/etc/fangfrisch/fangfrisch.conf` (Debian), but you can
+place the file in different locations of your own choosing.
 
 ----
 # Minimal example configuration, meant for testing.
