@@ -26,12 +26,12 @@ authors = [{name= "Ralph Seichter", email="fangfrisch@seichter.de"}]
 dependencies = ["requests>=2.22.0", "SQLAlchemy>=1.4.0"]
 description = "Update and verify unofficial Clam Anti-Virus signatures"
 keywords = ["antivirus", "clamav", "freshclam", "refresh", "update"]
+license = "GPL-3.0-or-later"
 readme = "README.rst"
 requires-python = ">=3.9"
 classifiers = [
   "Development Status :: 6 - Mature",
   "Intended Audience :: System Administrators",
-  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3.9",
   "Topic :: System :: Systems Administration",
