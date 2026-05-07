@@ -1,5 +1,5 @@
 # vim: ts=4 sw=4 noet
-ad		:= ~/.local/share/gem/ruby/3.3.0/bin/asciidoctor
+ad		:= asciidoctor
 adopt	?= -o $@
 ff		:= ../local/fangfrisch
 sources	:= fangfrisch.adoc combined.conf usage.txt ../contrib/fangfrisch-has-news.sh
