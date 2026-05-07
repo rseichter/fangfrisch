@@ -1,5 +1,5 @@
 """
-Copyright © 2020-2025 Ralph Seichter
+Copyright © 2020-2026 Ralph Seichter
 
 This file is part of "Fangfrisch".
 
@@ -39,7 +39,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         prog="fangfrisch",
         description="Update and verify unofficial ClamAV signatures.",
-        epilog=f"Fangfrisch version {__version__}. Copyright © 2020-2025 Ralph Seichter.",
+        epilog=f"Fangfrisch version {__version__}. Copyright © 2020-2026 Ralph Seichter.",
     )
     parser.add_argument("action", choices=[dumpconf, dumpmappings, initdb, "refresh"])
     parser.add_argument("-c", "--conf", default=None, help="configuration file")
