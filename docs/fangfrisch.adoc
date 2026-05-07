@@ -4,7 +4,7 @@ Ralph Seichter <fangfrisch@seichter.de>
 :revdate: {docdate}
 :revnumber: 1.9.2
 :version-label!:
-:copyright: © 2020-2025 Ralph Seichter
+:copyright: © 2020-2026 Ralph Seichter
 :encoding: UTF-8
 :hyphens: en
 :lang: en
