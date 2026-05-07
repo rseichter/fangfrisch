@@ -19,7 +19,7 @@ declare -r DB="$DIR"/db.sqlite
 rm -fr $DIR
 mkdir -p $DIR
 sqlite3 $DB <tests/tests.sql
-sed -i "" "s,^db_url.*,db_url = sqlite:///${DB}," tests/tests.conf
+sed -i "s,^db_url.*,db_url = sqlite:///${DB}," tests/tests.conf
 
 usage() {
 	echo "Usage: $(basename "$0") [coverage]" >&2
