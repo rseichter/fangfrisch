@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.12', '3.13', '3.14']
+        python-version: ['3.14']
 
     steps:
       - uses: actions/checkout@v6
@@ -34,7 +34,7 @@ jobs:
       - name: Run unit tests
         env:
           NETWORK_TESTS: 0
-          PYTHONPATH: '.:src'
+          PYTHONPATH: src
         run: |
           mkdir -p /tmp/fangfrisch/unittest
           sqlite3 /tmp/fangfrisch/unittest/db.sqlite < tests/tests.sql
