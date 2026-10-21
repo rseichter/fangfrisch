@@ -443,8 +443,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:fangfrisch@seichter.de">fangfrisch@seichter.de</a></span><br>
-<span id="revnumber"> 1.9.2,</span>
-<span id="revdate">2026-05-07</span>
+<span id="revnumber"> 1.9.3.dev1,</span>
+<span id="revdate">2026-10-22</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -804,7 +804,8 @@ customer_id = abcdef123456
 
 [urlhaus]
 enabled = yes
-max_size = 2MB</pre>
+auth_key = ab12cd34
+max_size = 12MB</pre>
 </div>
 </div>
 </div>
@@ -1188,7 +1189,8 @@ url_spam_marketing = ${prefix}spam_marketing.ndb
 
 [urlhaus]
 interval = 10m
-url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb</pre>
+auth_key = you_forgot_to_configure_auth_key
+url_urlhaus = https://urlhaus-api.abuse.ch/v2/files/exports/${auth_key}/urlhaus_clamav.ndb</pre>
 </div>
 </div>
 </div>
@@ -1320,9 +1322,10 @@ enabled = yes
 
 [urlhaus]
 interval = 10m
-url_urlhaus = https://urlhaus.abuse.ch/downloads/urlhaus.ndb
+auth_key = ab12cd34
+url_urlhaus = https://urlhaus-api.abuse.ch/v2/files/exports/${auth_key}/urlhaus_clamav.ndb
 enabled = yes
-max_size = 2MB</pre>
+max_size = 12MB</pre>
 </div>
 </div>
 </div>
@@ -1479,7 +1482,7 @@ fangfrisch --conf /etc/fangfrisch.conf dumpmappings | awk '{print $3}' | xargs /
 </div>
 <div id="footer">
 <div id="footer-text">
- 1.9.2<br>
+ 1.9.3.dev1<br>
 </div>
 </div>
 </body>

@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Release 1.9.3 (TBA)
+
+- Change builtin "URLhaus" configuration. Users now need to specify a personal
+  authentication key. See https://urlhaus.abuse.ch/ for details.
+
 Release 1.9.2 (2025-04-04)
 
 - Change preconfigured "sanesecurity" mirror URL.
