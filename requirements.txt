@@ -3,6 +3,7 @@ black
 build
 coverage
 flake8
+isort
 setuptools
 twine
 wheel

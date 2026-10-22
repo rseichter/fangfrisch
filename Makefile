@@ -59,7 +59,8 @@ shc:
 	shcare contrib/*.sh
 
 fmt:
-	black -l 120 src tests
+	isort src/fangfrisch tests
+	black src tests
 
 fla:	fmt
 	flake8 src tests --config=.flake8

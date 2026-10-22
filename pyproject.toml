@@ -1,4 +1,4 @@
-# Copyright © 2020-2025 Ralph Seichter
+# Copyright © 2020-2026 Ralph Seichter
 #
 # This file is part of "Fangfrisch".
 #
@@ -45,3 +45,11 @@ fangfrisch = "fangfrisch.__main__:main"
 Documentation = "https://rseichter.github.io/fangfrisch/"
 Source = "https://github.com/rseichter/fangfrisch"
 Issues = "https://github.com/rseichter/fangfrisch/issues"
+
+[tool.black]
+line-length = 120
+target-version = ["py314"]
+
+[tool.isort]
+force_single_line = true
+profile = "black"
