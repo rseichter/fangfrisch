@@ -21,10 +21,10 @@ import unittest
 
 # noinspection PyProtectedMember
 from fangfrisch.download import _download
-from tests import FangfrischTest
 from tests import MAX_SIZE
 from tests import NETWORK_TESTS
 from tests import URL_SHA256
+from tests import FangfrischTest
 
 
 @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")

@@ -22,7 +22,7 @@ from fangfrisch.config import INTERVAL
 urlhaus = {
     "urlhaus": {
         INTERVAL: "10m",
-        "auth_key" : "you_forgot_to_configure_auth_key",
+        "auth_key": "you_forgot_to_configure_auth_key",
         "url_urlhaus": r"https://urlhaus-api.abuse.ch/v2/files/exports/${auth_key}/urlhaus_clamav.ndb",
     }
 }

@@ -21,9 +21,9 @@ import logging
 import unittest
 
 import fangfrisch.log
-from fangfrisch.log import LogHandlerType
 
 # noinspection PyProtectedMember
+from fangfrisch.log import LogHandlerType
 from fangfrisch.log import _create_handler
 from fangfrisch.log import init_logger
 from fangfrisch.log import parse_syslog_target

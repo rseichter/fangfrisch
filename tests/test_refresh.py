@@ -27,12 +27,12 @@ from fangfrisch.refresh import ClamavRefresh
 from fangfrisch.refresh import _is_url_disabled
 from tests import DIGEST_DUMMY
 from tests import DIGEST_MD5
-from tests import FangfrischTest
 from tests import NETWORK_TESTS
 from tests import URL_BAD_SHA256
 from tests import URL_MD5
 from tests import URL_MISSING
 from tests import URL_SHA256
+from tests import FangfrischTest
 from tests import _ClamavTestItem
 
 
@@ -85,7 +85,7 @@ class RefreshTests(FangfrischTest):
     @unittest.skipUnless(NETWORK_TESTS, "network tests disabled")
     def test_refresh_force(self):
         cr = ClamavRefresh(Namespace(force=True))
-        (n, t) = cr.refresh_all()
+        n, t = cr.refresh_all()
         self.assertEqual(3, n)
         self.assertEqual(2, t)
 
@@ -111,7 +111,7 @@ class RefreshTests(FangfrischTest):
         ci = _ClamavTestItem(self.UNITTEST, "x", URL_MD5, "md5", f"{self.TMPDIR}/x")
         self.s.add(RefreshLog(ci, DIGEST_DUMMY))
         self.s.commit()
-        (n, t) = self.ref.refresh_all()
+        n, t = self.ref.refresh_all()
         self.assertEqual(3, n)
         self.assertEqual(2, t)
 
@@ -120,7 +120,7 @@ class RefreshTests(FangfrischTest):
         ci = _ClamavTestItem("unittest4", "url_blank", "", "md5", f"{self.TMPDIR}/blank")
         self.s.add(RefreshLog(ci, DIGEST_DUMMY))
         self.s.commit()
-        (n, t) = self.ref.refresh_all()
+        n, t = self.ref.refresh_all()
         self.assertEqual(3, n)
         self.assertEqual(3, n)
 
