@@ -641,7 +641,9 @@ db_url = sqlite:////var/lib/fangfrisch/db.sqlite
 local_directory = /var/lib/clamav
 
 [urlhaus]
-enabled = yes</pre>
+enabled = yes
+# URLhaus requires a personal key
+auth_key = YOUR-AUTH-KEY-HERE</pre>
 </div>
 </div>
 <div class="ulist">
@@ -767,7 +769,8 @@ Please make sure to examine the respective settings for yourself before enabling
 </table>
 </div>
 <div class="paragraph">
-<p>The defaults may not suit your personal preferences, and some providers require additional configuration, e.g. an access token.</p>
+<p>The defaults may not suit your personal preferences, and several providers require additional configuration, e.g. an access token or personal key.
+As of 2026, anonymous access to signature files has become the exception rather than the norm.</p>
 </div>
 <div class="listingblock">
 <div class="content">
