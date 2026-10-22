@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Release 1.9.3 (TBA)
+Release 1.9.3 (2026-10-22)
 
 - Breaking change to the builtin "URLhaus" configuration. Users now need to
   specify a personal authentication key. See https://urlhaus.abuse.ch/ for
